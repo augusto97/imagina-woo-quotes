@@ -1,0 +1,24 @@
+/**
+ * Aspecto de los bloques del PDF dentro del editor.
+ */
+
+.iwq-block-preview {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 20px;
+	border: 1px dashed #c3c4c7;
+	border-radius: 4px;
+	background: #f6f7f7;
+	text-align: center;
+}
+
+.iwq-block-preview__title {
+	color: #1e1e1e;
+	font-size: 14px;
+}
+
+.iwq-block-preview__help {
+	color: #757575;
+	font-size: 12px;
+}

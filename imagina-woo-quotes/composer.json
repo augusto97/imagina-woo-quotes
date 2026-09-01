@@ -1,0 +1,19 @@
+{
+	"name": "imagina/imagina-woo-quotes",
+	"description": "Solicitud de presupuestos para WooCommerce.",
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0-or-later",
+	"require": {
+		"php": ">=7.4",
+		"dompdf/dompdf": "^3.0"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"platform": {
+			"php": "7.4"
+		}
+	},
+	"scripts": {
+		"build": "composer install --no-dev --optimize-autoloader"
+	}
+}

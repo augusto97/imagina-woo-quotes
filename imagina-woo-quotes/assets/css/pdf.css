@@ -1,0 +1,202 @@
+/**
+ * Estilos del PDF.
+ *
+ * dompdf soporta un subconjunto de CSS 2.1: nada de flexbox, grid ni
+ * variables. Todo se resuelve con tablas y márgenes.
+ */
+
+@page {
+	margin: 20mm 15mm;
+}
+
+body {
+	margin: 0;
+	color: #1f2937;
+	font-family: "DejaVu Sans", sans-serif;
+	font-size: 10pt;
+	line-height: 1.5;
+}
+
+h1 {
+	margin: 0 0 4mm;
+	font-size: 20pt;
+	font-weight: 700;
+}
+
+h2 {
+	margin: 6mm 0 3mm;
+	font-size: 13pt;
+}
+
+h3 {
+	margin: 4mm 0 2mm;
+	font-size: 11pt;
+}
+
+p {
+	margin: 0 0 3mm;
+}
+
+.iwq-pdf-logo {
+	margin-bottom: 6mm;
+}
+
+.iwq-pdf-logo img {
+	max-height: 60px;
+}
+
+/* --- Datos del presupuesto y del cliente --- */
+
+.iwq-pdf-meta,
+.iwq-pdf-form {
+	width: 100%;
+	margin-bottom: 5mm;
+	border-collapse: collapse;
+}
+
+.iwq-pdf-meta th,
+.iwq-pdf-form th {
+	width: 35%;
+	padding: 1.5mm 2mm;
+	border-bottom: 0.3mm solid #e5e7eb;
+	color: #6b7280;
+	font-weight: 600;
+	text-align: left;
+}
+
+.iwq-pdf-meta td,
+.iwq-pdf-form td {
+	padding: 1.5mm 2mm;
+	border-bottom: 0.3mm solid #e5e7eb;
+}
+
+.iwq-pdf-customer {
+	margin-bottom: 5mm;
+	padding: 3mm 4mm;
+	background: #f9fafb;
+}
+
+.iwq-pdf-customer p {
+	margin: 0 0 1mm;
+}
+
+/* --- Tabla de productos --- */
+
+.iwq-pdf-table {
+	width: 100%;
+	margin-bottom: 5mm;
+	border-collapse: collapse;
+}
+
+.iwq-pdf-table th {
+	padding: 2mm;
+	border-bottom: 0.5mm solid #1f2937;
+	font-size: 9pt;
+	font-weight: 700;
+	text-align: left;
+	text-transform: uppercase;
+}
+
+.iwq-pdf-table td {
+	padding: 2.5mm 2mm;
+	border-bottom: 0.3mm solid #e5e7eb;
+	vertical-align: top;
+}
+
+.iwq-pdf-table__qty,
+.iwq-pdf-table__price,
+.iwq-pdf-table__total {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.iwq-pdf-table__name {
+	display: block;
+	font-weight: 600;
+}
+
+.iwq-pdf-table__sku {
+	display: block;
+	color: #6b7280;
+	font-size: 8pt;
+}
+
+.iwq-pdf-thumb {
+	width: 12mm;
+	margin-right: 2mm;
+	float: left;
+}
+
+.iwq-pdf-table del {
+	color: #9ca3af;
+	font-size: 9pt;
+}
+
+/* --- Totales --- */
+
+.iwq-pdf-totals {
+	width: 60%;
+	margin-left: 40%;
+	border-collapse: collapse;
+}
+
+.iwq-pdf-totals th {
+	padding: 1.5mm 2mm;
+	color: #6b7280;
+	font-weight: 600;
+	text-align: left;
+}
+
+.iwq-pdf-totals td {
+	padding: 1.5mm 2mm;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.iwq-pdf-totals tr:last-child th,
+.iwq-pdf-totals tr:last-child td {
+	border-top: 0.5mm solid #1f2937;
+	font-size: 12pt;
+	font-weight: 700;
+}
+
+/* --- Respuesta --- */
+
+.iwq-pdf-actions {
+	margin: 6mm 0;
+}
+
+.iwq-pdf-button {
+	display: inline-block;
+	padding: 3mm 6mm;
+	border: 0.3mm solid #d1d5db;
+	border-radius: 1.5mm;
+	color: #1f2937;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.iwq-pdf-button--accept {
+	border-color: #059669;
+	background: #059669;
+	color: #ffffff;
+}
+
+/* --- Pie repetido en cada página --- */
+
+.iwq-pdf-footer {
+	position: fixed;
+	bottom: -12mm;
+	left: 0;
+	right: 0;
+	color: #9ca3af;
+	font-size: 8pt;
+	text-align: center;
+}
+
+.iwq-pdf-placeholder {
+	padding: 4mm;
+	border: 0.3mm dashed #d1d5db;
+	color: #9ca3af;
+	text-align: center;
+}
