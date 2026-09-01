@@ -51,7 +51,7 @@ $iwq_is_empty = empty( $items );
 				<?php
 				$iwq_privacy = iwq_get_option( 'form_privacy_text' );
 
-				if ( $iwq_privacy && function_exists( 'wc_privacy_policy_page_id' ) ) :
+				if ( $iwq_privacy && function_exists( 'wc_replace_policy_page_link_placeholders' ) ) :
 					?>
 					<p class="iwq-field__description iwq-privacy">
 						<?php echo wp_kses_post( wc_replace_policy_page_link_placeholders( $iwq_privacy ) ); ?>

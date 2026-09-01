@@ -1,0 +1,277 @@
+/**
+ * Estilos del administrador.
+ *
+ * Se apoyan en los estilos nativos de WordPress y solo añaden lo que falta.
+ */
+
+.iwq-muted {
+	color: #787c82;
+}
+
+.iwq-numeric {
+	text-align: right;
+}
+
+/* --- Interruptor --- */
+
+.iwq-switch {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.iwq-switch input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.iwq-switch__track {
+	display: block;
+	width: 40px;
+	height: 22px;
+	border-radius: 11px;
+	background: #c3c4c7;
+	transition: background-color 150ms ease;
+}
+
+.iwq-switch__track::after {
+	content: "";
+	display: block;
+	width: 18px;
+	height: 18px;
+	margin: 2px;
+	border-radius: 50%;
+	background: #fff;
+	transition: transform 150ms ease;
+}
+
+.iwq-switch input:checked ~ .iwq-switch__track {
+	background: #2271b1;
+}
+
+.iwq-switch input:checked ~ .iwq-switch__track::after {
+	transform: translateX( 18px );
+}
+
+.iwq-switch input:focus-visible ~ .iwq-switch__track {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+/* --- Selector de imagen --- */
+
+.iwq-media-field__preview img {
+	max-width: 200px;
+	height: auto;
+	margin-bottom: 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+/* --- Constructor de formularios --- */
+
+.iwq-builder-cell {
+	padding: 0 !important;
+}
+
+.iwq-builder__list {
+	margin: 0 0 16px;
+	padding: 0;
+	list-style: none;
+}
+
+.iwq-builder__item {
+	margin-bottom: 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.iwq-builder__item.is-disabled {
+	opacity: 0.55;
+}
+
+.iwq-builder__placeholder {
+	height: 46px;
+	margin-bottom: 8px;
+	border: 1px dashed #2271b1;
+	border-radius: 4px;
+	background: #f0f6fc;
+}
+
+.iwq-builder__header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 12px;
+}
+
+.iwq-builder__handle {
+	color: #a7aaad;
+	cursor: grab;
+}
+
+.iwq-builder__title {
+	flex: 1 1 auto;
+	font-weight: 600;
+}
+
+.iwq-builder__type {
+	color: #787c82;
+	font-size: 12px;
+}
+
+.iwq-builder__badge {
+	padding: 2px 8px;
+	border-radius: 10px;
+	background: #f0f0f1;
+	color: #50575e;
+	font-size: 11px;
+}
+
+.iwq-builder__delete {
+	color: #b32d2e;
+}
+
+.iwq-builder__body {
+	padding: 4px 16px 12px;
+	border-top: 1px solid #f0f0f1;
+}
+
+/* --- Panel del pedido --- */
+
+.iwq-order-panel__alert {
+	margin-bottom: 12px;
+	padding: 10px 12px;
+	border-left: 3px solid #dba617;
+	background: #fcf9e8;
+}
+
+.iwq-order-panel__alert blockquote {
+	margin: 8px 0 0;
+	padding-left: 10px;
+	border-left: 2px solid #dcdcde;
+	color: #50575e;
+	font-style: italic;
+}
+
+.iwq-order-panel__hint {
+	margin: 12px 0;
+	padding: 10px 12px;
+	border-radius: 4px;
+	background: #f0f6fc;
+	color: #50575e;
+	font-size: 12px;
+}
+
+.iwq-order-panel__thread {
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.iwq-order-panel__entry {
+	margin-bottom: 8px;
+	padding: 8px 10px;
+	border-radius: 4px;
+	background: #f6f7f7;
+	font-size: 12px;
+}
+
+.iwq-order-panel__entry--customer {
+	border-left: 3px solid #2271b1;
+}
+
+.iwq-order-panel__entry--admin {
+	border-left: 3px solid #00a32a;
+}
+
+.iwq-order-panel__entry p {
+	margin: 4px 0;
+}
+
+.iwq-order-panel__reply textarea {
+	margin-bottom: 8px;
+}
+
+/* --- Estadísticas --- */
+
+.iwq-stats__periods {
+	margin: 16px 0;
+}
+
+.iwq-stats__cards {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 170px, 1fr ) );
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+.iwq-stat {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 20px;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.iwq-stat__value {
+	color: #1d2327;
+	font-size: 26px;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.iwq-stat__label {
+	color: #50575e;
+	font-size: 13px;
+}
+
+.iwq-stat__help {
+	color: #787c82;
+	font-size: 11px;
+}
+
+.iwq-bars {
+	max-width: 720px;
+	margin-bottom: 24px;
+}
+
+.iwq-bar {
+	display: grid;
+	grid-template-columns: 180px 1fr 120px;
+	gap: 12px;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.iwq-bar__track {
+	height: 12px;
+	border-radius: 6px;
+	background: #f0f0f1;
+	overflow: hidden;
+}
+
+.iwq-bar__fill {
+	display: block;
+	height: 100%;
+	border-radius: 6px;
+}
+
+.iwq-top-products {
+	max-width: 720px;
+}
+
+@media ( max-width: 782px ) {
+	.iwq-bar {
+		grid-template-columns: 1fr;
+		gap: 4px;
+	}
+}

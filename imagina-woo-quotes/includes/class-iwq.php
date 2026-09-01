@@ -64,9 +64,9 @@ final class IWQ {
 	 * @return void
 	 */
 	private function load_dependencies() {
-		require_once IWQ_DIR . 'includes/iwq-form-functions.php';
-		require_once IWQ_DIR . 'includes/iwq-template-functions.php';
-
+		// Las funciones se cargan desde el archivo principal para que estén
+		// disponibles durante la activación, cuando `plugins_loaded` de este
+		// plugin todavía no se ha ejecutado.
 		if ( is_readable( IWQ_DIR . 'vendor/autoload.php' ) ) {
 			require_once IWQ_DIR . 'vendor/autoload.php';
 		}
@@ -80,6 +80,7 @@ final class IWQ {
 	private function init_modules() {
 		// Siempre.
 		$this->modules['statuses']   = new IWQ_Order_Statuses();
+		$this->modules['uploads']    = new IWQ_Uploads();
 		$this->modules['session']    = new IWQ_Session();
 		$this->modules['exclusions'] = new IWQ_Exclusions();
 		$this->modules['request']    = new IWQ_Request_Handler();

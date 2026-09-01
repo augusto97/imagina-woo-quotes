@@ -30,6 +30,8 @@ define( 'IWQ_TEMPLATE_PATH', IWQ_DIR . 'templates/' );
 
 require_once IWQ_DIR . 'includes/class-iwq-autoloader.php';
 require_once IWQ_DIR . 'includes/iwq-core-functions.php';
+require_once IWQ_DIR . 'includes/iwq-form-functions.php';
+require_once IWQ_DIR . 'includes/iwq-template-functions.php';
 
 /**
  * Declara compatibilidad con HPOS (almacenamiento de pedidos en tablas propias)
