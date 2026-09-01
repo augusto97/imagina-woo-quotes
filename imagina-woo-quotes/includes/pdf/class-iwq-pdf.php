@@ -49,8 +49,12 @@ class IWQ_PDF {
 		$path = self::get_path( $order );
 
 		// El PDF se invalida cuando el pedido cambia: comparamos su fecha de
-		// modificación con la del archivo.
-		if ( ! $force && is_readable( $path ) && filemtime( $path ) >= $order->get_date_modified()->getTimestamp() ) {
+		// modificación con la del archivo. Un pedido recién creado todavía no
+		// tiene fecha de modificación, así que caemos en la de creación.
+		$modified = $order->get_date_modified() ? $order->get_date_modified() : $order->get_date_created();
+		$stamp    = $modified ? $modified->getTimestamp() : 0;
+
+		if ( ! $force && is_readable( $path ) && filemtime( $path ) >= $stamp ) {
 			return $path;
 		}
 

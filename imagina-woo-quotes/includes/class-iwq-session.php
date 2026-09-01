@@ -36,17 +36,13 @@ class IWQ_Session {
 	 */
 	public function __construct() {
 		// Endpoints AJAX ligeros de WooCommerce (`?wc-ajax=...`): no cargan
-		// admin-ajax.php ni el admin, así que responden mucho más rápido.
+		// admin-ajax.php ni el admin, así que responden mucho más rápido. Un
+		// solo hook por acción atiende a usuarios registrados y anónimos.
 		add_action( 'wc_ajax_iwq_add_item', array( $this, 'ajax_add_item' ) );
-		add_action( 'wc_ajax_nopriv_iwq_add_item', array( $this, 'ajax_add_item' ) );
 		add_action( 'wc_ajax_iwq_remove_item', array( $this, 'ajax_remove_item' ) );
-		add_action( 'wc_ajax_nopriv_iwq_remove_item', array( $this, 'ajax_remove_item' ) );
 		add_action( 'wc_ajax_iwq_update_item', array( $this, 'ajax_update_item' ) );
-		add_action( 'wc_ajax_nopriv_iwq_update_item', array( $this, 'ajax_update_item' ) );
 		add_action( 'wc_ajax_iwq_get_list', array( $this, 'ajax_get_list' ) );
-		add_action( 'wc_ajax_nopriv_iwq_get_list', array( $this, 'ajax_get_list' ) );
 		add_action( 'wc_ajax_iwq_clear_list', array( $this, 'ajax_clear_list' ) );
-		add_action( 'wc_ajax_nopriv_iwq_clear_list', array( $this, 'ajax_clear_list' ) );
 
 		// Al iniciar sesión, fusionamos la lista de invitado con la guardada.
 		add_action( 'wp_login', array( $this, 'merge_on_login' ), 10, 2 );

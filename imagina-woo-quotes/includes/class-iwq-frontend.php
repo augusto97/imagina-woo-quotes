@@ -47,6 +47,96 @@ class IWQ_Frontend {
 
 		// Contador en el menú y panel lateral.
 		add_action( 'wp_footer', array( $this, 'render_drawer' ) );
+
+		// Paso del carrito completo a la lista de presupuesto.
+		add_action( 'template_redirect', array( $this, 'handle_cart_to_quote' ) );
+	}
+
+	/**
+	 * Pasa el contenido del carrito a la lista de presupuesto.
+	 *
+	 * Se saltan los productos que las reglas no permiten presupuestar y se
+	 * avisa de cuántos quedaron fuera, para que el cliente no crea que se
+	 * han perdido.
+	 *
+	 * @return void
+	 */
+	public function handle_cart_to_quote() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- el nonce se comprueba justo debajo.
+		if ( empty( $_GET['iwq_cart_to_quote'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'iwq_cart_to_quote' ) ) {
+			wc_add_notice( __( 'Ese enlace ya no es válido. Inténtalo de nuevo.', 'imagina-woo-quotes' ), 'error' );
+			return;
+		}
+
+		if ( ! WC()->cart || WC()->cart->is_empty() ) {
+			return;
+		}
+
+		$added   = 0;
+		$skipped = 0;
+
+		foreach ( WC()->cart->get_cart() as $cart_item ) {
+			$result = IWQ_Session::add_item(
+				$cart_item['product_id'],
+				$cart_item['quantity'],
+				$cart_item['variation_id'],
+				isset( $cart_item['variation'] ) ? $cart_item['variation'] : array()
+			);
+
+			if ( is_wp_error( $result ) ) {
+				++$skipped;
+				continue;
+			}
+
+			++$added;
+		}
+
+		if ( $added && iwq_option_enabled( 'empty_cart_after_transfer' ) ) {
+			WC()->cart->empty_cart();
+		}
+
+		if ( $added ) {
+			wc_add_notice(
+				sprintf(
+					/* translators: %s: número de productos. */
+					_n(
+						'Hemos añadido %s producto a tu solicitud de presupuesto.',
+						'Hemos añadido %s productos a tu solicitud de presupuesto.',
+						$added,
+						'imagina-woo-quotes'
+					),
+					number_format_i18n( $added )
+				),
+				'success'
+			);
+		}
+
+		if ( $skipped ) {
+			wc_add_notice(
+				sprintf(
+					/* translators: %s: número de productos. */
+					_n(
+						'%s producto no admite presupuesto y se ha quedado en el carrito.',
+						'%s productos no admiten presupuesto y se han quedado en el carrito.',
+						$skipped,
+						'imagina-woo-quotes'
+					),
+					number_format_i18n( $skipped )
+				),
+				'notice'
+			);
+		}
+
+		$page_id = (int) iwq_get_option( 'quote_page_id' );
+
+		if ( $page_id && $added ) {
+			wp_safe_redirect( get_permalink( $page_id ) );
+			exit;
+		}
 	}
 
 	/* ---------------------------------------------------------------------

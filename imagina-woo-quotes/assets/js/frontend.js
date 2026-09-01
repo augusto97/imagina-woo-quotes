@@ -531,7 +531,7 @@
 					return;
 				}
 
-				form.innerHTML = '<div class="iwq-success" role="status">' + json.data.message + '</div>';
+				replaceWithMessage( form, json.data.message );
 				form.scrollIntoView( { behavior: 'smooth', block: 'center' } );
 			} )
 			.catch( function () {
@@ -543,6 +543,26 @@
 					button.removeAttribute( 'aria-busy' );
 				}
 			} );
+	}
+
+	/**
+	 * Sustituye el contenido de un formulario por un mensaje de éxito.
+	 *
+	 * Se usa `textContent` en lugar de `innerHTML`: aunque el mensaje viene de
+	 * un ajuste del administrador, un texto nunca debe interpretarse como
+	 * marcado.
+	 *
+	 * @param {HTMLElement} form    Formulario.
+	 * @param {string}      message Texto a mostrar.
+	 */
+	function replaceWithMessage( form, message ) {
+		var box = document.createElement( 'div' );
+
+		box.className = 'iwq-success';
+		box.setAttribute( 'role', 'status' );
+		box.textContent = message;
+
+		form.replaceChildren( box );
 	}
 
 	/**
@@ -647,7 +667,7 @@
 			message: ( form.querySelector( '[name="iwq_message"]' ) || {} ).value || ''
 		} )
 			.then( function ( data ) {
-				form.innerHTML = '<div class="iwq-success" role="status">' + data.message + '</div>';
+				replaceWithMessage( form, data.message );
 			} )
 			.catch( function ( error ) {
 				notify( error.message || i18n.error, 'error' );

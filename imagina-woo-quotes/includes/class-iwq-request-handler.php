@@ -18,9 +18,7 @@ class IWQ_Request_Handler {
 	 */
 	public function __construct() {
 		add_action( 'wc_ajax_iwq_submit_request', array( $this, 'ajax_submit' ) );
-		add_action( 'wc_ajax_nopriv_iwq_submit_request', array( $this, 'ajax_submit' ) );
 		add_action( 'wc_ajax_iwq_counter_offer', array( $this, 'ajax_counter_offer' ) );
-		add_action( 'wc_ajax_nopriv_iwq_counter_offer', array( $this, 'ajax_counter_offer' ) );
 
 		// Las respuestas por enlace del email llegan como GET.
 		add_action( 'template_redirect', array( $this, 'handle_quote_action' ) );
