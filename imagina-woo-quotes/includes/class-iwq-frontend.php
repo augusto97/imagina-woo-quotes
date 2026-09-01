@@ -1,0 +1,242 @@
+<?php
+/**
+ * Integración con las plantillas de WooCommerce en el front.
+ *
+ * @package ImaginaWooQuotes
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Class IWQ_Frontend
+ */
+class IWQ_Frontend {
+
+	/**
+	 * Marca si en esta petición se ha pintado algún botón.
+	 *
+	 * Los assets solo se encolan si la respuesta realmente los necesita.
+	 *
+	 * @var bool
+	 */
+	private static $needs_assets = false;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		// Ficha de producto.
+		$position = iwq_get_option( 'button_position_single', 'after_add_to_cart' );
+		$hook     = 'before_add_to_cart' === $position
+			? 'woocommerce_before_add_to_cart_form'
+			: 'woocommerce_after_add_to_cart_form';
+
+		add_action( $hook, array( $this, 'render_single_button' ), 20 );
+		add_action( 'woocommerce_single_product_summary', array( $this, 'render_single_button_fallback' ), 31 );
+
+		// Catálogo.
+		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'render_loop_button' ), 20 );
+
+		// Ocultación de precio y botón de compra.
+		add_filter( 'woocommerce_get_price_html', array( $this, 'filter_price_html' ), 100, 2 );
+		add_filter( 'woocommerce_is_purchasable', array( $this, 'filter_is_purchasable' ), 100, 2 );
+		add_filter( 'woocommerce_variable_price_html', array( $this, 'filter_price_html' ), 100, 2 );
+
+		// Carrito: permite pasar el carrito entero a presupuesto.
+		add_action( 'woocommerce_proceed_to_checkout', array( $this, 'render_cart_button' ), 25 );
+
+		// Contador en el menú y panel lateral.
+		add_action( 'wp_footer', array( $this, 'render_drawer' ) );
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Botones
+	 * ------------------------------------------------------------------ */
+
+	/**
+	 * Pinta el botón en la ficha de producto.
+	 *
+	 * @return void
+	 */
+	public function render_single_button() {
+		global $product;
+
+		if ( ! iwq_option_enabled( 'show_on_product', true ) ) {
+			return;
+		}
+
+		$this->output_button( $product, 'single' );
+	}
+
+	/**
+	 * Pinta el botón cuando el producto no tiene formulario de compra.
+	 *
+	 * Los productos sin precio o fuera de stock no imprimen
+	 * `woocommerce_after_add_to_cart_form`, así que sin este respaldo el
+	 * botón desaparecería justo donde más falta hace.
+	 *
+	 * @return void
+	 */
+	public function render_single_button_fallback() {
+		global $product;
+
+		if ( ! $product instanceof WC_Product || $product->is_purchasable() ) {
+			return;
+		}
+
+		$this->render_single_button();
+	}
+
+	/**
+	 * Pinta el botón en el catálogo.
+	 *
+	 * @return void
+	 */
+	public function render_loop_button() {
+		global $product;
+
+		if ( ! iwq_option_enabled( 'show_on_shop', true ) ) {
+			return;
+		}
+
+		$this->output_button( $product, 'loop' );
+	}
+
+	/**
+	 * Pinta el botón que convierte el carrito en solicitud.
+	 *
+	 * @return void
+	 */
+	public function render_cart_button() {
+		if ( ! iwq_option_enabled( 'show_on_cart' ) || WC()->cart->is_empty() ) {
+			return;
+		}
+
+		self::$needs_assets = true;
+
+		iwq_get_template( 'quote/cart-button.php' );
+	}
+
+	/**
+	 * Imprime el botón de presupuesto para un producto.
+	 *
+	 * @param WC_Product $product Producto.
+	 * @param string     $context `single` o `loop`.
+	 * @return void
+	 */
+	private function output_button( $product, $context ) {
+		if ( ! $product instanceof WC_Product || ! IWQ_Exclusions::is_quotable( $product ) ) {
+			return;
+		}
+
+		self::$needs_assets = true;
+
+		// En un producto variable, la variación concreta la elige el usuario:
+		// el botón se activa cuando el front informa de la variación.
+		iwq_get_template(
+			'quote/add-to-quote-button.php',
+			array(
+				'product'    => $product,
+				'context'    => $context,
+				'in_list'    => IWQ_Session::has_product( $product->get_id() ),
+				'is_variable' => $product->is_type( 'variable' ),
+			)
+		);
+	}
+
+	/**
+	 * Pinta el panel lateral con la lista.
+	 *
+	 * Se imprime vacío y lo rellena el front bajo demanda: así el HTML de
+	 * cada página sigue siendo cacheable.
+	 *
+	 * @return void
+	 */
+	public function render_drawer() {
+		if ( ! self::$needs_assets && ! self::is_quote_page() ) {
+			return;
+		}
+
+		iwq_get_template( 'quote/drawer.php' );
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Ocultación de precio y compra
+	 * ------------------------------------------------------------------ */
+
+	/**
+	 * Sustituye el precio por el texto configurado cuando toca ocultarlo.
+	 *
+	 * @param string     $html    HTML del precio.
+	 * @param WC_Product $product Producto.
+	 * @return string
+	 */
+	public function filter_price_html( $html, $product ) {
+		if ( ! IWQ_Exclusions::should_hide_price( $product ) ) {
+			return $html;
+		}
+
+		$text = iwq_get_option( 'hide_price_text', __( 'Precio bajo consulta', 'imagina-woo-quotes' ) );
+
+		/**
+		 * Filtra el texto que reemplaza al precio oculto.
+		 *
+		 * @param string     $text    Texto de reemplazo.
+		 * @param WC_Product $product Producto.
+		 */
+		$text = apply_filters( 'iwq_hidden_price_text', $text, $product );
+
+		return $text ? '<span class="iwq-price-hidden">' . esc_html( $text ) . '</span>' : '';
+	}
+
+	/**
+	 * Marca el producto como no comprable para esconder el botón de compra.
+	 *
+	 * Usar `is_purchasable` en lugar de ocultar el botón por CSS impide que
+	 * alguien añada el producto al carrito por POST directo.
+	 *
+	 * @param bool       $purchasable Valor actual.
+	 * @param WC_Product $product     Producto.
+	 * @return bool
+	 */
+	public function filter_is_purchasable( $purchasable, $product ) {
+		if ( IWQ_Exclusions::should_hide_add_to_cart( $product ) ) {
+			return false;
+		}
+
+		return $purchasable;
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Utilidades
+	 * ------------------------------------------------------------------ */
+
+	/**
+	 * Indica si la petición actual necesita los assets del plugin.
+	 *
+	 * @return bool
+	 */
+	public static function needs_assets() {
+		return self::$needs_assets;
+	}
+
+	/**
+	 * Fuerza la carga de los assets desde otro contexto (shortcode, bloque).
+	 *
+	 * @return void
+	 */
+	public static function require_assets() {
+		self::$needs_assets = true;
+	}
+
+	/**
+	 * Indica si estamos en la página de la lista de presupuesto.
+	 *
+	 * @return bool
+	 */
+	public static function is_quote_page() {
+		$page_id = (int) iwq_get_option( 'quote_page_id' );
+
+		return $page_id && is_page( $page_id );
+	}
+}

@@ -1,0 +1,597 @@
+/**
+ * Imagina Woo Quotes — estilos del front.
+ *
+ * Todo se declara con variables para que el tema pueda redefinir la
+ * apariencia sin tocar una sola regla, y sin que el plugin necesite generar
+ * CSS dinámico desde PHP.
+ */
+
+.iwq {
+	/* Paleta. El tema puede sobreescribir cualquiera de estas variables. */
+	--iwq-accent: #2563eb;
+	--iwq-accent-hover: #1d4ed8;
+	--iwq-accent-contrast: #ffffff;
+	--iwq-text: #1f2937;
+	--iwq-text-muted: #6b7280;
+	--iwq-surface: #ffffff;
+	--iwq-surface-alt: #f9fafb;
+	--iwq-border: #e5e7eb;
+	--iwq-danger: #dc2626;
+	--iwq-success: #059669;
+
+	--iwq-radius: 8px;
+	--iwq-gap: 16px;
+	--iwq-shadow: 0 10px 40px rgba( 0, 0, 0, 0.12 );
+	--iwq-transition: 200ms cubic-bezier( 0.4, 0, 0.2, 1 );
+}
+
+/* Los tokens viven también en :root para el contenido inyectado por JS. */
+:root {
+	--iwq-accent: #2563eb;
+	--iwq-accent-hover: #1d4ed8;
+	--iwq-accent-contrast: #ffffff;
+	--iwq-text: #1f2937;
+	--iwq-text-muted: #6b7280;
+	--iwq-surface: #ffffff;
+	--iwq-surface-alt: #f9fafb;
+	--iwq-border: #e5e7eb;
+	--iwq-danger: #dc2626;
+	--iwq-success: #059669;
+	--iwq-radius: 8px;
+	--iwq-gap: 16px;
+	--iwq-shadow: 0 10px 40px rgba( 0, 0, 0, 0.12 );
+	--iwq-transition: 200ms cubic-bezier( 0.4, 0, 0.2, 1 );
+}
+
+@media ( prefers-color-scheme: dark ) {
+	:root {
+		--iwq-text: #e5e7eb;
+		--iwq-text-muted: #9ca3af;
+		--iwq-surface: #1f2937;
+		--iwq-surface-alt: #111827;
+		--iwq-border: #374151;
+		--iwq-shadow: 0 10px 40px rgba( 0, 0, 0, 0.5 );
+	}
+}
+
+/* ---------------------------------------------------------------------
+ * Botón de presupuesto
+ * ------------------------------------------------------------------ */
+
+.iwq-add-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 0.7em 1.4em;
+	border: 1px solid var( --iwq-accent );
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-accent );
+	color: var( --iwq-accent-contrast );
+	font-size: inherit;
+	font-weight: 600;
+	line-height: 1.4;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color var( --iwq-transition ), border-color var( --iwq-transition ), transform var( --iwq-transition );
+}
+
+.iwq-add-button:hover,
+.iwq-add-button:focus-visible {
+	background: var( --iwq-accent-hover );
+	border-color: var( --iwq-accent-hover );
+	color: var( --iwq-accent-contrast );
+}
+
+.iwq-add-button:focus-visible {
+	outline: 2px solid var( --iwq-accent );
+	outline-offset: 2px;
+}
+
+.iwq-add-button:active {
+	transform: translateY( 1px );
+}
+
+.iwq-add-button--outline {
+	background: transparent;
+	color: var( --iwq-accent );
+}
+
+.iwq-add-button--outline:hover,
+.iwq-add-button--outline:focus-visible {
+	background: var( --iwq-accent );
+	color: var( --iwq-accent-contrast );
+}
+
+.iwq-add-button.is-added {
+	background: var( --iwq-success );
+	border-color: var( --iwq-success );
+}
+
+/* Reservamos el hueco del indicador para que el botón no cambie de tamaño
+   al empezar a cargar: evita el salto de layout. */
+.iwq-add-button__spinner {
+	width: 1em;
+	height: 1em;
+	flex: 0 0 auto;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	opacity: 0;
+	animation: iwq-spin 700ms linear infinite;
+}
+
+.iwq-add-button.is-loading {
+	pointer-events: none;
+}
+
+.iwq-add-button.is-loading .iwq-add-button__spinner {
+	opacity: 1;
+}
+
+@keyframes iwq-spin {
+	to {
+		transform: rotate( 360deg );
+	}
+}
+
+.iwq-add-button--loop {
+	width: 100%;
+	margin-top: 8px;
+}
+
+.iwq-price-hidden {
+	color: var( --iwq-text-muted );
+	font-style: italic;
+}
+
+/* ---------------------------------------------------------------------
+ * Contador
+ * ------------------------------------------------------------------ */
+
+.iwq-open-drawer {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+}
+
+.iwq-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 6px;
+	border-radius: 10px;
+	background: var( --iwq-accent );
+	color: var( --iwq-accent-contrast );
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* ---------------------------------------------------------------------
+ * Panel lateral
+ * ------------------------------------------------------------------ */
+
+.iwq-drawer {
+	position: fixed;
+	inset: 0;
+	z-index: 999999;
+}
+
+.iwq-drawer__overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba( 0, 0, 0, 0.45 );
+	opacity: 0;
+	transition: opacity var( --iwq-transition );
+}
+
+.iwq-drawer.is-open .iwq-drawer__overlay {
+	opacity: 1;
+}
+
+.iwq-drawer__panel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	width: min( 420px, 100vw );
+	height: 100%;
+	background: var( --iwq-surface );
+	box-shadow: var( --iwq-shadow );
+	color: var( --iwq-text );
+	transform: translateX( 100% );
+	transition: transform var( --iwq-transition );
+}
+
+.iwq-drawer.is-open .iwq-drawer__panel {
+	transform: translateX( 0 );
+}
+
+.iwq-drawer__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --iwq-gap );
+	padding: var( --iwq-gap );
+	border-bottom: 1px solid var( --iwq-border );
+}
+
+.iwq-drawer__title {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 600;
+}
+
+.iwq-drawer__close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	border-radius: var( --iwq-radius );
+	background: transparent;
+	color: var( --iwq-text-muted );
+	cursor: pointer;
+	transition: background-color var( --iwq-transition );
+}
+
+.iwq-drawer__close:hover,
+.iwq-drawer__close:focus-visible {
+	background: var( --iwq-surface-alt );
+	color: var( --iwq-text );
+}
+
+.iwq-drawer__body {
+	flex: 1 1 auto;
+	padding: var( --iwq-gap );
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.iwq-drawer__footer {
+	padding: var( --iwq-gap );
+	border-top: 1px solid var( --iwq-border );
+	background: var( --iwq-surface-alt );
+}
+
+.iwq-drawer__footer .iwq-add-button {
+	width: 100%;
+}
+
+body.iwq-drawer-open {
+	overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+ * Lista de productos
+ * ------------------------------------------------------------------ */
+
+.iwq-list {
+	display: flex;
+	flex-direction: column;
+	gap: var( --iwq-gap );
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.iwq-list__row {
+	display: grid;
+	grid-template-columns: 64px 1fr auto;
+	gap: 12px;
+	align-items: start;
+	padding-bottom: var( --iwq-gap );
+	border-bottom: 1px solid var( --iwq-border );
+	transition: opacity var( --iwq-transition );
+}
+
+.iwq-list__row.is-removing {
+	opacity: 0.4;
+	pointer-events: none;
+}
+
+.iwq-list__row:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.iwq-list__thumb img {
+	display: block;
+	width: 64px;
+	height: 64px;
+	border-radius: var( --iwq-radius );
+	object-fit: cover;
+}
+
+.iwq-list__name {
+	display: block;
+	color: var( --iwq-text );
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.iwq-list__name:hover {
+	text-decoration: underline;
+}
+
+.iwq-list__meta {
+	margin: 4px 0 8px;
+	color: var( --iwq-text-muted );
+	font-size: 0.85em;
+}
+
+.iwq-quantity {
+	width: 72px;
+	padding: 4px 8px;
+	border: 1px solid var( --iwq-border );
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-surface );
+	color: var( --iwq-text );
+}
+
+.iwq-remove-item {
+	padding: 4px;
+	border: 0;
+	background: transparent;
+	color: var( --iwq-text-muted );
+	cursor: pointer;
+	line-height: 1;
+	transition: color var( --iwq-transition );
+}
+
+.iwq-remove-item:hover,
+.iwq-remove-item:focus-visible {
+	color: var( --iwq-danger );
+}
+
+.iwq-empty {
+	padding: 32px 16px;
+	color: var( --iwq-text-muted );
+	text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+ * Formulario
+ * ------------------------------------------------------------------ */
+
+.iwq-form-grid {
+	display: grid;
+	grid-template-columns: repeat( 6, 1fr );
+	gap: var( --iwq-gap );
+}
+
+.iwq-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	grid-column: span 6;
+	min-width: 0;
+}
+
+.iwq-field--half {
+	grid-column: span 3;
+}
+
+.iwq-field--third {
+	grid-column: span 2;
+}
+
+@media ( max-width: 600px ) {
+	.iwq-field--half,
+	.iwq-field--third {
+		grid-column: span 6;
+	}
+}
+
+.iwq-field--heading {
+	margin-top: 8px;
+}
+
+.iwq-field__heading {
+	margin: 0;
+	font-size: 1.05rem;
+}
+
+.iwq-field__label {
+	color: var( --iwq-text );
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
+.iwq-field__required {
+	margin-left: 2px;
+	border: 0;
+	color: var( --iwq-danger );
+	text-decoration: none;
+}
+
+.iwq-field__control {
+	width: 100%;
+	padding: 0.6em 0.75em;
+	border: 1px solid var( --iwq-border );
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-surface );
+	color: var( --iwq-text );
+	font: inherit;
+	transition: border-color var( --iwq-transition ), box-shadow var( --iwq-transition );
+}
+
+.iwq-field__control:focus {
+	border-color: var( --iwq-accent );
+	box-shadow: 0 0 0 3px rgba( 37, 99, 235, 0.15 );
+	outline: none;
+}
+
+.iwq-field--error .iwq-field__control {
+	border-color: var( --iwq-danger );
+}
+
+.iwq-field__error {
+	color: var( --iwq-danger );
+	font-size: 0.85em;
+}
+
+.iwq-field__description,
+.iwq-field__hint {
+	color: var( --iwq-text-muted );
+	font-size: 0.85em;
+}
+
+.iwq-field__choices {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.iwq-field__choice,
+.iwq-field__acceptance {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	cursor: pointer;
+	font-size: 0.95em;
+}
+
+.iwq-success {
+	padding: 20px;
+	border: 1px solid var( --iwq-success );
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-surface-alt );
+	color: var( --iwq-text );
+	text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+ * Avisos flotantes
+ * ------------------------------------------------------------------ */
+
+.iwq-toasts {
+	position: fixed;
+	bottom: 24px;
+	left: 50%;
+	z-index: 1000000;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	transform: translateX( -50% );
+	pointer-events: none;
+}
+
+.iwq-toast {
+	padding: 12px 20px;
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-text );
+	color: var( --iwq-surface );
+	box-shadow: var( --iwq-shadow );
+	font-size: 0.9rem;
+	opacity: 0;
+	transform: translateY( 12px );
+	transition: opacity var( --iwq-transition ), transform var( --iwq-transition );
+}
+
+.iwq-toast.is-visible {
+	opacity: 1;
+	transform: translateY( 0 );
+}
+
+.iwq-toast--error {
+	background: var( --iwq-danger );
+	color: #ffffff;
+}
+
+/* ---------------------------------------------------------------------
+ * Tabla del presupuesto y negociación
+ * ------------------------------------------------------------------ */
+
+.iwq-quote-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin: var( --iwq-gap ) 0;
+}
+
+.iwq-quote-actions .iwq-add-button--reject {
+	background: transparent;
+	border-color: var( --iwq-border );
+	color: var( --iwq-text );
+}
+
+.iwq-quote-actions .iwq-add-button--reject:hover {
+	border-color: var( --iwq-danger );
+	background: var( --iwq-danger );
+	color: #ffffff;
+}
+
+.iwq-negotiation {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: var( --iwq-gap ) 0;
+}
+
+.iwq-negotiation__entry {
+	padding: 12px 16px;
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-surface-alt );
+}
+
+.iwq-negotiation__entry--customer {
+	border-left: 3px solid var( --iwq-accent );
+}
+
+.iwq-negotiation__entry--admin {
+	border-left: 3px solid var( --iwq-success );
+}
+
+.iwq-negotiation__meta {
+	color: var( --iwq-text-muted );
+	font-size: 0.8em;
+}
+
+.iwq-expiry-notice {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: var( --iwq-radius );
+	background: var( --iwq-surface-alt );
+	color: var( --iwq-text-muted );
+	font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------
+ * Accesibilidad
+ * ------------------------------------------------------------------ */
+
+.iwq-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect( 0, 0, 0, 0 );
+	white-space: nowrap;
+	border: 0;
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.iwq-drawer__panel,
+	.iwq-drawer__overlay,
+	.iwq-toast,
+	.iwq-add-button,
+	.iwq-list__row {
+		transition-duration: 0.01ms;
+	}
+
+	.iwq-add-button__spinner {
+		animation-duration: 2s;
+	}
+}
