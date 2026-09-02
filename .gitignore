@@ -1,6 +1,5 @@
 # Dependencias de Composer: se instalan al empaquetar, no se versionan.
 imagina-woo-quotes/vendor/
-composer.lock
 
 # Artefactos de empaquetado
 build/
