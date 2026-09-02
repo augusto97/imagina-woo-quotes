@@ -64,7 +64,12 @@ en las páginas que los necesitan.
 
 **Emails**
 - Seis clases `WC_Email`, configurables desde WooCommerce → Ajustes → Emails
-- Plantillas HTML y de texto plano, sobreescribibles desde el tema
+- Tres diseños seleccionables (moderno, minimalista, como WooCommerce) con
+  color de acento, logotipo y pie propios
+- Plantillas HTML y de texto plano, sobreescribibles desde el tema; el
+  contenido se compone de partes reutilizables en `templates/emails/parts/`
+- Vista previa en el admin de cada email y del PDF adjunto, tal como los
+  recibe el cliente o el administrador, con envío de prueba
 
 **Datos**
 - Estadísticas: tasa de aceptación y de respuesta, valor aceptado, reparto por

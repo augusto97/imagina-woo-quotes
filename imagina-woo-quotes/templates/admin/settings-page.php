@@ -30,6 +30,10 @@ defined( 'ABSPATH' ) || exit;
 
 		<?php IWQ_Statistics::render(); ?>
 
+	<?php elseif ( 'preview' === $current ) : ?>
+
+		<?php IWQ_Preview::render(); ?>
+
 	<?php else : ?>
 
 		<?php if ( 'pdf' === $current && ! IWQ_PDF::is_available() ) : ?>

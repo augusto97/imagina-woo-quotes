@@ -113,6 +113,115 @@
 	}
 
 	/* ------------------------------------------------------------------
+	 * Selector de color
+	 * --------------------------------------------------------------- */
+
+	if ( $.fn.wpColorPicker ) {
+		$( '.iwq-color-field' ).wpColorPicker();
+	}
+
+	/* ------------------------------------------------------------------
+	 * Vista previa de emails y PDF
+	 * --------------------------------------------------------------- */
+
+	var $preview = $( '.iwq-preview' );
+
+	if ( $preview.length ) {
+		var ajax = $preview.data( 'ajax' );
+		var nonce = $preview.data( 'nonce' );
+		var view = 'html';
+		var $frame = $( '#iwq-preview-iframe' );
+		var $meta = $( '#iwq-preview-meta' );
+		var $result = $( '#iwq-preview-result' );
+
+		function params( extra ) {
+			return $.extend( {
+				nonce: nonce,
+				email: $( '#iwq-preview-email' ).val(),
+				order: $( '#iwq-preview-order' ).val()
+			}, extra || {} );
+		}
+
+		function refresh() {
+			if ( ! $( '#iwq-preview-order' ).val() ) {
+				$frame.attr( 'srcdoc', '<p style="font-family:sans-serif;color:#666;padding:24px">' + i18n.noOrder + '</p>' );
+				$meta.prop( 'hidden', true );
+				return;
+			}
+
+			$frame.removeAttr( 'srcdoc' );
+
+			$.getJSON( ajax, params( { action: 'iwq_preview_meta' } ), function ( response ) {
+				if ( ! response.success ) {
+					$result.text( response.data.message );
+					return;
+				}
+
+				var d = response.data;
+
+				$meta.prop( 'hidden', false );
+				$meta.find( '[data-meta="subject"]' ).text( d.subject );
+				$meta.find( '[data-meta="from"]' ).text( d.from );
+				$meta.find( '[data-meta="to"]' ).text( d.to );
+				$meta.find( '[data-meta="status"]' ).text( d.status );
+				$meta.find( '[data-meta="attachments"]' ).text(
+					d.attachments.length ? d.attachments.map( function ( a ) { return a.name + ' (' + a.size + ')'; } ).join( ', ' ) : i18n.noAttachments
+				);
+				$meta.find( '[data-meta="disabled"]' ).prop( 'hidden', d.enabled );
+				$preview.data( 'pdfUrl', d.pdf_url );
+
+				if ( view === 'pdf' ) {
+					$frame.attr( 'src', d.pdf_url || 'about:blank' );
+				} else {
+					$frame.attr( 'src', ajax + '?' + $.param( params( { action: 'iwq_preview_email', format: view } ) ) );
+				}
+			} );
+		}
+
+		$preview.on( 'change', '#iwq-preview-email, #iwq-preview-order', refresh );
+
+		$preview.on( 'click', '.iwq-preview__view button', function () {
+			view = $( this ).data( 'view' );
+			$( '.iwq-preview__view button' ).removeClass( 'button-primary is-active' );
+			$( this ).addClass( 'button-primary is-active' );
+			refresh();
+		} );
+
+		$preview.on( 'click', '#iwq-preview-sample', function () {
+			var $button = $( this ).prop( 'disabled', true );
+
+			$.post( ajax, { action: 'iwq_create_sample', nonce: nonce }, function ( response ) {
+				$button.prop( 'disabled', false );
+
+				if ( ! response.success ) {
+					$result.text( response.data.message );
+					return;
+				}
+
+				$( '#iwq-preview-order' )
+					.find( 'option[value=""]' ).remove().end()
+					.prepend( $( '<option>', { value: response.data.id, text: response.data.label } ) )
+					.val( response.data.id );
+
+				refresh();
+			} );
+		} );
+
+		$preview.on( 'click', '#iwq-preview-send', function () {
+			var $button = $( this ).prop( 'disabled', true );
+
+			$result.text( i18n.sending );
+
+			$.post( ajax, params( { action: 'iwq_send_test_email', to: $( '#iwq-preview-to' ).val() } ), function ( response ) {
+				$button.prop( 'disabled', false );
+				$result.text( response.data.message );
+			} );
+		} );
+
+		refresh();
+	}
+
+	/* ------------------------------------------------------------------
 	 * Selector de imagen
 	 * --------------------------------------------------------------- */
 

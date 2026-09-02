@@ -134,6 +134,18 @@ class IWQ_Settings_Fields {
 				self::render_media( $name, $value );
 				break;
 
+			case 'color':
+				printf(
+					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="iwq-color-field" data-default-color="#2563eb">',
+					esc_attr( $name ),
+					esc_attr( $value )
+				);
+				break;
+
+			case 'email_style':
+				self::render_email_styles( $name, $value );
+				break;
+
 			default:
 				printf(
 					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="regular-text">',
@@ -291,6 +303,32 @@ class IWQ_Settings_Fields {
 			$value ? '' : ' hidden',
 			esc_html__( 'Quitar', 'imagina-woo-quotes' )
 		);
+	}
+
+	/**
+	 * Pinta el selector de diseño de email con su descripción.
+	 *
+	 * @param string $name  Atributo name.
+	 * @param mixed  $value Diseño elegido.
+	 * @return void
+	 */
+	private static function render_email_styles( $name, $value ) {
+		$value = $value ? $value : 'moderno';
+
+		echo '<fieldset class="iwq-style-picker">';
+
+		foreach ( IWQ_Email_Styles::get_styles() as $key => $style ) {
+			printf(
+				'<label class="iwq-style-picker__option"><input type="radio" name="%1$s" value="%2$s"%3$s> <span class="iwq-style-picker__label">%4$s</span><span class="iwq-style-picker__desc">%5$s</span></label>',
+				esc_attr( $name ),
+				esc_attr( $key ),
+				checked( $value, $key, false ),
+				esc_html( $style['label'] ),
+				esc_html( $style['description'] )
+			);
+		}
+
+		echo '</fieldset>';
 	}
 
 	/**

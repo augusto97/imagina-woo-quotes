@@ -37,6 +37,8 @@ class IWQ_Settings {
 			'quote'       => __( 'Presupuestos', 'imagina-woo-quotes' ),
 			'form'        => __( 'Formulario', 'imagina-woo-quotes' ),
 			'pdf'         => __( 'PDF', 'imagina-woo-quotes' ),
+			'emails'      => __( 'Emails', 'imagina-woo-quotes' ),
+			'preview'     => __( 'Vista previa', 'imagina-woo-quotes' ),
 			'rules'       => __( 'Reglas', 'imagina-woo-quotes' ),
 			'stats'       => __( 'Estadísticas', 'imagina-woo-quotes' ),
 		);
@@ -364,6 +366,34 @@ class IWQ_Settings {
 				),
 			),
 
+			'emails' => array(
+				'design' => array(
+					'title'  => __( 'Diseño de los emails', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'email_style'       => array(
+							'label' => __( 'Diseño', 'imagina-woo-quotes' ),
+							'type'  => 'email_style',
+							'desc'  => __( 'Se aplica a los seis emails del plugin. Compruébalo en la pestaña «Vista previa».', 'imagina-woo-quotes' ),
+						),
+						'email_accent'      => array(
+							'label' => __( 'Color de acento', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Botones y barra superior. Vacío: azul por defecto, o el color de WooCommerce en el diseño «Como WooCommerce».', 'imagina-woo-quotes' ),
+						),
+						'email_logo_id'     => array(
+							'label' => __( 'Logotipo', 'imagina-woo-quotes' ),
+							'type'  => 'media',
+							'desc'  => __( 'Si lo dejas vacío se usa el del PDF o el del tema.', 'imagina-woo-quotes' ),
+						),
+						'email_footer_text' => array(
+							'label' => __( 'Pie de los emails', 'imagina-woo-quotes' ),
+							'type'  => 'textarea',
+							'desc'  => __( 'Vacío: nombre y dirección de la tienda. No se usa en el diseño «Como WooCommerce», que lleva el pie de la tienda.', 'imagina-woo-quotes' ),
+						),
+					),
+				),
+			),
+
 			'rules' => array(
 				'scope' => array(
 					'title'  => __( 'Alcance', 'imagina-woo-quotes' ),
@@ -431,7 +461,8 @@ class IWQ_Settings {
 				),
 			),
 
-			'stats' => array(),
+			'stats'   => array(),
+			'preview' => array(),
 		);
 
 		return isset( $sections[ $tab ] ) ? $sections[ $tab ] : array();
@@ -470,6 +501,12 @@ class IWQ_Settings {
 			case 'checkbox':
 				return static function ( $value ) {
 					return 'yes' === $value ? 'yes' : 'no';
+				};
+
+			case 'color':
+				return static function ( $value ) {
+					$value = sanitize_hex_color( $value );
+					return $value ? $value : '';
 				};
 
 			case 'number':

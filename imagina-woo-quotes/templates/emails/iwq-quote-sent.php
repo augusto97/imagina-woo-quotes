@@ -1,15 +1,15 @@
 <?php
 /**
- * Email: Presupuesto valorado para el cliente.
+ * Email: presupuesto valorado para el cliente.
  *
- * Se puede sobreescribir copiándolo a
+ * Devuelve solo el cuerpo; el envoltorio lo pone emails/layout.php según el
+ * diseño elegido. Se puede sobreescribir copiándolo a
  * `tu-tema/imagina-woo-quotes/emails/iwq-quote-sent.php`.
  *
  * @package ImaginaWooQuotes
  *
  * @var WC_Order  $order              Pedido.
  * @var IWQ_Quote $quote              Presupuesto.
- * @var string    $email_heading      Encabezado.
  * @var string    $additional_content Contenido adicional configurado.
  * @var bool      $sent_to_admin      Si el email va al administrador.
  * @var WC_Email  $email              Email en curso.
@@ -17,48 +17,47 @@
 
 defined( 'ABSPATH' ) || exit;
 
-do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
-
-<p><?php
-printf(
-	/* translators: %s: nombre del cliente. */
-	esc_html__( 'Hola %s:', 'imagina-woo-quotes' ),
-	esc_html( $order->get_billing_first_name() )
-);
-?></p>
-
-<p><?php esc_html_e( 'Ya tenemos listo tu presupuesto. Puedes revisarlo abajo y respondernos con un clic.', 'imagina-woo-quotes' ); ?></p>
-
-<?php if ( $quote && $quote->get_expiry_date() ) : ?>
-	<p style="padding:12px 16px;background:#f9fafb;border-radius:6px;color:#6b7280;">
-		<?php
-		printf(
-			/* translators: %s: fecha de vencimiento. */
-			esc_html__( 'Este presupuesto es válido hasta el %s.', 'imagina-woo-quotes' ),
-			esc_html( date_i18n( get_option( 'date_format' ), $quote->get_expiry_date() ) )
-		);
-		?>
-	</p>
-<?php endif; ?>
-
-<?php if ( $quote && $quote->is_actionable() ) : ?>
-	<p style="margin:24px 0;">
-		<a href="<?php echo esc_url( $quote->get_accept_url() ); ?>" style="display:inline-block;padding:12px 24px;background:#059669;color:#ffffff;border-radius:6px;text-decoration:none;font-weight:600;margin-right:8px;">
-			<?php esc_html_e( 'Aceptar el presupuesto', 'imagina-woo-quotes' ); ?>
-		</a>
-		<a href="<?php echo esc_url( $quote->get_reject_url() ); ?>" style="display:inline-block;padding:12px 24px;background:#ffffff;color:#6b7280;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;">
-			<?php esc_html_e( 'Rechazarlo', 'imagina-woo-quotes' ); ?>
-		</a>
-	</p>
-<?php endif; ?>
+$iwq_part = static function ( $part, $args = array() ) use ( $order, $quote, $sent_to_admin ) {
+	iwq_get_template( 'emails/parts/' . $part . '.php', array_merge( compact( 'order', 'quote', 'sent_to_admin' ), $args ) );
+};
+?>
+<p>
+	<?php
+	printf(
+		/* translators: %s: nombre del cliente. */
+		esc_html__( 'Hola %s:', 'imagina-woo-quotes' ),
+		esc_html( $order->get_billing_first_name() )
+	);
+	?>
+</p>
+<p><?php esc_html_e( 'Ya tenemos listo tu presupuesto. Aquí tienes el detalle; también va adjunto en PDF.', 'imagina-woo-quotes' ); ?></p>
 
 <?php
-do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, false, $email );
-do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, false, $email );
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, false, $email );
+$iwq_part( 'summary' );
+$iwq_part( 'items' );
+
+if ( $quote->is_actionable() ) {
+	$iwq_part(
+		'cta',
+		array(
+			'buttons' => array(
+				array( 'url' => $quote->get_accept_url(), 'label' => __( 'Aceptar el presupuesto', 'imagina-woo-quotes' ), 'primary' => true ),
+				array( 'url' => $quote->get_reject_url(), 'label' => __( 'Rechazarlo', 'imagina-woo-quotes' ), 'primary' => false ),
+			),
+		)
+	);
+
+	if ( iwq_option_enabled( 'allow_counter_offers', true ) && $order->get_customer_id() ) {
+		echo '<p class="iwq-muted">';
+		printf(
+			/* translators: %s: enlace a Mi Cuenta. */
+			esc_html__( '¿Quieres proponer otro precio? Puedes hacerlo desde %s.', 'imagina-woo-quotes' ),
+			'<a href="' . esc_url( $order->get_view_order_url() ) . '">' . esc_html__( 'tu cuenta', 'imagina-woo-quotes' ) . '</a>'
+		);
+		echo '</p>';
+	}
+}
 
 if ( $additional_content ) {
 	echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
 }
-
-do_action( 'woocommerce_email_footer', $email );

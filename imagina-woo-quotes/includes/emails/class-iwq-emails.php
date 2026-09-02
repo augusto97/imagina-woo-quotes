@@ -22,6 +22,8 @@ class IWQ_Emails {
 	public function __construct() {
 		add_filter( 'woocommerce_email_classes', array( $this, 'register' ) );
 		add_filter( 'woocommerce_template_directory', array( $this, 'template_directory' ), 10, 2 );
+		add_filter( 'woocommerce_email_styles', array( $this, 'email_styles' ), 20, 2 );
+		// Solo en texto plano: en HTML las partes de la plantilla ya lo pintan.
 		add_action( 'woocommerce_email_order_details', array( $this, 'render_quote_details' ), 5, 4 );
 		add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdf' ), 10, 4 );
 
@@ -67,7 +69,25 @@ class IWQ_Emails {
 	}
 
 	/**
-	 * Añade al email la tabla de productos y los datos del formulario.
+	 * Sustituye el CSS de WooCommerce por el del diseño elegido en nuestros
+	 * emails. Con el diseño «Como WooCommerce» se conservan ambos.
+	 *
+	 * @param string   $css   CSS actual.
+	 * @param WC_Email $email Email en curso.
+	 * @return string
+	 */
+	public function email_styles( $css, $email = null ) {
+		if ( ! $email || 0 !== strpos( $email->id, 'iwq_' ) ) {
+			return $css;
+		}
+
+		$style = IWQ_Email_Styles::get_current();
+
+		return ( 'woocommerce' === $style ? $css : '' ) . IWQ_Email_Styles::get_css( $style );
+	}
+
+	/**
+	 * Añade al email de texto plano los datos del formulario.
 	 *
 	 * @param WC_Order $order         Pedido.
 	 * @param bool     $sent_to_admin Si el email va al administrador.
@@ -76,7 +96,7 @@ class IWQ_Emails {
 	 * @return void
 	 */
 	public function render_quote_details( $order, $sent_to_admin, $plain_text, $email ) {
-		if ( ! iwq_is_quote( $order ) || 0 !== strpos( $email->id, 'iwq_' ) ) {
+		if ( ! $plain_text || ! iwq_is_quote( $order ) || 0 !== strpos( $email->id, 'iwq_' ) ) {
 			return;
 		}
 
@@ -93,7 +113,7 @@ class IWQ_Emails {
 		}
 
 		iwq_get_template(
-			$plain_text ? 'emails/plain/form-data.php' : 'emails/form-data.php',
+			'emails/plain/form-data.php',
 			array(
 				'form_data'     => $data,
 				'order'         => $order,

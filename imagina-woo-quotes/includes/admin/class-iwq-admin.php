@@ -69,7 +69,7 @@ class IWQ_Admin {
 			wp_enqueue_script(
 				'iwq-admin',
 				IWQ_URL . 'assets/js/admin.js',
-				array( 'jquery', 'jquery-ui-sortable', 'wp-i18n' ),
+				array( 'jquery', 'jquery-ui-sortable', 'wp-i18n', 'wp-color-picker' ),
 				IWQ_VERSION,
 				true
 			);
@@ -85,11 +85,16 @@ class IWQ_Admin {
 						'confirmDelete' => __( '¿Seguro que quieres borrar este campo?', 'imagina-woo-quotes' ),
 						'newField'      => __( 'Campo nuevo', 'imagina-woo-quotes' ),
 						'coreField'     => __( 'Este campo es del sistema: puedes cambiar su etiqueta, pero no borrarlo.', 'imagina-woo-quotes' ),
+						'noOrder'       => __( 'Elige un presupuesto o crea uno de ejemplo para ver la vista previa.', 'imagina-woo-quotes' ),
+						'noAttachments' => __( 'ninguno', 'imagina-woo-quotes' ),
+						'sending'       => __( 'Enviando…', 'imagina-woo-quotes' ),
 					),
 				)
 			);
 
 			wp_enqueue_media();
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wc-enhanced-select' );
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 		}

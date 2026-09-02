@@ -106,6 +106,7 @@ final class IWQ {
 			$this->modules['form_admin']       = new IWQ_Form_Admin();
 			$this->modules['order_metabox']    = new IWQ_Order_Metabox();
 			$this->modules['exclusions_admin'] = new IWQ_Exclusions_Admin();
+			$this->modules['preview']          = new IWQ_Preview();
 		}
 	}
 

@@ -5,6 +5,29 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.1.0] - 2026-09-02
+
+### Añadido
+- Tres diseños de email seleccionables: «Moderno» (tarjeta con barra de
+  color y botones grandes), «Minimalista» (texto sobre blanco) y «Como
+  WooCommerce» (cabecera, pie y colores de la tienda). Con color de acento,
+  logotipo y pie configurables en la pestaña Emails
+- Los seis emails se reescriben sobre partes reutilizables: resumen del
+  presupuesto, tabla de productos con miniaturas y precios tachados, botones
+  de respuesta, datos del cliente, contraoferta y respuestas del formulario.
+  Todas sobreescribibles desde el tema en `imagina-woo-quotes/emails/parts/`
+- Pestaña «Vista previa» en WooCommerce → Presupuestos: cada email tal como
+  lo recibe su destinatario (asunto, remitente, destinatario, adjuntos y
+  estado del presupuesto), en HTML, texto plano y con el PDF adjunto;
+  envío de prueba a cualquier dirección; y un botón para crear un
+  presupuesto de ejemplo con descuento, validez y contraoferta cuando la
+  tienda aún no tiene ninguno
+
+### Cambiado
+- La tabla de productos de los emails es propia del plugin: respeta los
+  precios ocultos y muestra el precio de catálogo tachado cuando el
+  presupuesto lo mejora
+
 ## [1.0.2] - 2026-09-02
 
 ### Cambiado
@@ -65,6 +88,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.1.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.1.0
 [1.0.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.2
 [1.0.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.1
 [1.0.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.0

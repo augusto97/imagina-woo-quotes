@@ -55,26 +55,50 @@ abstract class IWQ_Email_Base extends WC_Email {
 	public function trigger( $order_id ) {
 		$this->setup_locale();
 
-		$order = $order_id ? wc_get_order( $order_id ) : false;
-
-		if ( $order instanceof WC_Order ) {
-			$this->object                         = $order;
-			$this->quote                          = iwq_get_quote( $order );
-			$this->placeholders['{order_date}']   = wc_format_datetime( $order->get_date_created() );
-			$this->placeholders['{order_number}'] = $order->get_order_number();
-			$this->placeholders['{customer_name}'] = $order->get_formatted_billing_full_name();
-			$this->placeholders['{expiry_date}']  = $this->get_expiry_placeholder();
-
-			if ( ! $this->is_for_admin() ) {
-				$this->recipient = $order->get_billing_email();
-			}
-		}
-
-		if ( $this->is_enabled() && $this->get_recipient() ) {
+		if ( $this->prepare( $order_id ) && $this->is_enabled() && $this->get_recipient() ) {
 			$this->send( $this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
 		}
 
 		$this->restore_locale();
+	}
+
+	/**
+	 * Carga el pedido en el email sin enviarlo.
+	 *
+	 * Lo usa `trigger()` y también la vista previa del administrador, que
+	 * necesita el asunto, el contenido y los adjuntos tal como saldrían.
+	 *
+	 * @param int|WC_Order $order Pedido o su ID.
+	 * @return bool False si el pedido no existe.
+	 */
+	public function prepare( $order ) {
+		$order = is_numeric( $order ) ? wc_get_order( $order ) : $order;
+
+		if ( ! $order instanceof WC_Order ) {
+			return false;
+		}
+
+		$this->object                          = $order;
+		$this->quote                           = iwq_get_quote( $order );
+		$this->placeholders['{order_date}']    = wc_format_datetime( $order->get_date_created() );
+		$this->placeholders['{order_number}']  = $order->get_order_number();
+		$this->placeholders['{customer_name}'] = $order->get_formatted_billing_full_name();
+		$this->placeholders['{expiry_date}']   = $this->get_expiry_placeholder();
+
+		if ( ! $this->is_for_admin() ) {
+			$this->recipient = $order->get_billing_email();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Indica si este email va al administrador (para la vista previa).
+	 *
+	 * @return bool
+	 */
+	public function goes_to_admin() {
+		return $this->is_for_admin();
 	}
 
 	/**
@@ -96,11 +120,22 @@ abstract class IWQ_Email_Base extends WC_Email {
 	 * @return string
 	 */
 	public function get_content_html() {
-		return wc_get_template_html(
+		$body = wc_get_template_html(
 			$this->template_html,
 			$this->get_template_args( false ),
 			'',
 			$this->template_base
+		);
+
+		return iwq_get_template(
+			'emails/layout.php',
+			array(
+				'style'         => IWQ_Email_Styles::get_current(),
+				'email_heading' => $this->get_heading(),
+				'content'       => $body,
+				'email'         => $this,
+			),
+			true
 		);
 	}
 
