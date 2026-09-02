@@ -200,3 +200,10 @@ p {
 	color: #9ca3af;
 	text-align: center;
 }
+
+.iwq-pdf-pending {
+	margin: 3mm 0 5mm;
+	padding: 3mm 4mm;
+	background: #f9fafb;
+	color: #6b7280;
+}

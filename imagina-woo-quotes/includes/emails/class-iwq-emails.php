@@ -107,7 +107,20 @@ class IWQ_Emails {
 	 * @return array
 	 */
 	public function attach_pdf( $attachments, $email_id, $order, $email = null ) {
-		if ( 'iwq_quote_sent' !== $email_id ) {
+		/**
+		 * Filtra los emails que llevan el PDF adjunto.
+		 *
+		 * En la solicitud nueva y su confirmación el documento aún no tiene
+		 * precios: sirve como resguardo de qué se pidió.
+		 *
+		 * @param string[] $with_pdf Identificadores de email.
+		 */
+		$with_pdf = apply_filters(
+			'iwq_emails_with_pdf',
+			array( 'iwq_new_request', 'iwq_request_received', 'iwq_quote_sent', 'iwq_reminder' )
+		);
+
+		if ( ! in_array( $email_id, $with_pdf, true ) ) {
 			return $attachments;
 		}
 

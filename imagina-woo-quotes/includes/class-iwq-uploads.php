@@ -34,7 +34,7 @@ class IWQ_Uploads {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'init', array( __CLASS__, 'maybe_serve_file' ) );
+		add_action( 'template_redirect', array( __CLASS__, 'maybe_serve_file' ) );
 	}
 
 	/**

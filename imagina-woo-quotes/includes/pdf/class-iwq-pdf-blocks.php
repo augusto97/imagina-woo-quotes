@@ -78,11 +78,19 @@ class IWQ_PDF_Blocks {
 		$show_images = ! empty( $attributes['showImages'] );
 		$show_sku    = ! empty( $attributes['showSku'] );
 
+		// Antes de valorar, el documento es un resguardo de lo pedido: sin
+		// columnas de precio, que saldrían a cero.
+		$priced = self::is_priced( $order );
+
 		$html  = '<table class="iwq-pdf-table"><thead><tr>';
 		$html .= '<th class="iwq-pdf-table__product">' . esc_html__( 'Producto', 'imagina-woo-quotes' ) . '</th>';
 		$html .= '<th class="iwq-pdf-table__qty">' . esc_html__( 'Cantidad', 'imagina-woo-quotes' ) . '</th>';
-		$html .= '<th class="iwq-pdf-table__price">' . esc_html__( 'Precio', 'imagina-woo-quotes' ) . '</th>';
-		$html .= '<th class="iwq-pdf-table__total">' . esc_html__( 'Total', 'imagina-woo-quotes' ) . '</th>';
+
+		if ( $priced ) {
+			$html .= '<th class="iwq-pdf-table__price">' . esc_html__( 'Precio', 'imagina-woo-quotes' ) . '</th>';
+			$html .= '<th class="iwq-pdf-table__total">' . esc_html__( 'Total', 'imagina-woo-quotes' ) . '</th>';
+		}
+
 		$html .= '</tr></thead><tbody>';
 
 		foreach ( $order->get_items() as $item_id => $item ) {
@@ -111,12 +119,26 @@ class IWQ_PDF_Blocks {
 			$html .= '</td>';
 
 			$html .= '<td class="iwq-pdf-table__qty">' . esc_html( $quantity ) . '</td>';
-			$html .= '<td class="iwq-pdf-table__price">' . self::price( $unit, $order, $quote, $item_id ) . '</td>';
-			$html .= '<td class="iwq-pdf-table__total">' . wp_kses_post( wc_price( $line_total, array( 'currency' => $order->get_currency() ) ) ) . '</td>';
+
+			if ( $priced ) {
+				$html .= '<td class="iwq-pdf-table__price">' . self::price( $unit, $order, $quote, $item_id ) . '</td>';
+				$html .= '<td class="iwq-pdf-table__total">' . wp_kses_post( wc_price( $line_total, array( 'currency' => $order->get_currency() ) ) ) . '</td>';
+			}
+
 			$html .= '</tr>';
 		}
 
 		return $html . '</tbody></table>';
+	}
+
+	/**
+	 * Indica si el presupuesto ya tiene precios puestos por la tienda.
+	 *
+	 * @param WC_Order $order Pedido.
+	 * @return bool
+	 */
+	private static function is_priced( $order ) {
+		return 'iwq-new' !== $order->get_status() && (float) $order->get_total() > 0;
 	}
 
 	/**
@@ -160,7 +182,12 @@ class IWQ_PDF_Blocks {
 		}
 
 		$order = $quote->get_order();
-		$html  = '<table class="iwq-pdf-totals">';
+
+		if ( ! self::is_priced( $order ) ) {
+			return '<p class="iwq-pdf-pending">' . esc_html__( 'Precios pendientes de valoración. Te enviaremos el presupuesto en breve.', 'imagina-woo-quotes' ) . '</p>';
+		}
+
+		$html = '<table class="iwq-pdf-totals">';
 
 		foreach ( $order->get_order_item_totals() as $total ) {
 			$html .= sprintf(

@@ -20,7 +20,9 @@ class IWQ_PDF {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'init', array( __CLASS__, 'maybe_serve_pdf' ) );
+		// En `template_redirect`, no en `init`: los bloques de la plantilla se
+		// registran en `init` y generar el PDF antes los dejaría vacíos.
+		add_action( 'template_redirect', array( __CLASS__, 'maybe_serve_pdf' ) );
 	}
 
 	/**
@@ -54,7 +56,20 @@ class IWQ_PDF {
 		$modified = $order->get_date_modified() ? $order->get_date_modified() : $order->get_date_created();
 		$stamp    = $modified ? $modified->getTimestamp() : 0;
 
-		if ( ! $force && is_readable( $path ) && filemtime( $path ) >= $stamp ) {
+		// La plantilla también invalida: editarla debe verse en el PDF.
+		$template_id = (int) $order->get_meta( '_iwq_pdf_template_id' );
+		$template_id = $template_id ? $template_id : (int) iwq_get_option( 'pdf_template_id' );
+		$template    = $template_id ? get_post( $template_id ) : null;
+
+		if ( $template ) {
+			$stamp = max( $stamp, (int) get_post_modified_time( 'U', true, $template ) );
+		}
+
+		// Un PDF generado por otra versión del plugin se descarta: así una
+		// corrección en el render llega a los documentos ya cacheados.
+		$same_version = IWQ_VERSION === $order->get_meta( '_iwq_pdf_version' );
+
+		if ( ! $force && $same_version && is_readable( $path ) && filemtime( $path ) >= $stamp ) {
 			return $path;
 		}
 
@@ -104,6 +119,7 @@ class IWQ_PDF {
 			file_put_contents( $path, $dompdf->output() );
 
 			$order->update_meta_data( IWQ_Quote::META_PDF_FILE, basename( $path ) );
+			$order->update_meta_data( '_iwq_pdf_version', IWQ_VERSION );
 			$order->save();
 
 			return $path;
@@ -125,6 +141,13 @@ class IWQ_PDF {
 	 */
 	public static function get_html( $order ) {
 		$quote = new IWQ_Quote( $order );
+
+		// Si nos llaman antes de `init` (cron, REST, otro plugin), los bloques
+		// aún no existen y do_blocks() los pintaría vacíos. Los registramos
+		// aquí mismo; register_block_type() ignora los ya registrados.
+		if ( ! WP_Block_Type_Registry::get_instance()->is_registered( 'imagina-quotes/quote-table' ) ) {
+			IWQ_PDF_Template_CPT::register_blocks();
+		}
 
 		IWQ_PDF_Blocks::set_context( $quote );
 
