@@ -59,6 +59,7 @@
  * ------------------------------------------------------------------ */
 
 .iwq-add-button {
+	box-sizing: border-box;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -144,6 +145,26 @@
 .iwq-price-hidden {
 	color: var( --iwq-text-muted );
 	font-style: italic;
+}
+
+.iwq-link-button {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var( --iwq-text-muted );
+	font: inherit;
+	font-size: 0.9em;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.iwq-link-button:hover,
+.iwq-link-button:focus-visible {
+	color: var( --iwq-danger );
+}
+
+.iwq-quote-page__tools {
+	margin: 12px 0 32px;
 }
 
 /* ---------------------------------------------------------------------
@@ -455,10 +476,16 @@ body.iwq-drawer-open {
 .iwq-field__choice,
 .iwq-field__acceptance {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	gap: 8px;
 	cursor: pointer;
 	font-size: 0.95em;
+}
+
+.iwq-field__choice input,
+.iwq-field__acceptance input {
+	margin: 0;
+	flex: 0 0 auto;
 }
 
 .iwq-success {
