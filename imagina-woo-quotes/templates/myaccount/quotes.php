@@ -61,8 +61,8 @@ endif;
 
 				<td data-title="<?php esc_attr_e( 'Total', 'imagina-woo-quotes' ); ?>">
 					<?php
-					// Un presupuesto sin valorar todavía no tiene importe que mostrar.
-					echo $iwq_order->get_total() > 0
+					// Sin precios visibles no hay importe que mostrar.
+					echo $iwq_quote && $iwq_quote->prices_visible()
 						? wp_kses_post( $iwq_order->get_formatted_order_total() )
 						: '—';
 					?>

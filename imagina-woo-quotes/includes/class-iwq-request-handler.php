@@ -140,11 +140,13 @@ class IWQ_Request_Handler {
 
 			$order->update_meta_data( IWQ_Quote::META_IS_QUOTE, 'yes' );
 			$order->update_meta_data( IWQ_Quote::META_FORM_DATA, $form_data );
+			$order->update_meta_data( IWQ_Quote::META_PRICES_VISIBLE, $this->prices_were_visible() ? 'yes' : 'no' );
 			$order->set_currency( get_woocommerce_currency() );
 
-			// Los precios los pone el administrador al preparar el
-			// presupuesto: la solicitud nace sin importe.
-			$order->calculate_totals( false );
+			// La solicitud nace con los precios de catálogo, impuestos
+			// incluidos según la configuración de la tienda. El administrador
+			// los ajusta desde el pedido si quiere hacer un descuento.
+			$order->calculate_totals( true );
 			$order->set_status( 'iwq-new', __( 'Solicitud de presupuesto recibida.', 'imagina-woo-quotes' ) );
 			$order->save();
 
@@ -175,6 +177,27 @@ class IWQ_Request_Handler {
 	}
 
 	/**
+	 * Indica si el cliente veía los precios de todo lo que pidió.
+	 *
+	 * Si alguno estaba oculto por las reglas, la solicitud entera se trata
+	 * como «sin precios»: el cliente no debe verlos por la puerta de atrás en
+	 * el email o el PDF.
+	 *
+	 * @return bool
+	 */
+	private function prices_were_visible() {
+		foreach ( IWQ_Session::get_items() as $item ) {
+			$product = wc_get_product( $item['variation_id'] ? $item['variation_id'] : $item['product_id'] );
+
+			if ( $product && IWQ_Exclusions::should_hide_price( $product ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Vuelca la lista de presupuesto en las líneas del pedido.
 	 *
 	 * @param WC_Order $order Pedido.
@@ -189,13 +212,11 @@ class IWQ_Request_Handler {
 				continue;
 			}
 
+			// Sin subtotal ni total explícitos, WooCommerce usa el precio de
+			// catálogo del producto.
 			$args = array(
 				'variation' => isset( $item['variation'] ) ? $item['variation'] : array(),
 			);
-
-			// El importe arranca en cero: es una solicitud, no una venta.
-			$args['subtotal'] = 0;
-			$args['total']    = 0;
 
 			/**
 			 * Filtra los argumentos de una línea antes de añadirla al pedido.

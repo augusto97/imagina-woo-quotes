@@ -41,6 +41,12 @@ endif;
 					</div>
 				<?php endif; ?>
 
+				<?php if ( ! IWQ_Exclusions::should_hide_price( $iwq_product ) && $iwq_product->get_price() !== '' ) : ?>
+					<div class="iwq-list__price">
+						<?php echo wp_kses_post( wc_price( wc_get_price_to_display( $iwq_product ) ) ); ?>
+					</div>
+				<?php endif; ?>
+
 				<label class="iwq-sr-only" for="iwq-qty-<?php echo esc_attr( $iwq_key ); ?>">
 					<?php esc_html_e( 'Cantidad', 'imagina-woo-quotes' ); ?>
 				</label>

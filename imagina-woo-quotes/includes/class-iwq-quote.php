@@ -21,6 +21,7 @@ class IWQ_Quote {
 	const META_REMINDERS    = '_iwq_reminders_sent';
 	const META_PDF_FILE     = '_iwq_pdf_file';
 	const META_LIST_PRICES  = '_iwq_list_prices';
+	const META_PRICES_VISIBLE = '_iwq_prices_visible';
 
 	/**
 	 * Pedido subyacente.
@@ -80,8 +81,12 @@ class IWQ_Quote {
 			return false;
 		}
 
-		$this->order->calculate_totals( false );
+		$this->order->calculate_totals( true );
 		$this->set_expiry_from_settings();
+
+		// Una vez valorado por la tienda, el presupuesto siempre muestra
+		// sus precios: es justamente lo que el cliente pidió.
+		$this->order->update_meta_data( self::META_PRICES_VISIBLE, 'yes' );
 		$this->order->update_meta_data( self::META_SENT_AT, time() );
 		$this->order->delete_meta_data( self::META_REMINDERS );
 
@@ -464,6 +469,27 @@ class IWQ_Quote {
 		}
 
 		$this->order->update_meta_data( self::META_LIST_PRICES, $prices );
+	}
+
+	/**
+	 * Indica si el documento debe mostrar precios.
+	 *
+	 * Es «no» solo en solicitudes cuyos productos tenían el precio oculto
+	 * para el cliente y que la tienda aún no ha valorado.
+	 *
+	 * @return bool
+	 */
+	public function prices_visible() {
+		return 'no' !== $this->order->get_meta( self::META_PRICES_VISIBLE );
+	}
+
+	/**
+	 * Indica si los precios son todavía los de catálogo, sin revisar.
+	 *
+	 * @return bool
+	 */
+	public function is_estimate() {
+		return 'iwq-new' === $this->order->get_status();
 	}
 
 	/**

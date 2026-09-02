@@ -25,6 +25,11 @@ class IWQ_Emails {
 		add_action( 'woocommerce_email_order_details', array( $this, 'render_quote_details' ), 5, 4 );
 		add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdf' ), 10, 4 );
 
+		// En solicitudes con precios ocultos, la tabla de WooCommerce no debe
+		// enseñar subtotales ni totales.
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'maybe_hide_totals' ), 10, 2 );
+		add_filter( 'woocommerce_order_formatted_line_subtotal', array( $this, 'maybe_hide_line_subtotal' ), 10, 3 );
+
 		// Los emails se disparan desde las acciones de la máquina de estados.
 		add_action( 'iwq_request_created', array( $this, 'trigger_new_request' ) );
 		add_action( 'iwq_quote_sent', array( $this, 'trigger_quote_sent' ) );
@@ -95,6 +100,41 @@ class IWQ_Emails {
 				'sent_to_admin' => $sent_to_admin,
 			)
 		);
+	}
+
+	/**
+	 * Quita las filas de totales si el cliente no debe ver precios.
+	 *
+	 * @param array    $total_rows Filas de totales.
+	 * @param WC_Order $order      Pedido.
+	 * @return array
+	 */
+	public function maybe_hide_totals( $total_rows, $order ) {
+		if ( ! $order instanceof WC_Order || ! iwq_is_quote( $order ) ) {
+			return $total_rows;
+		}
+
+		$quote = iwq_get_quote( $order );
+
+		return $quote && ! $quote->prices_visible() ? array() : $total_rows;
+	}
+
+	/**
+	 * Quita el subtotal de línea si el cliente no debe ver precios.
+	 *
+	 * @param string        $subtotal HTML del subtotal.
+	 * @param WC_Order_Item $item     Línea.
+	 * @param WC_Order      $order    Pedido.
+	 * @return string
+	 */
+	public function maybe_hide_line_subtotal( $subtotal, $item, $order ) {
+		if ( ! $order instanceof WC_Order || ! iwq_is_quote( $order ) ) {
+			return $subtotal;
+		}
+
+		$quote = iwq_get_quote( $order );
+
+		return $quote && ! $quote->prices_visible() ? '' : $subtotal;
 	}
 
 	/**

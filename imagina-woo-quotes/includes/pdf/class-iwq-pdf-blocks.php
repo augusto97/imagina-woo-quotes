@@ -78,9 +78,9 @@ class IWQ_PDF_Blocks {
 		$show_images = ! empty( $attributes['showImages'] );
 		$show_sku    = ! empty( $attributes['showSku'] );
 
-		// Antes de valorar, el documento es un resguardo de lo pedido: sin
-		// columnas de precio, que saldrían a cero.
-		$priced = self::is_priced( $order );
+		// Si al cliente se le ocultaban los precios, el resguardo tampoco
+		// los muestra.
+		$priced = $quote->prices_visible();
 
 		$html  = '<table class="iwq-pdf-table"><thead><tr>';
 		$html .= '<th class="iwq-pdf-table__product">' . esc_html__( 'Producto', 'imagina-woo-quotes' ) . '</th>';
@@ -132,16 +132,6 @@ class IWQ_PDF_Blocks {
 	}
 
 	/**
-	 * Indica si el presupuesto ya tiene precios puestos por la tienda.
-	 *
-	 * @param WC_Order $order Pedido.
-	 * @return bool
-	 */
-	private static function is_priced( $order ) {
-		return 'iwq-new' !== $order->get_status() && (float) $order->get_total() > 0;
-	}
-
-	/**
 	 * Pinta un precio, tachando el de catálogo si el presupuesto mejora.
 	 *
 	 * @param float     $unit    Precio unitario presupuestado.
@@ -183,11 +173,17 @@ class IWQ_PDF_Blocks {
 
 		$order = $quote->get_order();
 
-		if ( ! self::is_priced( $order ) ) {
+		if ( ! $quote->prices_visible() ) {
 			return '<p class="iwq-pdf-pending">' . esc_html__( 'Precios pendientes de valoración. Te enviaremos el presupuesto en breve.', 'imagina-woo-quotes' ) . '</p>';
 		}
 
-		$html = '<table class="iwq-pdf-totals">';
+		$html = '';
+
+		if ( $quote->is_estimate() ) {
+			$html .= '<p class="iwq-pdf-pending">' . esc_html__( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto definitivo en breve.', 'imagina-woo-quotes' ) . '</p>';
+		}
+
+		$html .= '<table class="iwq-pdf-totals">';
 
 		foreach ( $order->get_order_item_totals() as $total ) {
 			$html .= sprintf(

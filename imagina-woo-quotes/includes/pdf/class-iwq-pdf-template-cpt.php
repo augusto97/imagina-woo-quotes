@@ -225,7 +225,10 @@ class IWQ_PDF_Template_CPT {
 			'<!-- wp:imagina-quotes/quote-totals /-->',
 			'<!-- wp:imagina-quotes/form-data /-->',
 			'<!-- wp:imagina-quotes/quote-actions /-->',
-			'<!-- wp:paragraph --><p>' . esc_html__( 'Presupuesto válido hasta el {expiry_date}. Gracias por confiar en {site_title}.', 'imagina-woo-quotes' ) . '</p><!-- /wp:paragraph -->',
+			// La validez la pinta el bloque de datos del presupuesto solo cuando
+			// hay fecha; aquí no, para que una solicitud sin valorar no diga
+			// «válido hasta el —».
+			'<!-- wp:paragraph --><p>' . esc_html__( 'Gracias por confiar en {site_title}.', 'imagina-woo-quotes' ) . '</p><!-- /wp:paragraph -->',
 		);
 
 		return implode( "\n\n", $blocks );

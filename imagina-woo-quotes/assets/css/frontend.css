@@ -350,6 +350,12 @@ body.iwq-drawer-open {
 	font-size: 0.85em;
 }
 
+.iwq-list__price {
+	margin: 2px 0 8px;
+	color: var( --iwq-text-muted );
+	font-size: 0.9em;
+}
+
 .iwq-quantity {
 	width: 72px;
 	padding: 4px 8px;

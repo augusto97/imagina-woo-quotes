@@ -78,15 +78,12 @@ class IWQ_Gateway extends WC_Payment_Gateway {
 		}
 
 		$order->update_meta_data( IWQ_Quote::META_IS_QUOTE, 'yes' );
+		// En el checkout el cliente ya vio los precios.
+		$order->update_meta_data( IWQ_Quote::META_PRICES_VISIBLE, 'yes' );
 
-		// Los importes los fija el administrador al valorar el presupuesto.
-		foreach ( $order->get_items() as $item ) {
-			$item->set_total( 0 );
-			$item->set_subtotal( 0 );
-			$item->save();
-		}
-
-		$order->calculate_totals( false );
+		// Los importes del checkout se conservan como punto de partida; el
+		// administrador los ajusta al valorar.
+		$order->calculate_totals( true );
 		$order->set_status( 'iwq-new', __( 'Solicitud de presupuesto creada desde el checkout.', 'imagina-woo-quotes' ) );
 		$order->save();
 
