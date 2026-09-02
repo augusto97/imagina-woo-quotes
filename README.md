@@ -75,9 +75,12 @@ en las páginas que los necesitan.
 
 - WordPress 6.4 o superior
 - WooCommerce 8.0 o superior
-- PHP 7.4 o superior
+- PHP 8.1 o superior
 
 ## Instalación
+
+Probado en WordPress 6.9.7 con WooCommerce 10.9.0 sobre PHP 8.4, en un tema de
+bloques (Twenty Twenty-Five).
 
 ```bash
 git clone https://github.com/augusto97/imagina-woo-quotes.git

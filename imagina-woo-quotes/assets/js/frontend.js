@@ -10,6 +10,11 @@
 
 	var STORAGE_KEY = 'iwq_quote_state';
 
+	// Solo los botones que llevan un producto son «añadir a la lista». Otros
+	// elementos comparten la clase por estilo (enviar, aceptar, enlaces) y no
+	// deben tocarse.
+	var ADD_SELECTOR = '.iwq-add-button[data-product-id]';
+
 	var settings = window.iwqData || {};
 	var i18n = settings.i18n || {};
 
@@ -155,7 +160,7 @@
 			node.hidden = state.count === 0;
 		} );
 
-		document.querySelectorAll( '.iwq-add-button' ).forEach( function ( button ) {
+		document.querySelectorAll( ADD_SELECTOR ).forEach( function ( button ) {
 			var id = parseInt( button.dataset.productId, 10 );
 
 			setButtonAdded( button, state.ids.indexOf( id ) !== -1 );
@@ -692,7 +697,7 @@
 		document.addEventListener( 'click', function ( event ) {
 			var target = event.target;
 
-			var add = target.closest( '.iwq-add-button' );
+			var add = target.closest( ADD_SELECTOR );
 
 			if ( add ) {
 				event.preventDefault();

@@ -58,8 +58,11 @@ class IWQ_Frontend {
 		add_filter( 'woocommerce_is_purchasable', array( $this, 'filter_is_purchasable' ), 100, 2 );
 		add_filter( 'woocommerce_variable_price_html', array( $this, 'filter_price_html' ), 100, 2 );
 
-		// Carrito: permite pasar el carrito entero a presupuesto.
+		// Carrito: permite pasar el carrito entero a presupuesto. El hook cubre
+		// el carrito clásico; el filtro, el bloque Carrito de los temas de
+		// bloques, que no dispara ningún hook clásico.
 		add_action( 'woocommerce_proceed_to_checkout', array( $this, 'render_cart_button' ), 25 );
+		add_filter( 'render_block_woocommerce/cart', array( $this, 'append_cart_button_to_block' ), 10, 2 );
 
 		// Contador en el menú y panel lateral.
 		add_action( 'wp_footer', array( $this, 'render_drawer' ) );
@@ -250,6 +253,26 @@ class IWQ_Frontend {
 		self::$needs_assets = true;
 
 		iwq_get_template( 'quote/cart-button.php' );
+	}
+
+	/**
+	 * Añade el botón de presupuesto después del bloque Carrito.
+	 *
+	 * Se coloca fuera de la raíz del bloque para que React, al hidratar el
+	 * carrito, no lo elimine.
+	 *
+	 * @param string $content HTML del bloque.
+	 * @param array  $block   Bloque analizado.
+	 * @return string
+	 */
+	public function append_cart_button_to_block( $content, $block ) {
+		if ( ! iwq_option_enabled( 'show_on_cart' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+			return $content;
+		}
+
+		self::$needs_assets = true;
+
+		return $content . '<div class="iwq iwq-cart-actions">' . iwq_get_template( 'quote/cart-button.php', array(), true ) . '</div>';
 	}
 
 	/**

@@ -249,7 +249,11 @@ class IWQ_Quote {
 			return;
 		}
 
-		if ( $this->order->get_meta( self::META_EXPIRY ) ) {
+		// Se respeta una fecha puesta a mano, salvo que ya haya pasado: al
+		// reenviar un presupuesto vencido, mantenerla lo dejaría vencido.
+		$current = (int) $this->order->get_meta( self::META_EXPIRY );
+
+		if ( $current > time() ) {
 			return;
 		}
 
@@ -381,7 +385,7 @@ class IWQ_Quote {
 			sprintf(
 				/* translators: %s: importe propuesto por el cliente. */
 				__( 'El cliente envió una contraoferta de %s.', 'imagina-woo-quotes' ),
-				wp_strip_all_tags( wc_price( $offer, array( 'currency' => $this->order->get_currency() ) ) )
+				html_entity_decode( wp_strip_all_tags( wc_price( $offer, array( 'currency' => $this->order->get_currency() ) ) ), ENT_QUOTES, 'UTF-8' )
 			)
 		);
 

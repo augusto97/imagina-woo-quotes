@@ -47,6 +47,39 @@ class IWQ_Order_Metabox {
 			'side',
 			'high'
 		);
+
+		add_meta_box(
+			'iwq-request-data',
+			__( 'Datos de la solicitud', 'imagina-woo-quotes' ),
+			array( $this, 'render_request_data' ),
+			$screen_id,
+			'normal',
+			'high'
+		);
+	}
+
+	/**
+	 * Pinta las respuestas del formulario y los adjuntos.
+	 *
+	 * @param WC_Order|WP_Post $object Objeto de la pantalla.
+	 * @return void
+	 */
+	public function render_request_data( $object ) {
+		$order = $object instanceof WC_Order ? $object : wc_get_order( $object->ID );
+		$quote = iwq_get_quote( $order );
+
+		if ( ! $quote ) {
+			return;
+		}
+
+		iwq_get_template(
+			'admin/order-request-data.php',
+			array(
+				'order'     => $order,
+				'form_data' => $quote->get_form_data(),
+				'fields'    => iwq_get_all_form_fields(),
+			)
+		);
 	}
 
 	/**

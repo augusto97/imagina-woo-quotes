@@ -77,6 +77,14 @@ class IWQ_Form_Validator {
 		$required = 'yes' === $field['required'];
 		$is_empty = is_array( $value ) ? empty( $value ) : ( '' === trim( (string) $value ) );
 
+		// `sanitize_email()` devuelve cadena vacía ante un email malformado;
+		// si el usuario escribió algo, el error correcto es «inválido», no
+		// «obligatorio».
+		if ( 'email' === $field['type'] && $is_empty && '' !== trim( (string) wp_unslash( $raw ) ) ) {
+			$this->errors[ $field['id'] ] = __( 'Introduce una dirección de email válida.', 'imagina-woo-quotes' );
+			return;
+		}
+
 		if ( $required && $is_empty ) {
 			$this->errors[ $field['id'] ] = sprintf(
 				/* translators: %s: nombre del campo. */
