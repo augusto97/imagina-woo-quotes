@@ -22,6 +22,16 @@ class IWQ_Frontend {
 	private static $needs_assets = false;
 
 	/**
+	 * Productos para los que ya se pintó el botón de ficha en esta petición.
+	 *
+	 * En un tema de bloques el botón puede llegar por el hook clásico y por
+	 * el filtro del bloque de compra; con esto solo sale una vez.
+	 *
+	 * @var array<int,bool>
+	 */
+	private static $rendered_single = array();
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -33,6 +43,12 @@ class IWQ_Frontend {
 
 		add_action( $hook, array( $this, 'render_single_button' ), 20 );
 		add_action( 'woocommerce_single_product_summary', array( $this, 'render_single_button_fallback' ), 31 );
+
+		// Temas de bloques: cuando el producto no es comprable (agotado, sin
+		// precio) el bloque de compra no dispara ningún hook clásico, así que
+		// añadimos el botón a la salida del propio bloque.
+		add_filter( 'render_block_woocommerce/add-to-cart-form', array( $this, 'append_to_add_to_cart_block' ), 10, 2 );
+		add_filter( 'render_block_woocommerce/add-to-cart-with-options', array( $this, 'append_to_add_to_cart_block' ), 10, 2 );
 
 		// Catálogo.
 		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'render_loop_button' ), 20 );
@@ -178,6 +194,35 @@ class IWQ_Frontend {
 	}
 
 	/**
+	 * Añade el botón al bloque de compra si el hook clásico no lo pintó.
+	 *
+	 * @param string $content HTML del bloque ya renderizado.
+	 * @param array  $block   Bloque analizado.
+	 * @return string
+	 */
+	public function append_to_add_to_cart_block( $content, $block ) {
+		global $product;
+
+		if ( ! iwq_option_enabled( 'show_on_product', true ) || ! $product instanceof WC_Product ) {
+			return $content;
+		}
+
+		if ( isset( self::$rendered_single[ $product->get_id() ] ) ) {
+			return $content;
+		}
+
+		$button = $this->get_button_html( $product, 'single' );
+
+		if ( ! $button ) {
+			return $content;
+		}
+
+		return 'before_add_to_cart' === iwq_get_option( 'button_position_single', 'after_add_to_cart' )
+			? $button . $content
+			: $content . $button;
+	}
+
+	/**
 	 * Pinta el botón en el catálogo.
 	 *
 	 * @return void
@@ -215,22 +260,44 @@ class IWQ_Frontend {
 	 * @return void
 	 */
 	private function output_button( $product, $context ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- la plantilla escapa su salida.
+		echo $this->get_button_html( $product, $context );
+	}
+
+	/**
+	 * Devuelve el HTML del botón para un producto, o cadena vacía si no
+	 * corresponde mostrarlo.
+	 *
+	 * @param WC_Product $product Producto.
+	 * @param string     $context `single`, `loop` o `shortcode`.
+	 * @return string
+	 */
+	public function get_button_html( $product, $context ) {
 		if ( ! $product instanceof WC_Product || ! IWQ_Exclusions::is_quotable( $product ) ) {
-			return;
+			return '';
+		}
+
+		if ( 'single' === $context ) {
+			if ( isset( self::$rendered_single[ $product->get_id() ] ) ) {
+				return '';
+			}
+
+			self::$rendered_single[ $product->get_id() ] = true;
 		}
 
 		self::$needs_assets = true;
 
 		// En un producto variable, la variación concreta la elige el usuario:
-		// el botón se activa cuando el front informa de la variación.
-		iwq_get_template(
+		// el front la lee del formulario al pulsar el botón.
+		return iwq_get_template(
 			'quote/add-to-quote-button.php',
 			array(
-				'product'    => $product,
-				'context'    => $context,
-				'in_list'    => IWQ_Session::has_product( $product->get_id() ),
+				'product'     => $product,
+				'context'     => $context,
+				'in_list'     => IWQ_Session::has_product( $product->get_id() ),
 				'is_variable' => $product->is_type( 'variable' ),
-			)
+			),
+			true
 		);
 	}
 

@@ -93,6 +93,13 @@ class IWQ_Session {
 		self::$cache = $items;
 
 		if ( self::session_available() ) {
+			// Este es el único punto donde se abre la sesión de WooCommerce: al
+			// guardar una lista con contenido. WooCommerce no emite la cookie
+			// por sí solo al escribir datos, hay que pedírselo.
+			if ( ! empty( $items ) && ! WC()->session->has_session() ) {
+				WC()->session->set_customer_session_cookie( true );
+			}
+
 			WC()->session->set( self::SESSION_KEY, $items );
 		}
 

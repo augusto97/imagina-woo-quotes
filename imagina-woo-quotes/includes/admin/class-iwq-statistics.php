@@ -35,16 +35,20 @@ class IWQ_Statistics {
 		$total  = 0;
 
 		foreach ( iwq_get_quote_statuses() as $status ) {
-			$orders = wc_get_orders(
+			// Con `paginate` WooCommerce devuelve el total sin cargar ningún
+			// pedido: un `limit => -1` traería todos a memoria solo para
+			// contarlos.
+			$result = wc_get_orders(
 				array(
 					'status'       => $status,
 					'date_created' => '>=' . $after,
-					'limit'        => -1,
+					'limit'        => 1,
+					'paginate'     => true,
 					'return'       => 'ids',
 				)
 			);
 
-			$counts[ $status ] = count( $orders );
+			$counts[ $status ] = (int) $result->total;
 			$total            += $counts[ $status ];
 		}
 
@@ -74,19 +78,28 @@ class IWQ_Statistics {
 	 * @return float
 	 */
 	private static function get_accepted_value( $after ) {
-		$orders = wc_get_orders(
-			array(
-				'status'       => 'iwq-accepted',
-				'date_created' => '>=' . $after,
-				'limit'        => -1,
-			)
-		);
-
 		$total = 0;
+		$page  = 1;
 
-		foreach ( $orders as $order ) {
-			$total += (float) $order->get_total();
-		}
+		// Se recorre por páginas para que una tienda con miles de
+		// presupuestos aceptados no cargue todos los pedidos de golpe.
+		do {
+			$result = wc_get_orders(
+				array(
+					'status'       => 'iwq-accepted',
+					'date_created' => '>=' . $after,
+					'limit'        => 100,
+					'paged'        => $page,
+					'paginate'     => true,
+				)
+			);
+
+			foreach ( $result->orders as $order ) {
+				$total += (float) $order->get_total();
+			}
+
+			++$page;
+		} while ( $page <= $result->max_num_pages );
 
 		return $total;
 	}

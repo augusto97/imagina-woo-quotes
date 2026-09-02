@@ -13,6 +13,15 @@ $iwq_is_empty = empty( $items );
 ?>
 <div class="iwq iwq-quote-page">
 
+	<?php
+	// Los avisos de aceptar, rechazar o enlace caducado llegan aquí por la
+	// URL del email. En un tema de bloques nadie los imprime en una página
+	// normal, así que lo hacemos nosotros, igual que hace el carrito.
+	if ( function_exists( 'wc_print_notices' ) ) {
+		wc_print_notices();
+	}
+	?>
+
 	<?php if ( $iwq_is_empty ) : ?>
 
 		<div class="iwq-empty">
