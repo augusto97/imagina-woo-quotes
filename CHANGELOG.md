@@ -5,6 +5,38 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.2.0] - 2026-09-03
+
+### Añadido
+- Panel de administración propio en WooCommerce → Presupuestos: cabecera con
+  versión y acceso a pedidos, navegación lateral con iconos agrupada en
+  «Panel» y «Ajustes», tarjetas por sección, barra de guardado fija con
+  estado de cambios pendientes, atajo Ctrl/Cmd + S, aviso flotante al
+  guardar y aviso al salir con cambios sin guardar
+- Pestaña «Inicio»: solicitudes de los últimos 30 días, cuántas esperan
+  respuesta, aceptados y valor aceptado; lista de puesta en marcha
+  (sistema activo, página publicada, PDF disponible, plantilla elegida,
+  aviso de nueva solicitud, protección contra spam) con enlace directo a
+  lo que falta; accesos rápidos y actividad reciente con estado y total
+- Estadísticas y vista previa rediseñadas sobre el mismo sistema: tarjetas
+  de métricas, selector de periodo, tablas y controles propios
+
+### Cambiado
+- Los estilos y el script del panel (25 KB y 12 KB sin comprimir) se cargan
+  solo en la pantalla del plugin. Pedidos y productos reciben una hoja
+  aparte de un kilobyte para sus metaboxes y ningún JavaScript; el resto
+  del admin no carga nada del plugin
+- Los campos de ajustes se pintan en filas propias en lugar de `form-table`;
+  el guardado sigue pasando por la API de ajustes de WordPress, con el
+  mismo nonce, capacidad y saneado que antes
+- Los desplegables llevan una flecha propia y los campos bloqueados del
+  constructor de formularios se muestran atenuados en lugar de con el
+  patrón rayado del navegador
+
+### Corregido
+- La pestaña «Formulario» abría todos los paneles del constructor al
+  cargar; ahora se abren solo al pulsar «Editar»
+
 ## [1.1.0] - 2026-09-02
 
 ### Añadido
@@ -88,6 +120,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.2.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.2.0
 [1.1.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.1.0
 [1.0.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.2
 [1.0.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.1

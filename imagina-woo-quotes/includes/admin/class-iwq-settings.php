@@ -2,9 +2,10 @@
 /**
  * Página de ajustes del plugin.
  *
- * Se apoya en la API de ajustes de WordPress y en los estilos nativos del
- * admin, sin ningún framework propio: es la diferencia entre pesar unos
- * kilobytes y arrastrar un framework de varios megas en cada pantalla.
+ * Se apoya en la API de ajustes de WordPress (registro, nonces y saneado)
+ * con una interfaz propia y ligera que solo se carga en esta pantalla, sin
+ * ningún framework: es la diferencia entre pesar unos kilobytes y arrastrar
+ * varios megas en cada página del admin.
  *
  * @package ImaginaWooQuotes
  */
@@ -31,16 +32,84 @@ class IWQ_Settings {
 	 * @return array<string,string>
 	 */
 	public static function get_tabs() {
+		$tabs = array();
+
+		foreach ( self::get_tab_meta() as $slug => $tab ) {
+			$tabs[ $slug ] = $tab['label'];
+		}
+
+		return $tabs;
+	}
+
+	/**
+	 * Metadatos de cada pestaña: etiqueta, grupo del menú, icono y texto de
+	 * cabecera. Las pestañas sin campos (inicio, vista previa, estadísticas)
+	 * pintan su propia plantilla.
+	 *
+	 * @return array<string,array{label:string,group:string,icon:string,desc:string}>
+	 */
+	public static function get_tab_meta() {
 		return array(
-			'general'     => __( 'General', 'imagina-woo-quotes' ),
-			'display'     => __( 'Botones y catálogo', 'imagina-woo-quotes' ),
-			'quote'       => __( 'Presupuestos', 'imagina-woo-quotes' ),
-			'form'        => __( 'Formulario', 'imagina-woo-quotes' ),
-			'pdf'         => __( 'PDF', 'imagina-woo-quotes' ),
-			'emails'      => __( 'Emails', 'imagina-woo-quotes' ),
-			'preview'     => __( 'Vista previa', 'imagina-woo-quotes' ),
-			'rules'       => __( 'Reglas', 'imagina-woo-quotes' ),
-			'stats'       => __( 'Estadísticas', 'imagina-woo-quotes' ),
+			'inicio'  => array(
+				'label' => __( 'Inicio', 'imagina-woo-quotes' ),
+				'group' => __( 'Panel', 'imagina-woo-quotes' ),
+				'icon'  => 'home',
+				'desc'  => __( 'Un vistazo a la actividad reciente y a lo que falta por configurar.', 'imagina-woo-quotes' ),
+			),
+			'stats'   => array(
+				'label' => __( 'Estadísticas', 'imagina-woo-quotes' ),
+				'group' => __( 'Panel', 'imagina-woo-quotes' ),
+				'icon'  => 'chart',
+				'desc'  => __( 'Cuántas solicitudes entran, cuántas se aceptan y qué productos generan más interés.', 'imagina-woo-quotes' ),
+			),
+			'preview' => array(
+				'label' => __( 'Vista previa', 'imagina-woo-quotes' ),
+				'group' => __( 'Panel', 'imagina-woo-quotes' ),
+				'icon'  => 'eye',
+				'desc'  => __( 'Mira cada email y el PDF exactamente como los recibe el cliente o el administrador.', 'imagina-woo-quotes' ),
+			),
+			'general' => array(
+				'label' => __( 'General', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'sliders',
+				'desc'  => __( 'Activación, páginas y quién puede pedir presupuesto.', 'imagina-woo-quotes' ),
+			),
+			'display' => array(
+				'label' => __( 'Botones y catálogo', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'tag',
+				'desc'  => __( 'Dónde aparece el botón y cómo se comportan los precios y la compra.', 'imagina-woo-quotes' ),
+			),
+			'quote'   => array(
+				'label' => __( 'Presupuestos', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'file',
+				'desc'  => __( 'Caducidad, recordatorios, contraofertas y cantidades permitidas.', 'imagina-woo-quotes' ),
+			),
+			'form'    => array(
+				'label' => __( 'Formulario', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'form',
+				'desc'  => __( 'Los campos que rellena el cliente, los textos y la protección contra spam.', 'imagina-woo-quotes' ),
+			),
+			'pdf'     => array(
+				'label' => __( 'PDF', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'pdf',
+				'desc'  => __( 'El documento que acompaña a cada presupuesto: plantilla, logotipo y formato.', 'imagina-woo-quotes' ),
+			),
+			'emails'  => array(
+				'label' => __( 'Emails', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'mail',
+				'desc'  => __( 'Diseño, color y logotipo de todos los emails del plugin.', 'imagina-woo-quotes' ),
+			),
+			'rules'   => array(
+				'label' => __( 'Reglas', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'filter',
+				'desc'  => __( 'Qué productos, categorías y roles pueden pedir presupuesto.', 'imagina-woo-quotes' ),
+			),
 		);
 	}
 
@@ -648,13 +717,13 @@ class IWQ_Settings {
 		$tabs = self::get_tabs();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo elige la pestaña visible.
-		$current = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general';
-		$current = isset( $tabs[ $current ] ) ? $current : 'general';
+		$current = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'inicio';
+		$current = isset( $tabs[ $current ] ) ? $current : 'inicio';
 
 		iwq_get_template(
 			'admin/settings-page.php',
 			array(
-				'tabs'     => $tabs,
+				'tabs'     => self::get_tab_meta(),
 				'current'  => $current,
 				'sections' => self::get_sections( $current ),
 			)

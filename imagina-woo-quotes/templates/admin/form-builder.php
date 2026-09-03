@@ -20,7 +20,7 @@ $iwq_connectable = iwq_get_connectable_fields();
 ?>
 <div class="iwq-builder" data-name="<?php echo esc_attr( $name ); ?>">
 
-	<p class="description">
+	<p class="iwq-builder__intro">
 		<?php esc_html_e( 'Arrastra los campos para reordenarlos. Los marcados como del sistema se pueden renombrar y desactivar, pero no borrar.', 'imagina-woo-quotes' ); ?>
 	</p>
 
@@ -48,12 +48,12 @@ $iwq_connectable = iwq_get_connectable_fields();
 						<span class="iwq-builder__badge"><?php esc_html_e( 'Sistema', 'imagina-woo-quotes' ); ?></span>
 					<?php endif; ?>
 
-					<button type="button" class="button-link iwq-builder__toggle" aria-expanded="false">
+					<button type="button" class="iwq-btn iwq-btn--ghost iwq-btn--sm iwq-builder__toggle" aria-expanded="false">
 						<?php esc_html_e( 'Editar', 'imagina-woo-quotes' ); ?>
 					</button>
 
 					<?php if ( ! $iwq_field['core'] ) : ?>
-						<button type="button" class="button-link iwq-builder__delete" aria-label="<?php esc_attr_e( 'Borrar el campo', 'imagina-woo-quotes' ); ?>">
+						<button type="button" class="iwq-btn iwq-btn--ghost iwq-btn--sm iwq-builder__delete" aria-label="<?php esc_attr_e( 'Borrar el campo', 'imagina-woo-quotes' ); ?>">
 							<span class="dashicons dashicons-trash" aria-hidden="true"></span>
 						</button>
 					<?php endif; ?>
@@ -159,7 +159,7 @@ $iwq_connectable = iwq_get_connectable_fields();
 		?>
 	</ul>
 
-	<button type="button" class="button iwq-builder__add">
+	<button type="button" class="iwq-btn iwq-btn--secondary iwq-builder__add">
 		<?php esc_html_e( 'Añadir campo', 'imagina-woo-quotes' ); ?>
 	</button>
 </div>

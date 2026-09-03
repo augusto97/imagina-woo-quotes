@@ -13,7 +13,7 @@ fama de ralentizar las tiendas, y con razón.
 
 | | YITH | WPC | Este plugin |
 |---|---|---|---|
-| Framework de admin | `plugin-fw`, 18 MB, en todo el admin | — | API nativa de WordPress |
+| Framework de admin | `plugin-fw`, 18 MB, en todo el admin | — | interfaz propia de 38 KB, solo en su pantalla |
 | jQuery en el front | jQuery + jQuery UI + dialog | jQuery | **ninguno** |
 | Librería de gráficos | — | Chart.js, 208 KB | SVG generado en PHP |
 | Sesión de WooCommerce | se abre a todo visitante | ídem | **solo al primer añadido** |
@@ -75,6 +75,17 @@ en las páginas que los necesitan.
 - Estadísticas: tasa de aceptación y de respuesta, valor aceptado, reparto por
   estado
 - Contador de solicitudes por producto, con columna ordenable en el listado
+
+**Panel de administración**
+- Interfaz propia en WooCommerce → Presupuestos: navegación lateral con
+  iconos, tarjetas por sección, barra de guardado fija con estado de cambios,
+  atajo Ctrl/Cmd + S y avisos flotantes
+- Pestaña de inicio con métricas, lista de puesta en marcha, accesos rápidos
+  y actividad reciente
+- Sin frameworks: CSS y JavaScript propios que solo se cargan en esa
+  pantalla; pedidos y productos reciben una hoja de un kilobyte y ningún
+  script. El guardado usa la API de ajustes de WordPress con nonce,
+  capacidad `manage_woocommerce` y saneado por campo
 
 ## Requisitos
 

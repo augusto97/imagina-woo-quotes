@@ -20,11 +20,11 @@ defined( 'ABSPATH' ) || exit;
 		<span class="iwq-builder__title"><?php esc_html_e( 'Campo nuevo', 'imagina-woo-quotes' ); ?></span>
 		<span class="iwq-builder__type"><?php esc_html_e( 'Texto', 'imagina-woo-quotes' ); ?></span>
 
-		<button type="button" class="button-link iwq-builder__toggle" aria-expanded="true">
+		<button type="button" class="iwq-btn iwq-btn--ghost iwq-btn--sm iwq-builder__toggle" aria-expanded="true">
 			<?php esc_html_e( 'Editar', 'imagina-woo-quotes' ); ?>
 		</button>
 
-		<button type="button" class="button-link iwq-builder__delete" aria-label="<?php esc_attr_e( 'Borrar el campo', 'imagina-woo-quotes' ); ?>">
+		<button type="button" class="iwq-btn iwq-btn--ghost iwq-btn--sm iwq-builder__delete" aria-label="<?php esc_attr_e( 'Borrar el campo', 'imagina-woo-quotes' ); ?>">
 			<span class="dashicons dashicons-trash" aria-hidden="true"></span>
 		</button>
 	</div>

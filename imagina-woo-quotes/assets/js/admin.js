@@ -9,6 +9,10 @@
 	var settings = window.iwqAdmin || {};
 	var i18n = settings.i18n || {};
 
+	// WordPress limpia settings-updated de la URL con un script en línea que
+	// corre antes que este, así que la marca llega en el DOM.
+	var justSaved = $( '.iwq-app' ).data( 'saved' ) === 1;
+
 	/* ------------------------------------------------------------------
 	 * Constructor de formularios
 	 * --------------------------------------------------------------- */
@@ -182,8 +186,8 @@
 
 		$preview.on( 'click', '.iwq-preview__view button', function () {
 			view = $( this ).data( 'view' );
-			$( '.iwq-preview__view button' ).removeClass( 'button-primary is-active' );
-			$( this ).addClass( 'button-primary is-active' );
+			$( '.iwq-preview__view button' ).removeClass( 'is-active' ).attr( 'aria-pressed', 'false' );
+			$( this ).addClass( 'is-active' ).attr( 'aria-pressed', 'true' );
 			refresh();
 		} );
 
@@ -222,6 +226,139 @@
 	}
 
 	/* ------------------------------------------------------------------
+	 * Barra de guardado, avisos y atajos
+	 * --------------------------------------------------------------- */
+
+	var $app = $( '.iwq-app' );
+	var $form = $( '#iwq-settings-form' );
+	var $status = $( '.iwq-savebar__status' );
+	var $toast = $( '.iwq-toast' );
+	var toastTimer = null;
+	var dirty = false;
+	var submitting = false;
+
+	/**
+	 * Muestra un aviso flotante unos segundos.
+	 *
+	 * @param {string} message Texto.
+	 * @param {string} type    success | error.
+	 */
+	function toast( message, type ) {
+		if ( ! $toast.length ) {
+			return;
+		}
+
+		window.clearTimeout( toastTimer );
+
+		var icon = type === 'error'
+			? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h0"/></svg>'
+			: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>';
+
+		$toast
+			.attr( 'class', 'iwq-toast iwq-toast--' + ( type || 'success' ) )
+			.html( icon + '<span></span>' )
+			.find( 'span' ).text( message ).end()
+			.prop( 'hidden', false );
+
+		// Dos fotogramas: primero existe, luego se anima.
+		window.requestAnimationFrame( function () {
+			window.requestAnimationFrame( function () {
+				$toast.addClass( 'is-visible' );
+			} );
+		} );
+
+		toastTimer = window.setTimeout( function () {
+			$toast.removeClass( 'is-visible' );
+			window.setTimeout( function () {
+				$toast.prop( 'hidden', true );
+			}, 200 );
+		}, 3500 );
+	}
+
+	/**
+	 * Los avisos que imprime WordPress tras guardar se convierten en un
+	 * aviso flotante; los errores de saneado se quedan visibles en la página.
+	 */
+	function absorbNotices() {
+		var $notices = $app.children( '.notice, .updated' );
+
+		$notices.each( function () {
+			var $notice = $( this );
+			var text = $.trim( $notice.text() );
+
+			if ( $notice.hasClass( 'notice-error' ) || $notice.hasClass( 'error' ) ) {
+				toast( text, 'error' );
+				return;
+			}
+
+			if ( $notice.hasClass( 'notice-success' ) || $notice.hasClass( 'updated' ) || $notice.attr( 'id' ) === 'setting-error-settings_updated' ) {
+				toast( text || i18n.saved, 'success' );
+				$notice.remove();
+			}
+		} );
+
+		// Fuera del menú «Ajustes» WordPress no imprime el aviso de guardado:
+		// solo deja settings-updated=true en la URL, así que lo anunciamos aquí.
+		if ( justSaved && ! $toast.hasClass( 'is-visible' ) ) {
+			toast( i18n.saved, 'success' );
+		}
+
+		// Limpia la URL para que recargar no vuelva a anunciar el guardado.
+		if ( window.history.replaceState && /[?&]settings-updated=/.test( window.location.search ) ) {
+			var clean = window.location.href.replace( /([?&])settings-updated=[^&]*&?/, '$1' ).replace( /[?&]$/, '' );
+			window.history.replaceState( null, '', clean );
+		}
+	}
+
+	/**
+	 * Marca el formulario como modificado y lo refleja en la barra.
+	 */
+	function setDirty( value ) {
+		dirty = value;
+		$status.toggleClass( 'is-dirty', dirty ).text( dirty ? i18n.unsaved : i18n.noChanges );
+	}
+
+	if ( $form.length ) {
+		// WordPress mueve los avisos tras el h1 de .wrap con un pequeño
+		// retraso; esperamos a que lo haga antes de leerlos.
+		window.setTimeout( absorbNotices, 50 );
+
+		$form.on( 'change input', 'input, select, textarea', function () {
+			if ( ! dirty ) {
+				setDirty( true );
+			}
+		} );
+
+		// Reordenar campos del constructor también cuenta como cambio.
+		$form.on( 'sortupdate', function () {
+			setDirty( true );
+		} );
+
+		$form.on( 'submit', function () {
+			submitting = true;
+			$status.removeClass( 'is-dirty' ).text( i18n.saving );
+			$form.find( '.iwq-savebar .iwq-btn--primary' ).prop( 'disabled', true );
+		} );
+
+		$( document ).on( 'keydown', function ( event ) {
+			if ( ( event.ctrlKey || event.metaKey ) && ! event.altKey && String( event.key ).toLowerCase() === 's' ) {
+				event.preventDefault();
+				$form.trigger( 'submit' );
+			}
+		} );
+
+		$( window ).on( 'beforeunload', function ( event ) {
+			if ( dirty && ! submitting ) {
+				event.preventDefault();
+				event.returnValue = i18n.leave;
+				return i18n.leave;
+			}
+		} );
+	} else {
+		window.setTimeout( absorbNotices, 50 );
+	}
+
+	/* ------------------------------------------------------------------
 	 * Selector de imagen
 	 * --------------------------------------------------------------- */
 
@@ -242,7 +379,7 @@
 				? attachment.sizes.medium.url
 				: attachment.url;
 
-			$field.find( 'input[type="hidden"]' ).val( attachment.id );
+			$field.find( 'input[type="hidden"]' ).val( attachment.id ).trigger( 'change' );
 			$field.find( '.iwq-media-field__preview' ).html( '<img src="' + url + '" alt="">' );
 			$field.find( '.iwq-media-clear' ).prop( 'hidden', false );
 		} );
@@ -255,7 +392,7 @@
 
 		var $field = $( this ).closest( '.iwq-media-field' );
 
-		$field.find( 'input[type="hidden"]' ).val( '' );
+		$field.find( 'input[type="hidden"]' ).val( '' ).trigger( 'change' );
 		$field.find( '.iwq-media-field__preview' ).empty();
 		$( this ).prop( 'hidden', true );
 	} );

@@ -24,26 +24,27 @@ class IWQ_Settings_Fields {
 		$value = get_option( $name, '' );
 
 		if ( 'form_builder' === $field['type'] ) {
-			echo '<tr><td colspan="2" class="iwq-builder-cell">';
+			echo '<div class="iwq-field-row iwq-field-row--wide">';
 			self::render_form_builder( $name );
-			echo '</td></tr>';
+			echo '</div>';
 
 			return;
 		}
 
 		printf(
-			'<tr><th scope="row"><label for="%1$s">%2$s</label></th><td>',
+			'<div class="iwq-field-row iwq-field-row--%3$s"><div class="iwq-field-row__label"><label for="%1$s">%2$s</label></div><div class="iwq-field-row__control">',
 			esc_attr( $name ),
-			esc_html( $field['label'] )
+			esc_html( $field['label'] ),
+			esc_attr( $field['type'] )
 		);
 
 		self::render_control( $name, $field, $value );
 
 		if ( ! empty( $field['desc'] ) ) {
-			printf( '<p class="description">%s</p>', esc_html( $field['desc'] ) );
+			printf( '<p class="iwq-field-row__desc">%s</p>', esc_html( $field['desc'] ) );
 		}
 
-		echo '</td></tr>';
+		echo '</div></div>';
 	}
 
 	/**
@@ -112,7 +113,7 @@ class IWQ_Settings_Fields {
 				);
 
 				printf(
-					' <a class="button" href="%s">%s</a>',
+					' <a class="iwq-btn iwq-btn--secondary iwq-btn--sm" href="%s">%s</a>',
 					esc_url( admin_url( 'edit.php?post_type=' . IWQ_PDF_Template_CPT::POST_TYPE ) ),
 					esc_html__( 'Gestionar plantillas', 'imagina-woo-quotes' )
 				);
@@ -295,7 +296,7 @@ class IWQ_Settings_Fields {
 		$url   = $value ? wp_get_attachment_image_url( $value, 'medium' ) : '';
 
 		printf(
-			'<div class="iwq-media-field"><input type="hidden" name="%1$s" id="%1$s" value="%2$d"><div class="iwq-media-field__preview">%3$s</div><button type="button" class="button iwq-media-select">%4$s</button> <button type="button" class="button-link iwq-media-clear"%5$s>%6$s</button></div>',
+			'<div class="iwq-media-field"><input type="hidden" name="%1$s" id="%1$s" value="%2$d"><div class="iwq-media-field__preview">%3$s</div><button type="button" class="iwq-btn iwq-btn--secondary iwq-btn--sm iwq-media-select">%4$s</button> <button type="button" class="iwq-btn iwq-btn--ghost iwq-btn--sm iwq-media-clear"%5$s>%6$s</button></div>',
 			esc_attr( $name ),
 			esc_attr( $value ),
 			$url ? '<img src="' . esc_url( $url ) . '" alt="">' : '',

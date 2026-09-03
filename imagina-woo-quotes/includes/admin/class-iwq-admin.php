@@ -55,17 +55,13 @@ class IWQ_Admin {
 	 * @return void
 	 */
 	public function enqueue( $hook ) {
-		$screen    = get_current_screen();
-		$is_ours   = false !== strpos( $hook, 'iwq-settings' );
-		$is_order  = $screen && in_array( $screen->id, array( 'shop_order', 'woocommerce_page_wc-orders' ), true );
+		$screen = get_current_screen();
 
-		if ( ! $is_ours && ! $is_order ) {
-			return;
-		}
+		// La pantalla del plugin lleva su propia interfaz: hoja de estilos y
+		// script completos, que ninguna otra página del admin carga.
+		if ( false !== strpos( $hook, 'iwq-settings' ) ) {
+			wp_enqueue_style( 'iwq-admin', IWQ_URL . 'assets/css/admin.css', array(), IWQ_VERSION );
 
-		wp_enqueue_style( 'iwq-admin', IWQ_URL . 'assets/css/admin.css', array(), IWQ_VERSION );
-
-		if ( $is_ours ) {
 			wp_enqueue_script(
 				'iwq-admin',
 				IWQ_URL . 'assets/js/admin.js',
@@ -88,6 +84,11 @@ class IWQ_Admin {
 						'noOrder'       => __( 'Elige un presupuesto o crea uno de ejemplo para ver la vista previa.', 'imagina-woo-quotes' ),
 						'noAttachments' => __( 'ninguno', 'imagina-woo-quotes' ),
 						'sending'       => __( 'Enviando…', 'imagina-woo-quotes' ),
+						'saved'         => __( 'Ajustes guardados.', 'imagina-woo-quotes' ),
+						'unsaved'       => __( 'Hay cambios sin guardar', 'imagina-woo-quotes' ),
+						'noChanges'     => __( 'Sin cambios pendientes', 'imagina-woo-quotes' ),
+						'saving'        => __( 'Guardando…', 'imagina-woo-quotes' ),
+						'leave'         => __( 'Tienes cambios sin guardar. ¿Salir de todos modos?', 'imagina-woo-quotes' ),
 					),
 				)
 			);
@@ -97,7 +98,53 @@ class IWQ_Admin {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wc-enhanced-select' );
 			wp_enqueue_style( 'woocommerce_admin_styles' );
+
+			return;
 		}
+
+		// En pedidos y productos solo hace falta un puñado de reglas para los
+		// metaboxes: un archivo aparte de un kilobyte, sin JavaScript.
+		$order_screens = array( 'shop_order', 'woocommerce_page_wc-orders', 'edit-product' );
+
+		if ( $screen && in_array( $screen->id, $order_screens, true ) ) {
+			wp_enqueue_style( 'iwq-admin-order', IWQ_URL . 'assets/css/admin-order.css', array(), IWQ_VERSION );
+		}
+	}
+
+	/**
+	 * Icono SVG en línea para la navegación del panel.
+	 *
+	 * Trazos de 24×24 con `currentColor`: pesan menos que una fuente de iconos
+	 * y heredan el color del enlace.
+	 *
+	 * @param string $name Nombre del icono.
+	 * @return string SVG listo para imprimir.
+	 */
+	public static function icon( $name ) {
+		$paths = array(
+			'home'    => '<path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+			'chart'   => '<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>',
+			'eye'     => '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+			'sliders' => '<path d="M4 6h10"/><path d="M18 6h2"/><path d="M4 12h2"/><path d="M10 12h10"/><path d="M4 18h12"/><path d="M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+			'tag'     => '<path d="M20 12 12 20l-9-9V3h8l9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+			'file'    => '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M9 13h6"/><path d="M9 17h6"/>',
+			'form'    => '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10"/><path d="M7 13h6"/><path d="M7 17h3"/>',
+			'pdf'     => '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M8.5 16v-5h1.6a1.5 1.5 0 0 1 0 3H8.5"/><path d="M13 11h2v5h-2z"/>',
+			'mail'    => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+			'filter'  => '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
+			'save'    => '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3"/><path d="M8 21v-7h8v7"/>',
+			'check'   => '<path d="m5 12 5 5L20 7"/>',
+			'plus'    => '<path d="M12 5v14"/><path d="M5 12h14"/>',
+			'orders'  => '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6"/><path d="M9 12h6"/>',
+			'blocks'  => '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>',
+			'arrow'   => '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+		);
+
+		if ( ! isset( $paths[ $name ] ) ) {
+			return '';
+		}
+
+		return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $paths[ $name ] . '</svg>';
 	}
 
 	/**

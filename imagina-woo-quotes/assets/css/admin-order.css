@@ -1,0 +1,17 @@
+/**
+ * Estilos mínimos para las pantallas de WooCommerce donde el plugin añade
+ * paneles: pedido y producto. Se mantienen nativos a propósito.
+ */
+
+.iwq-muted { color: #787c82; }
+
+.iwq-order-panel__alert { margin-bottom: 12px; padding: 10px 12px; border-left: 3px solid #dba617; background: #fcf9e8; }
+.iwq-order-panel__alert blockquote { margin: 8px 0 0; padding-left: 10px; border-left: 2px solid #dcdcde; color: #50575e; font-style: italic; }
+.iwq-order-panel__hint { margin: 12px 0; padding: 10px 12px; border-radius: 4px; background: #f0f6fc; color: #50575e; font-size: 12px; }
+.iwq-order-panel__thread { margin: 0 0 12px; padding: 0; list-style: none; }
+.iwq-order-panel__entry { margin-bottom: 8px; padding: 8px 10px; border-radius: 4px; background: #f6f7f7; font-size: 12px; }
+.iwq-order-panel__entry--customer { border-left: 3px solid #2271b1; }
+.iwq-order-panel__entry--admin { border-left: 3px solid #00a32a; }
+.iwq-order-panel__entry p { margin: 4px 0; }
+.iwq-order-panel__reply textarea { margin-bottom: 8px; }
+.iwq-request-data th { font-weight: 600; }
