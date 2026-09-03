@@ -80,8 +80,9 @@ en las páginas que los necesitan.
 - Pestaña «Diseño» con vista previa en vivo: colores, redondeo y modo
   oscuro; tipografía, tamaño, grosor, mayúsculas, relleno, redondeo, sombra
   y ancho del botón; título, lado, ancho, cabecera y velo del panel lateral;
-  disposición en columnas, tarjetas, miniaturas y estilo de campos de la
-  página de solicitud; CSS adicional
+  disposición en una o dos columnas (a ancho amplio y con la lista fija al
+  hacer scroll), tarjetas, miniaturas y estilo de campos de la página de
+  solicitud; CSS adicional
 - Todo se traduce a variables CSS impresas en línea tras la hoja del front,
   sin archivos generados; con los valores por defecto no se imprime nada
 

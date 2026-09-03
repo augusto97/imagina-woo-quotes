@@ -5,6 +5,20 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.4.0] - 2026-09-03
+
+### Añadido
+- Página de solicitud a dos columnas de verdad en escritorio: con la
+  disposición en columnas la página pasa al ancho amplio del tema
+  (`alignwide`), la lista ocupa cinco doceavos y el formulario siete (o al
+  revés con el formulario a la izquierda) y la lista se queda fija mientras
+  se rellena el formulario. En pantallas estrechas se apila
+- Ajuste «Ancho en escritorio» (automático, contenido, amplio o completo) y
+  «Fijar la lista al hacer scroll» en Presupuestos → Diseño
+- El bloque «Lista de presupuesto» admite alineación ancha y completa desde
+  el editor, y el shortcode `[iwq_quote_list width="wide"]` también; ambos
+  mandan sobre el ajuste
+
 ## [1.3.0] - 2026-09-03
 
 ### Añadido
@@ -155,6 +169,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.4.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.4.0
 [1.3.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.3.0
 [1.2.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.2.0
 [1.1.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.1.0

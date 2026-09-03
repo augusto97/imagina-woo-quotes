@@ -450,6 +450,22 @@ class IWQ_Settings {
 							),
 							'desc'    => __( 'En pantallas estrechas siempre se apilan.', 'imagina-woo-quotes' ),
 						),
+						'page_width'      => array(
+							'label'   => __( 'Ancho en escritorio', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'auto'    => __( 'Automático: amplio con dos columnas, normal con una', 'imagina-woo-quotes' ),
+								'content' => __( 'El del contenido del tema', 'imagina-woo-quotes' ),
+								'wide'    => __( 'Amplio (alignwide)', 'imagina-woo-quotes' ),
+								'full'    => __( 'Completo (alignfull)', 'imagina-woo-quotes' ),
+							),
+							'desc'    => __( 'Los anchos amplio y completo los definen los temas de bloques y los clásicos con soporte de alineaciones anchas. Si usas el bloque «Lista de presupuesto», su alineación en el editor manda sobre este ajuste.', 'imagina-woo-quotes' ),
+						),
+						'page_sticky_list' => array(
+							'label' => __( 'Fijar la lista al hacer scroll', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+							'desc'  => __( 'Con dos columnas, la lista de productos acompaña al formulario mientras se rellena.', 'imagina-woo-quotes' ),
+						),
 						'page_card_style' => array(
 							'label'   => __( 'Bloques', 'imagina-woo-quotes' ),
 							'type'    => 'select',

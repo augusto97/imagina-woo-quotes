@@ -52,6 +52,15 @@ class IWQ_Blocks {
 			array(
 				'api_version'     => 3,
 				'render_callback' => array( $this, 'render_list' ),
+				'supports'        => array(
+					'align'    => array( 'wide', 'full' ),
+					'multiple' => false,
+				),
+				'attributes'      => array(
+					'align' => array(
+						'type' => 'string',
+					),
+				),
 			)
 		);
 	}
@@ -82,12 +91,22 @@ class IWQ_Blocks {
 	/**
 	 * Pinta la lista con el formulario.
 	 *
+	 * La alineación elegida en el editor (ancha o completa) manda sobre el
+	 * ajuste de la pestaña Diseño.
+	 *
+	 * @param array $attributes Atributos del bloque.
 	 * @return string
 	 */
-	public function render_list() {
+	public function render_list( $attributes = array() ) {
 		$shortcodes = IWQ::instance()->get( 'shortcodes' );
 
-		return $shortcodes ? $shortcodes->quote_list() : '';
+		if ( ! $shortcodes ) {
+			return '';
+		}
+
+		$align = isset( $attributes['align'] ) ? $attributes['align'] : '';
+
+		return $shortcodes->quote_list( array( 'width' => $align ) );
 	}
 
 	/**

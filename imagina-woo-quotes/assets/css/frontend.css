@@ -179,9 +179,35 @@
 
 .iwq-quote-page--columns .iwq-quote-page__layout {
 	display: grid;
-	grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
-	gap: 40px;
+	grid-template-columns: minmax( 0, 5fr ) minmax( 0, 7fr );
+	gap: 48px;
 	align-items: start;
+}
+
+/* La lista acompaña al formulario mientras se rellena. */
+.iwq-quote-page--sticky .iwq-quote-page__list {
+	position: sticky;
+	top: calc( var( --wp-admin--admin-bar--height, 0px ) + 24px );
+}
+
+/* Ancho amplio y completo: los temas de bloques y los clásicos con soporte
+   de alineaciones anchas aplican alignwide y alignfull; esto es la red de
+   seguridad para los que no. */
+.iwq-quote-page--wide {
+	max-width: 1280px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.iwq-quote-page--full {
+	box-sizing: border-box;
+	padding-left: var( --wp--style--root--padding-left, 24px );
+	padding-right: var( --wp--style--root--padding-right, 24px );
+}
+
+/* Con el formulario a la izquierda, es él quien se lleva la columna ancha. */
+.iwq-quote-page--form-left .iwq-quote-page__layout {
+	grid-template-columns: minmax( 0, 7fr ) minmax( 0, 5fr );
 }
 
 .iwq-quote-page--columns .iwq-quote-page__tools {
@@ -200,6 +226,10 @@
 
 	.iwq-quote-page--form-left .iwq-quote-page__list {
 		order: 0;
+	}
+
+	.iwq-quote-page--sticky .iwq-quote-page__list {
+		position: static;
 	}
 }
 

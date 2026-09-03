@@ -58,6 +58,8 @@ class IWQ_Design {
 			'drawer_show_thumbs'      => 'yes',
 			'drawer_footer_label'     => '',
 			'page_layout'             => 'stacked',
+			'page_width'              => 'auto',
+			'page_sticky_list'        => 'yes',
 			'page_card_style'         => 'plain',
 			'page_show_thumbs'        => 'yes',
 			'page_list_title'         => '',
@@ -248,18 +250,44 @@ class IWQ_Design {
 	/**
 	 * Clases modificadoras de la página de solicitud.
 	 *
+	 * @param string $align Alineación pedida por el bloque o el shortcode
+	 *                      (content, wide o full); vacío usa el ajuste.
 	 * @return string[]
 	 */
-	public static function get_page_classes() {
+	public static function get_page_classes( $align = '' ) {
 		$classes = array();
 		$layout  = self::get( 'page_layout' );
+		$columns = 'columns' === $layout || 'columns_form_left' === $layout;
 
-		if ( 'columns' === $layout || 'columns_form_left' === $layout ) {
+		if ( $columns ) {
 			$classes[] = 'iwq-quote-page--columns';
+
+			if ( 'yes' === self::get( 'page_sticky_list' ) ) {
+				$classes[] = 'iwq-quote-page--sticky';
+			}
 		}
 
 		if ( 'columns_form_left' === $layout ) {
 			$classes[] = 'iwq-quote-page--form-left';
+		}
+
+		// Ancho: en escritorio dos columnas necesitan más sitio del que da
+		// el ancho de contenido de la mayoría de temas, así que «auto» pasa
+		// a ancho amplio cuando hay columnas. Las clases alignwide y
+		// alignfull las entienden los temas de bloques y los clásicos con
+		// soporte de alineaciones anchas.
+		$width = in_array( $align, array( 'content', 'wide', 'full' ), true ) ? $align : self::get( 'page_width' );
+
+		if ( 'auto' === $width ) {
+			$width = $columns ? 'wide' : 'content';
+		}
+
+		if ( 'wide' === $width ) {
+			$classes[] = 'alignwide';
+			$classes[] = 'iwq-quote-page--wide';
+		} elseif ( 'full' === $width ) {
+			$classes[] = 'alignfull';
+			$classes[] = 'iwq-quote-page--full';
 		}
 
 		$card = self::get( 'page_card_style' );

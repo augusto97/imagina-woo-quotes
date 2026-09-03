@@ -24,14 +24,23 @@ class IWQ_Shortcodes {
 	/**
 	 * `[iwq_quote_list]` — lista de productos y formulario de solicitud.
 	 *
+	 * Admite `width="content|wide|full"` para forzar el ancho; sin él manda
+	 * el ajuste de la pestaña Diseño.
+	 *
+	 * @param array|string $atts Atributos del shortcode.
 	 * @return string
 	 */
-	public function quote_list() {
+	public function quote_list( $atts = array() ) {
+		$atts = shortcode_atts( array( 'width' => '' ), $atts, 'iwq_quote_list' );
+
 		IWQ_Frontend::require_assets();
 
 		return iwq_get_template(
 			'quote/quote-page.php',
-			array( 'items' => IWQ_Session::get_items() ),
+			array(
+				'items' => IWQ_Session::get_items(),
+				'align' => sanitize_key( $atts['width'] ),
+			),
 			true
 		);
 	}

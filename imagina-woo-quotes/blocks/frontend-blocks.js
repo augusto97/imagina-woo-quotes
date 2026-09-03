@@ -64,7 +64,8 @@
 		description: __( 'Los productos de la lista y el formulario de solicitud.', 'imagina-woo-quotes' ),
 		icon: 'list-view',
 		category: 'woocommerce',
-		supports: { multiple: false },
+		supports: { multiple: false, align: [ 'wide', 'full' ] },
+		attributes: { align: { type: 'string' } },
 		edit: function () {
 			return el(
 				'div',

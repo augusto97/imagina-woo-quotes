@@ -4,13 +4,14 @@
  *
  * @package ImaginaWooQuotes
  *
- * @var array $items Líneas de la lista.
+ * @var array  $items Líneas de la lista.
+ * @var string $align Ancho pedido por el bloque o el shortcode, si lo hay.
  */
 
 defined( 'ABSPATH' ) || exit;
 
 $iwq_is_empty     = empty( $items );
-$iwq_page_classes = array_merge( array( 'iwq', 'iwq-quote-page' ), IWQ_Design::get_page_classes() );
+$iwq_page_classes = array_merge( array( 'iwq', 'iwq-quote-page' ), IWQ_Design::get_page_classes( isset( $align ) ? $align : '' ) );
 $iwq_list_title   = IWQ_Design::get( 'page_list_title' );
 $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty' );
 ?>
