@@ -80,6 +80,12 @@ class IWQ_Settings {
 				'icon'  => 'tag',
 				'desc'  => __( 'Dónde aparece el botón y cómo se comportan los precios y la compra.', 'imagina-woo-quotes' ),
 			),
+			'design'  => array(
+				'label' => __( 'Diseño', 'imagina-woo-quotes' ),
+				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
+				'icon'  => 'palette',
+				'desc'  => __( 'Colores, tipografía y forma del botón, del panel lateral y de la página de solicitud. Los cambios se ven en la vista previa al momento.', 'imagina-woo-quotes' ),
+			),
 			'quote'   => array(
 				'label' => __( 'Presupuestos', 'imagina-woo-quotes' ),
 				'group' => __( 'Ajustes', 'imagina-woo-quotes' ),
@@ -170,14 +176,6 @@ class IWQ_Settings {
 							'label' => __( 'Texto cuando ya está añadido', 'imagina-woo-quotes' ),
 							'type'  => 'text',
 						),
-						'button_style'        => array(
-							'label'   => __( 'Estilo', 'imagina-woo-quotes' ),
-							'type'    => 'select',
-							'options' => array(
-								'solid'   => __( 'Relleno', 'imagina-woo-quotes' ),
-								'outline' => __( 'Contorno', 'imagina-woo-quotes' ),
-							),
-						),
 						'show_on_product'     => array(
 							'label' => __( 'Mostrar en la ficha de producto', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',
@@ -232,6 +230,270 @@ class IWQ_Settings {
 						'hide_add_to_cart_roles' => array(
 							'label' => __( 'Ocultar la compra solo a estos roles', 'imagina-woo-quotes' ),
 							'type'  => 'roles',
+						),
+					),
+				),
+			),
+
+			'design' => array(
+				'preview' => array(
+					'title'  => __( 'Vista previa', 'imagina-woo-quotes' ),
+					'desc'   => __( 'Una muestra del botón, el panel lateral y el formulario con los ajustes de esta pestaña. Se actualiza al cambiar cualquier valor, antes de guardar.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'design_preview' => array(
+							'label' => '',
+							'type'  => 'design_preview',
+						),
+					),
+				),
+				'colors' => array(
+					'title'  => __( 'Colores y forma', 'imagina-woo-quotes' ),
+					'desc'   => __( 'Se aplican a todo lo que pinta el plugin en la tienda. Déjalos vacíos para usar los valores por defecto.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'design_accent'          => array(
+							'label' => __( 'Color principal', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Botones, contador y bordes activos.', 'imagina-woo-quotes' ),
+						),
+						'design_accent_hover'    => array(
+							'label' => __( 'Color principal al pasar el ratón', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'design_accent_contrast' => array(
+							'label' => __( 'Texto sobre el color principal', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'design_text'            => array(
+							'label' => __( 'Texto', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'design_text_muted'      => array(
+							'label' => __( 'Texto secundario', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'design_surface'         => array(
+							'label' => __( 'Fondo', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Panel lateral, campos y tarjetas.', 'imagina-woo-quotes' ),
+						),
+						'design_surface_alt'     => array(
+							'label' => __( 'Fondo secundario', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Pie del panel, campos rellenos y avisos.', 'imagina-woo-quotes' ),
+						),
+						'design_border'          => array(
+							'label' => __( 'Bordes', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'design_radius'          => array(
+							'label' => __( 'Redondeo general', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'max'   => 40,
+							'desc'  => __( 'Esquinas de campos, tarjetas y miniaturas. El botón puede tener el suyo.', 'imagina-woo-quotes' ),
+						),
+						'design_dark_mode'       => array(
+							'label' => __( 'Adaptarse al modo oscuro del sistema', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+							'desc'  => __( 'Invierte fondos y textos cuando el visitante tiene el modo oscuro activado. Actívalo solo si tu tema también lo hace.', 'imagina-woo-quotes' ),
+						),
+					),
+				),
+				'button' => array(
+					'title'  => __( 'Botón «Solicitar presupuesto»', 'imagina-woo-quotes' ),
+					'desc'   => __( 'También se aplica al botón de enviar del formulario y a los de aceptar y rechazar.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'button_style'          => array(
+							'label'   => __( 'Estilo', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'solid'   => __( 'Relleno', 'imagina-woo-quotes' ),
+								'outline' => __( 'Contorno', 'imagina-woo-quotes' ),
+							),
+						),
+						'button_font'           => array(
+							'label'   => __( 'Tipografía', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'inherit' => __( 'La del tema', 'imagina-woo-quotes' ),
+								'system'  => __( 'Del sistema (San Francisco, Segoe UI, Roboto…)', 'imagina-woo-quotes' ),
+							),
+						),
+						'button_font_size'      => array(
+							'label'       => __( 'Tamaño de letra', 'imagina-woo-quotes' ),
+							'type'        => 'size',
+							'unit'        => 'px',
+							'max'         => 40,
+							'placeholder' => __( 'Heredar', 'imagina-woo-quotes' ),
+						),
+						'button_font_weight'    => array(
+							'label'   => __( 'Grosor', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'inherit' => __( 'Seminegrita (por defecto)', 'imagina-woo-quotes' ),
+								'400'     => __( 'Normal', 'imagina-woo-quotes' ),
+								'500'     => __( 'Medio', 'imagina-woo-quotes' ),
+								'600'     => __( 'Seminegrita', 'imagina-woo-quotes' ),
+								'700'     => __( 'Negrita', 'imagina-woo-quotes' ),
+							),
+						),
+						'button_text_transform' => array(
+							'label'   => __( 'Mayúsculas', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'none'      => __( 'Tal como se escribe', 'imagina-woo-quotes' ),
+								'uppercase' => __( 'Todo en mayúsculas', 'imagina-woo-quotes' ),
+							),
+						),
+						'button_padding_y'      => array(
+							'label'       => __( 'Relleno vertical', 'imagina-woo-quotes' ),
+							'type'        => 'size',
+							'unit'        => 'px',
+							'max'         => 60,
+							'placeholder' => __( 'Heredar', 'imagina-woo-quotes' ),
+						),
+						'button_padding_x'      => array(
+							'label'       => __( 'Relleno horizontal', 'imagina-woo-quotes' ),
+							'type'        => 'size',
+							'unit'        => 'px',
+							'max'         => 120,
+							'placeholder' => __( 'Heredar', 'imagina-woo-quotes' ),
+						),
+						'button_radius'         => array(
+							'label'       => __( 'Redondeo del botón', 'imagina-woo-quotes' ),
+							'type'        => 'size',
+							'unit'        => 'px',
+							'max'         => 999,
+							'placeholder' => __( 'Como el general', 'imagina-woo-quotes' ),
+							'desc'        => __( 'Un valor alto, como 999, da un botón en forma de píldora.', 'imagina-woo-quotes' ),
+						),
+						'button_shadow'         => array(
+							'label' => __( 'Sombra', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'button_full_width'     => array(
+							'label' => __( 'Ancho completo en la ficha de producto', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'link_color'            => array(
+							'label' => __( 'Color de los enlaces', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Nombres de producto en la lista y enlaces de texto como «Vaciar la lista».', 'imagina-woo-quotes' ),
+						),
+						'link_hover_color'      => array(
+							'label' => __( 'Color de los enlaces al pasar el ratón', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+					),
+				),
+				'drawer' => array(
+					'title'  => __( 'Panel lateral', 'imagina-woo-quotes' ),
+					'desc'   => __( 'El panel que se abre al añadir un producto.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'drawer_title'        => array(
+							'label'       => __( 'Título', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Tu presupuesto', 'imagina-woo-quotes' ),
+						),
+						'drawer_footer_label' => array(
+							'label'       => __( 'Texto del botón inferior', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ),
+						),
+						'drawer_position'     => array(
+							'label'   => __( 'Lado', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'right' => __( 'Derecha', 'imagina-woo-quotes' ),
+								'left'  => __( 'Izquierda', 'imagina-woo-quotes' ),
+							),
+						),
+						'drawer_width'        => array(
+							'label' => __( 'Ancho', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 280,
+							'max'   => 720,
+						),
+						'drawer_header_style' => array(
+							'label'   => __( 'Cabecera', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'plain'  => __( 'Sobre el fondo', 'imagina-woo-quotes' ),
+								'accent' => __( 'Con el color principal', 'imagina-woo-quotes' ),
+							),
+						),
+						'drawer_overlay'      => array(
+							'label' => __( 'Oscurecer el fondo', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => '%',
+							'max'   => 100,
+							'desc'  => __( 'Opacidad del velo sobre la página mientras el panel está abierto.', 'imagina-woo-quotes' ),
+						),
+						'drawer_show_thumbs'  => array(
+							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+					),
+				),
+				'page' => array(
+					'title'  => __( 'Página de solicitud', 'imagina-woo-quotes' ),
+					'desc'   => __( 'La página con la lista de productos y el formulario. Los textos del formulario se cambian en la pestaña Formulario.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'page_layout'     => array(
+							'label'   => __( 'Disposición', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'stacked'           => __( 'Lista arriba, formulario debajo', 'imagina-woo-quotes' ),
+								'columns'           => __( 'Dos columnas: lista y formulario', 'imagina-woo-quotes' ),
+								'columns_form_left' => __( 'Dos columnas: formulario y lista', 'imagina-woo-quotes' ),
+							),
+							'desc'    => __( 'En pantallas estrechas siempre se apilan.', 'imagina-woo-quotes' ),
+						),
+						'page_card_style' => array(
+							'label'   => __( 'Bloques', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'plain'    => __( 'Sin fondo', 'imagina-woo-quotes' ),
+								'bordered' => __( 'Tarjetas con borde', 'imagina-woo-quotes' ),
+								'shadow'   => __( 'Tarjetas con sombra', 'imagina-woo-quotes' ),
+							),
+						),
+						'page_list_title' => array(
+							'label'       => __( 'Título de la lista', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Productos en tu solicitud', 'imagina-woo-quotes' ),
+						),
+						'page_show_thumbs' => array(
+							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'field_style'     => array(
+							'label'   => __( 'Estilo de los campos', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'default'   => __( 'Con borde', 'imagina-woo-quotes' ),
+								'filled'    => __( 'Rellenos', 'imagina-woo-quotes' ),
+								'underline' => __( 'Solo línea inferior', 'imagina-woo-quotes' ),
+							),
+						),
+						'field_radius'    => array(
+							'label'       => __( 'Redondeo de los campos', 'imagina-woo-quotes' ),
+							'type'        => 'size',
+							'unit'        => 'px',
+							'max'         => 40,
+							'placeholder' => __( 'Como el general', 'imagina-woo-quotes' ),
+						),
+					),
+				),
+				'css' => array(
+					'title'  => __( 'CSS adicional', 'imagina-woo-quotes' ),
+					'desc'   => __( 'Para lo que no cubran los ajustes. Se imprime solo en las páginas donde carga el plugin, después de sus estilos.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'custom_css' => array(
+							'label'       => __( 'CSS del front', 'imagina-woo-quotes' ),
+							'type'        => 'css',
+							'placeholder' => ".iwq-add-button {\n\tletter-spacing: 0.02em;\n}",
 						),
 					),
 				),
@@ -546,6 +808,10 @@ class IWQ_Settings {
 		foreach ( array_keys( self::get_tabs() ) as $tab ) {
 			foreach ( self::get_sections( $tab ) as $section ) {
 				foreach ( $section['fields'] as $key => $field ) {
+					if ( 'design_preview' === $field['type'] ) {
+						continue;
+					}
+
 					register_setting(
 						self::OPTION_GROUP . '_' . $tab,
 						'iwq_' . $key,
@@ -583,6 +849,17 @@ class IWQ_Settings {
 			case 'media':
 			case 'pdf_template':
 				return 'absint';
+
+			case 'size':
+				// A diferencia de «number», el vacío se conserva: significa
+				// «heredar», y un cero sería un tamaño real.
+				return static function ( $value ) {
+					$value = trim( (string) $value );
+					return '' === $value ? '' : (string) absint( $value );
+				};
+
+			case 'css':
+				return array( IWQ_Design::class, 'sanitize_css' );
 
 			case 'textarea':
 				return 'sanitize_textarea_field';

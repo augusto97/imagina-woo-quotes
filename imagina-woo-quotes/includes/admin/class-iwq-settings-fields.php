@@ -23,6 +23,21 @@ class IWQ_Settings_Fields {
 		$name  = 'iwq_' . $key;
 		$value = get_option( $name, '' );
 
+		// Los ajustes de diseño nunca guardados muestran su valor efectivo.
+		$design_defaults = IWQ_Design::get_defaults();
+
+		if ( '' === $value && isset( $design_defaults[ $key ] ) ) {
+			$value = $design_defaults[ $key ];
+		}
+
+		if ( 'design_preview' === $field['type'] ) {
+			echo '<div class="iwq-field-row iwq-field-row--wide iwq-field-row--preview">';
+			iwq_get_template( 'admin/design-preview.php' );
+			echo '</div>';
+
+			return;
+		}
+
 		if ( 'form_builder' === $field['type'] ) {
 			echo '<div class="iwq-field-row iwq-field-row--wide">';
 			self::render_form_builder( $name );
@@ -78,6 +93,27 @@ class IWQ_Settings_Fields {
 					'<input type="number" name="%1$s" id="%1$s" value="%2$s" class="small-text" min="0" step="1">',
 					esc_attr( $name ),
 					esc_attr( $value )
+				);
+				break;
+
+			case 'size':
+				printf(
+					'<span class="iwq-size-field"><input type="number" name="%1$s" id="%1$s" value="%2$s" class="small-text" min="%3$s" max="%4$s" step="1" placeholder="%5$s"><span class="iwq-size-field__unit">%6$s</span></span>',
+					esc_attr( $name ),
+					esc_attr( $value ),
+					esc_attr( isset( $field['min'] ) ? $field['min'] : 0 ),
+					esc_attr( isset( $field['max'] ) ? $field['max'] : 999 ),
+					esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' ),
+					esc_html( isset( $field['unit'] ) ? $field['unit'] : '' )
+				);
+				break;
+
+			case 'css':
+				printf(
+					'<textarea name="%1$s" id="%1$s" rows="8" class="large-text code" spellcheck="false" placeholder="%3$s">%2$s</textarea>',
+					esc_attr( $name ),
+					esc_textarea( $value ),
+					esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' )
 				);
 				break;
 
@@ -137,9 +173,10 @@ class IWQ_Settings_Fields {
 
 			case 'color':
 				printf(
-					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="iwq-color-field" data-default-color="#2563eb">',
+					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="iwq-color-field" data-default-color="%3$s">',
 					esc_attr( $name ),
-					esc_attr( $value )
+					esc_attr( $value ),
+					esc_attr( isset( $field['default'] ) ? $field['default'] : ( $value ? $value : '#2563eb' ) )
 				);
 				break;
 
@@ -149,9 +186,10 @@ class IWQ_Settings_Fields {
 
 			default:
 				printf(
-					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="regular-text">',
+					'<input type="text" name="%1$s" id="%1$s" value="%2$s" class="regular-text" placeholder="%3$s">',
 					esc_attr( $name ),
-					esc_attr( $value )
+					esc_attr( $value ),
+					esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' )
 				);
 		}
 	}

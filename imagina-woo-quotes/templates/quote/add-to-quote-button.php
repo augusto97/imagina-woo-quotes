@@ -25,9 +25,7 @@ if ( $in_list ) {
 	$iwq_classes[] = 'is-added';
 }
 
-if ( 'outline' === iwq_get_option( 'button_style', 'solid' ) ) {
-	$iwq_classes[] = 'iwq-add-button--outline';
-}
+$iwq_classes = array_merge( $iwq_classes, IWQ_Design::get_button_classes() );
 ?>
 <button
 	type="button"

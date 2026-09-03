@@ -40,6 +40,14 @@ class IWQ_Assets {
 			IWQ_VERSION
 		);
 
+		// Los ajustes de la pestaña «Diseño» viajan como variables CSS en
+		// línea: unas decenas de bytes, sin archivos generados.
+		$design_css = IWQ_Design::get_css();
+
+		if ( '' !== $design_css ) {
+			wp_add_inline_style( 'iwq-frontend', $design_css );
+		}
+
 		wp_enqueue_script(
 			'iwq-frontend',
 			IWQ_URL . 'assets/js/frontend.js',

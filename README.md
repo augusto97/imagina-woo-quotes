@@ -76,6 +76,15 @@ en las páginas que los necesitan.
   estado
 - Contador de solicitudes por producto, con columna ordenable en el listado
 
+**Diseño del front**
+- Pestaña «Diseño» con vista previa en vivo: colores, redondeo y modo
+  oscuro; tipografía, tamaño, grosor, mayúsculas, relleno, redondeo, sombra
+  y ancho del botón; título, lado, ancho, cabecera y velo del panel lateral;
+  disposición en columnas, tarjetas, miniaturas y estilo de campos de la
+  página de solicitud; CSS adicional
+- Todo se traduce a variables CSS impresas en línea tras la hoja del front,
+  sin archivos generados; con los valores por defecto no se imprime nada
+
 **Panel de administración**
 - Interfaz propia en WooCommerce → Presupuestos: navegación lateral con
   iconos, tarjetas por sección, barra de guardado fija con estado de cambios,

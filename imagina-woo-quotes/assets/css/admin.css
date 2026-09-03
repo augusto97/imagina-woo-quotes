@@ -524,6 +524,14 @@ a.iwq-kpi:hover { transform: translateY( -2px ); box-shadow: var( --iwq-shadow-l
 .iwq-card__body--flush .iwq-empty { padding: 22px; }
 .iwq-table td .iwq-muted { display: block; font-size: 12px; }
 
+.iwq-size-field { display: inline-flex; align-items: center; gap: 8px; }
+.iwq-app .iwq-size-field input[type="number"] { width: 120px; max-width: 120px; }
+.iwq-size-field__unit { color: var( --iwq-text-3 ); font-size: 12.5px; font-weight: 600; }
+
+.iwq-field-row--preview { padding: 0; }
+.iwq-design-preview { margin: 0 -22px; background: #eef0f3; background-image: radial-gradient( rgba( 15, 23, 42, 0.08 ) 1px, transparent 1px ); background-size: 18px 18px; }
+.iwq-design-preview iframe { display: block; width: 100%; height: 640px; border: 0; }
+
 .iwq-builder__intro { margin: 10px 0 14px; color: var( --iwq-text-2 ); font-size: 13px; }
 
 .iwq-app .wp-picker-container .wp-color-result.button { min-height: 36px; border-radius: var( --iwq-radius-sm ); }

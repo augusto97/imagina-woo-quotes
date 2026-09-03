@@ -5,6 +5,41 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.3.0] - 2026-09-03
+
+### Añadido
+- Pestaña «Diseño» en WooCommerce → Presupuestos con vista previa en vivo
+  del botón, el panel lateral y el formulario, que cambia al instante con
+  cada ajuste sin guardar
+- Colores del front: principal, principal al pasar el ratón, texto sobre el
+  principal, texto, texto secundario, fondo, fondo secundario y bordes;
+  redondeo general y modo oscuro automático opcional
+- Botón «Solicitar presupuesto»: relleno o contorno, tipografía del tema o
+  del sistema, tamaño de letra, grosor, mayúsculas, relleno vertical y
+  horizontal, redondeo (hasta píldora), sombra y ancho completo en la ficha;
+  color de los enlaces y al pasar el ratón
+- Panel lateral: título, texto del botón inferior, lado (derecha o
+  izquierda), ancho, cabecera con el color principal, opacidad del velo y
+  miniaturas
+- Página de solicitud: disposición en una columna o en dos (lista y
+  formulario en cualquier orden), bloques sin fondo o como tarjetas con
+  borde o sombra, título de la lista, miniaturas, estilo de los campos (con
+  borde, rellenos o solo línea inferior) y su redondeo
+- CSS adicional del front, saneado y impreso solo donde carga el plugin
+
+### Cambiado
+- Los ajustes de diseño se imprimen como variables CSS en línea tras la
+  hoja del front: unas decenas de bytes y ningún archivo generado. Con los
+  valores por defecto no se imprime nada
+- El ajuste «Estilo» del botón pasa de la pestaña «Botones y catálogo» a la
+  pestaña «Diseño»; su valor guardado se conserva
+- El modo oscuro automático del front ya no viene activado: ahora es un
+  ajuste, porque invertía los colores del panel en tiendas con tema claro
+
+### Corregido
+- Los campos de media fila del formulario se salían de su columna en temas
+  que no aplican `box-sizing: border-box` a los campos
+
 ## [1.2.0] - 2026-09-03
 
 ### Añadido
@@ -120,6 +155,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.3.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.3.0
 [1.2.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.2.0
 [1.1.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.1.0
 [1.0.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.0.2

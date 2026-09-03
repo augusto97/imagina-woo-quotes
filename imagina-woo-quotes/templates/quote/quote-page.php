@@ -9,9 +9,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iwq_is_empty = empty( $items );
+$iwq_is_empty     = empty( $items );
+$iwq_page_classes = array_merge( array( 'iwq', 'iwq-quote-page' ), IWQ_Design::get_page_classes() );
+$iwq_list_title   = IWQ_Design::get( 'page_list_title' );
+$iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty' );
 ?>
-<div class="iwq iwq-quote-page">
+<div class="<?php echo esc_attr( implode( ' ', $iwq_page_classes ) ); ?>">
 
 	<?php
 	// Los avisos de aceptar, rechazar o enlace caducado llegan aquí por la
@@ -32,21 +35,27 @@ $iwq_is_empty = empty( $items );
 			</a>
 		</div>
 
-	<?php else : ?>
+	<?php endif; ?>
 
-		<h2 class="iwq-quote-page__title"><?php esc_html_e( 'Productos en tu solicitud', 'imagina-woo-quotes' ); ?></h2>
+	<div class="iwq-quote-page__layout">
 
-		<?php iwq_get_template( 'quote/drawer-content.php', array( 'items' => $items ) ); ?>
+	<?php if ( ! $iwq_is_empty ) : ?>
 
-		<p class="iwq-quote-page__tools">
-			<button type="button" class="iwq-clear-list iwq-link-button">
-				<?php esc_html_e( 'Vaciar la lista', 'imagina-woo-quotes' ); ?>
-			</button>
-		</p>
+		<div class="iwq-quote-page__list">
+			<h2 class="iwq-quote-page__title"><?php echo esc_html( $iwq_list_title ? $iwq_list_title : __( 'Productos en tu solicitud', 'imagina-woo-quotes' ) ); ?></h2>
+
+			<?php iwq_get_template( 'quote/drawer-content.php', array( 'items' => $items ) ); ?>
+
+			<p class="iwq-quote-page__tools">
+				<button type="button" class="iwq-clear-list iwq-link-button">
+					<?php esc_html_e( 'Vaciar la lista', 'imagina-woo-quotes' ); ?>
+				</button>
+			</p>
+		</div>
 
 	<?php endif; ?>
 
-	<?php if ( ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty' ) ) : ?>
+	<?php if ( $iwq_show_form ) : ?>
 
 		<div class="iwq-quote-page__form">
 			<h2><?php echo esc_html( iwq_get_option( 'form_title', __( 'Cuéntanos qué necesitas', 'imagina-woo-quotes' ) ) ); ?></h2>
@@ -77,5 +86,7 @@ $iwq_is_empty = empty( $items );
 		</div>
 
 	<?php endif; ?>
+
+	</div>
 
 </div>

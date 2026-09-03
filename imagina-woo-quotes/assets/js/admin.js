@@ -226,6 +226,141 @@
 	}
 
 	/* ------------------------------------------------------------------
+	 * Vista previa en vivo de la pestaña Diseño
+	 * --------------------------------------------------------------- */
+
+	var $designFrame = $( '#iwq-design-preview-frame' );
+
+	if ( $designFrame.length ) {
+		var designDefaults = {
+			design_accent: '#2563eb', design_accent_hover: '#1d4ed8', design_accent_contrast: '#ffffff',
+			design_text: '#1f2937', design_text_muted: '#6b7280', design_surface: '#ffffff',
+			design_surface_alt: '#f9fafb', design_border: '#e5e7eb', design_radius: '8',
+			drawer_width: '420', drawer_overlay: '45'
+		};
+
+		var colorVars = {
+			design_accent: '--iwq-accent', design_accent_hover: '--iwq-accent-hover',
+			design_accent_contrast: '--iwq-accent-contrast', design_text: '--iwq-text',
+			design_text_muted: '--iwq-text-muted', design_surface: '--iwq-surface',
+			design_surface_alt: '--iwq-surface-alt', design_border: '--iwq-border',
+			link_color: '--iwq-link', link_hover_color: '--iwq-link-hover'
+		};
+
+		var sizeVars = {
+			design_radius: '--iwq-radius', button_radius: '--iwq-btn-radius',
+			button_padding_y: '--iwq-btn-pad-y', button_padding_x: '--iwq-btn-pad-x',
+			button_font_size: '--iwq-btn-size', field_radius: '--iwq-field-radius'
+		};
+
+		function val( key ) {
+			var $el = $( '#iwq_' + key );
+
+			if ( ! $el.length ) {
+				return '';
+			}
+
+			if ( $el.is( ':checkbox' ) ) {
+				return $el.prop( 'checked' ) ? 'yes' : 'no';
+			}
+
+			return $.trim( String( $el.val() || '' ) );
+		}
+
+		function set( root, name, value ) {
+			if ( value ) {
+				root.style.setProperty( name, value );
+			} else {
+				root.style.removeProperty( name );
+			}
+		}
+
+		function renderDesign() {
+			var doc = $designFrame[ 0 ].contentDocument;
+
+			if ( ! doc || ! doc.documentElement ) {
+				return;
+			}
+
+			// La hoja del front fija sus variables en .iwq, así que se
+			// sobrescriben ahí (como hace el CSS en línea del front).
+			var root = doc.querySelector( '.iwq.stage' ) || doc.documentElement;
+			var key;
+
+			for ( key in colorVars ) {
+				var color = val( key );
+				set( root, colorVars[ key ], /^#[0-9a-f]{3,8}$/i.test( color ) && color !== designDefaults[ key ] ? color : '' );
+			}
+
+			for ( key in sizeVars ) {
+				var size = val( key );
+				set( root, sizeVars[ key ], size !== '' && size !== designDefaults[ key ] ? parseInt( size, 10 ) + 'px' : '' );
+			}
+
+			var weight = val( 'button_font_weight' );
+			set( root, '--iwq-btn-weight', /^[4-7]00$/.test( weight ) ? weight : '' );
+
+			var upper = val( 'button_text_transform' ) === 'uppercase';
+			set( root, '--iwq-btn-transform', upper ? 'uppercase' : '' );
+			set( root, '--iwq-btn-spacing', upper ? '0.04em' : '' );
+			set( root, '--iwq-btn-font', val( 'button_font' ) === 'system' ? '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' : '' );
+			set( root, '--iwq-btn-shadow', val( 'button_shadow' ) === 'yes' ? '0 6px 18px rgba(0,0,0,0.16)' : '' );
+
+			var overlay = val( 'drawer_overlay' );
+			set( root, '--iwq-overlay', overlay !== '' && overlay !== designDefaults.drawer_overlay ? 'rgba(0,0,0,' + ( Math.min( 100, parseInt( overlay, 10 ) || 0 ) / 100 ) + ')' : '' );
+
+			var $button = $( doc ).find( '[data-preview="button"]' );
+			$button.toggleClass( 'iwq-add-button--outline', val( 'button_style' ) === 'outline' );
+			$button.toggleClass( 'iwq-add-button--block', val( 'button_full_width' ) === 'yes' );
+
+			var $drawer = $( doc ).find( '[data-preview="drawer"]' );
+			$drawer.toggleClass( 'iwq-drawer--accent-header', val( 'drawer_header_style' ) === 'accent' );
+			$drawer.toggleClass( 'iwq-no-thumbs', val( 'drawer_show_thumbs' ) === 'no' );
+			$( doc ).find( '[data-preview="drawer-title"]' ).text( val( 'drawer_title' ) || $( '#iwq_drawer_title' ).attr( 'placeholder' ) );
+			$( doc ).find( '[data-preview="drawer-footer"]' ).text( val( 'drawer_footer_label' ) || $( '#iwq_drawer_footer_label' ).attr( 'placeholder' ) );
+
+			var $page = $( doc ).find( '[data-preview="page"]' );
+			var card = val( 'page_card_style' );
+			$page.toggleClass( 'iwq-quote-page--card', card === 'bordered' || card === 'shadow' );
+			$page.toggleClass( 'iwq-quote-page--shadow', card === 'shadow' );
+			$page.removeClass( 'iwq-fields--filled iwq-fields--underline' );
+
+			var field = val( 'field_style' );
+
+			if ( field === 'filled' || field === 'underline' ) {
+				$page.addClass( 'iwq-fields--' + field );
+			}
+
+			// El CSS adicional también se refleja, en un <style> propio.
+			var custom = doc.getElementById( 'iwq-custom-css' );
+
+			if ( ! custom ) {
+				custom = doc.createElement( 'style' );
+				custom.id = 'iwq-custom-css';
+				doc.head.appendChild( custom );
+			}
+
+			custom.textContent = val( 'custom_css' ).replace( /<\/style/gi, '' );
+		}
+
+		$designFrame.on( 'load', renderDesign );
+
+		if ( $designFrame[ 0 ].contentDocument && $designFrame[ 0 ].contentDocument.readyState === 'complete' ) {
+			renderDesign();
+		}
+
+		$( '#iwq-settings-form' ).on( 'input change', 'input, select, textarea', renderDesign );
+
+		// Iris avisa por su propio callback, no por eventos del input.
+		if ( $.fn.wpColorPicker ) {
+			$( '.iwq-color-field' ).each( function () {
+				$( this ).wpColorPicker( 'option', 'change', function () { window.setTimeout( renderDesign, 0 ); } );
+				$( this ).wpColorPicker( 'option', 'clear', function () { window.setTimeout( renderDesign, 0 ); } );
+			} );
+		}
+	}
+
+	/* ------------------------------------------------------------------
 	 * Barra de guardado, avisos y atajos
 	 * --------------------------------------------------------------- */
 

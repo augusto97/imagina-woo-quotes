@@ -132,6 +132,7 @@ class IWQ_Admin {
 			'pdf'     => '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="M8.5 16v-5h1.6a1.5 1.5 0 0 1 0 3H8.5"/><path d="M13 11h2v5h-2z"/>',
 			'mail'    => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
 			'filter'  => '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
+			'palette' => '<path d="M12 3a9 9 0 0 0 0 18c1.5 0 2-1 2-2 0-.6-.4-1-.6-1.5-.3-.6.1-1.5 1.1-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/>',
 			'save'    => '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3"/><path d="M8 21v-7h8v7"/>',
 			'check'   => '<path d="m5 12 5 5L20 7"/>',
 			'plus'    => '<path d="M12 5v14"/><path d="M5 12h14"/>',
