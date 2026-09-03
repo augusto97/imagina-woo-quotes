@@ -461,6 +461,24 @@ class IWQ_Settings {
 							),
 							'desc'    => __( 'Los anchos amplio y completo los definen los temas de bloques y los clásicos con soporte de alineaciones anchas. Si usas el bloque «Lista de presupuesto», su alineación en el editor manda sobre este ajuste.', 'imagina-woo-quotes' ),
 						),
+						'page_columns'    => array(
+							'label'   => __( 'Reparto de las columnas', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'30' => __( 'Lista 30 % · Formulario 70 %', 'imagina-woo-quotes' ),
+								'40' => __( 'Lista 40 % · Formulario 60 %', 'imagina-woo-quotes' ),
+								'50' => __( 'Mitad y mitad', 'imagina-woo-quotes' ),
+								'60' => __( 'Lista 60 % · Formulario 40 %', 'imagina-woo-quotes' ),
+								'70' => __( 'Lista 70 % · Formulario 30 %', 'imagina-woo-quotes' ),
+							),
+							'desc'    => __( 'Solo con dos columnas. El orden lo decide la disposición.', 'imagina-woo-quotes' ),
+						),
+						'page_columns_gap' => array(
+							'label' => __( 'Separación entre columnas', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'max'   => 160,
+						),
 						'page_sticky_list' => array(
 							'label' => __( 'Fijar la lista al hacer scroll', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',

@@ -68,7 +68,9 @@ $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty
 				?>
 
 				<?php
-				$iwq_privacy = iwq_get_option( 'form_privacy_text' );
+				// Las instalaciones anteriores guardaron «%s» como marcador del
+				// enlace; equivale a [privacy_policy].
+				$iwq_privacy = str_replace( '%s', '[privacy_policy]', (string) iwq_get_option( 'form_privacy_text' ) );
 
 				if ( $iwq_privacy && function_exists( 'wc_replace_policy_page_link_placeholders' ) ) :
 					?>

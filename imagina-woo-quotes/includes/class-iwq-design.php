@@ -59,6 +59,8 @@ class IWQ_Design {
 			'drawer_footer_label'     => '',
 			'page_layout'             => 'stacked',
 			'page_width'              => 'auto',
+			'page_columns'            => '40',
+			'page_columns_gap'        => '48',
 			'page_sticky_list'        => 'yes',
 			'page_card_style'         => 'plain',
 			'page_show_thumbs'        => 'yes',
@@ -134,6 +136,20 @@ class IWQ_Design {
 			}
 
 			$vars[ $var ] = absint( $raw ) . 'px';
+		}
+
+		// Reparto de las columnas: porcentaje de la lista; el resto, formulario.
+		$list_share = absint( self::get( 'page_columns' ) );
+
+		if ( $list_share >= 20 && $list_share <= 80 && (string) $list_share !== $defaults['page_columns'] ) {
+			$vars['--iwq-col-list'] = $list_share . 'fr';
+			$vars['--iwq-col-form'] = ( 100 - $list_share ) . 'fr';
+		}
+
+		$gap = self::get( 'page_columns_gap' );
+
+		if ( '' !== $gap && $gap !== $defaults['page_columns_gap'] ) {
+			$vars['--iwq-col-gap'] = absint( $gap ) . 'px';
 		}
 
 		$weight = self::get( 'button_font_weight' );

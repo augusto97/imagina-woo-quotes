@@ -179,8 +179,8 @@
 
 .iwq-quote-page--columns .iwq-quote-page__layout {
 	display: grid;
-	grid-template-columns: minmax( 0, 5fr ) minmax( 0, 7fr );
-	gap: 48px;
+	grid-template-columns: minmax( 0, var( --iwq-col-list, 5fr ) ) minmax( 0, var( --iwq-col-form, 7fr ) );
+	gap: var( --iwq-col-gap, 48px );
 	align-items: start;
 }
 
@@ -207,7 +207,7 @@
 
 /* Con el formulario a la izquierda, es él quien se lleva la columna ancha. */
 .iwq-quote-page--form-left .iwq-quote-page__layout {
-	grid-template-columns: minmax( 0, 7fr ) minmax( 0, 5fr );
+	grid-template-columns: minmax( 0, var( --iwq-col-form, 7fr ) ) minmax( 0, var( --iwq-col-list, 5fr ) );
 }
 
 .iwq-quote-page--columns .iwq-quote-page__tools {

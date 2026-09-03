@@ -5,6 +5,19 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.5.0] - 2026-09-03
+
+### Añadido
+- Ajustes «Reparto de las columnas» (lista 30, 40, 50, 60 o 70 % y el resto
+  para el formulario) y «Separación entre columnas» en Presupuestos →
+  Diseño → Página de solicitud. Hasta ahora el reparto era fijo
+
+### Corregido
+- El texto de privacidad del formulario mostraba «%s» en lugar del enlace a
+  la política de privacidad: el valor por defecto usaba un marcador
+  distinto del que entiende la plantilla. Las instalaciones que ya lo
+  tienen guardado también se corrigen sin tocar el ajuste
+
 ## [1.4.0] - 2026-09-03
 
 ### Añadido
@@ -169,6 +182,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.5.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.5.0
 [1.4.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.4.0
 [1.3.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.3.0
 [1.2.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.2.0

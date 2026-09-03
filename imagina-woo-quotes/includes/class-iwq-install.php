@@ -114,7 +114,7 @@ class IWQ_Install {
 			'pdf_filename'             => 'presupuesto-{order_number}',
 			// Formulario.
 			'form_fields'              => iwq_get_default_form_fields(),
-			'form_privacy_text'        => __( 'Tus datos se usarán para procesar tu solicitud y responderte. Consulta nuestra %s.', 'imagina-woo-quotes' ),
+			'form_privacy_text'        => __( 'Tus datos se usarán para procesar tu solicitud y responderte. Consulta nuestra [privacy_policy].', 'imagina-woo-quotes' ),
 		);
 
 		foreach ( $defaults as $key => $value ) {
