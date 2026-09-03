@@ -77,6 +77,9 @@ en las páginas que los necesitan.
 - Contador de solicitudes por producto, con columna ordenable en el listado
 
 **Diseño del front**
+- La lista de la página de solicitud usa la tabla del carrito de WooCommerce
+  (mismas clases, misma caja de cantidad, mismos botones), así que el tema la
+  pinta igual que el carrito; opcionalmente, la lista compacta del plugin
 - Pestaña «Diseño» con vista previa en vivo: colores, redondeo y modo
   oscuro; tipografía, tamaño, grosor, mayúsculas, relleno, redondeo, sombra
   y ancho del botón; título, lado, ancho, cabecera y velo del panel lateral;

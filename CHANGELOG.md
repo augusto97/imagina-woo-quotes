@@ -5,6 +5,25 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.6.0] - 2026-09-03
+
+### Añadido
+- La lista de productos de la página de solicitud se pinta con la misma
+  tabla que el carrito de WooCommerce (`shop_table cart`): mismas columnas
+  (quitar, imagen, producto, precio, cantidad, subtotal), misma caja de
+  cantidad de `woocommerce_quantity_input()`, mismo aspa de quitar y botones
+  con la clase `button` del tema. El tema la pinta idéntica al carrito, sin
+  CSS propio. El subtotal de cada línea se actualiza al cambiar la cantidad
+- Ajuste «Lista de productos» en Presupuestos → Diseño → Página de
+  solicitud: «Como el carrito de WooCommerce» (por defecto) o «Lista
+  compacta del plugin», la de antes, con los colores de la pestaña
+- Con la tabla del carrito, los botones de enviar, vaciar y seguir viendo
+  productos usan las clases de botón del tema (`button`, `button alt`)
+
+### Cambiado
+- Las columnas de precio y subtotal se omiten cuando todos los productos de
+  la lista tienen el precio oculto
+
 ## [1.5.0] - 2026-09-03
 
 ### Añadido
@@ -182,6 +201,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.6.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.6.0
 [1.5.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.5.0
 [1.4.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.4.0
 [1.3.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.3.0

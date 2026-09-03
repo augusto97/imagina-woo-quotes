@@ -433,6 +433,14 @@
 				.then( function ( data ) {
 					writeState( { count: data.count, ids: data.ids } );
 					syncUI( { count: data.count, ids: data.ids } );
+
+					// La tabla tipo carrito muestra el subtotal de la línea; el
+					// HTML viene de wc_price() en nuestro propio endpoint.
+					var subtotal = row.querySelector( '.iwq-line-subtotal' );
+
+					if ( subtotal && data.subtotal ) {
+						subtotal.innerHTML = data.subtotal;
+					}
 				} )
 				.catch( function ( error ) {
 					notify( error.message || i18n.error, 'error' );
@@ -459,7 +467,7 @@
 					body.innerHTML = data.html;
 				}
 
-				document.querySelectorAll( '.iwq-list__row' ).forEach( function ( row ) {
+				document.querySelectorAll( '.iwq-list__row, .iwq-cart-row' ).forEach( function ( row ) {
 					row.remove();
 				} );
 

@@ -14,6 +14,8 @@ $iwq_is_empty     = empty( $items );
 $iwq_page_classes = array_merge( array( 'iwq', 'iwq-quote-page' ), IWQ_Design::get_page_classes( isset( $align ) ? $align : '' ) );
 $iwq_list_title   = IWQ_Design::get( 'page_list_title' );
 $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty' );
+$iwq_woo_style    = 'plugin' !== IWQ_Design::get( 'page_list_style' );
+$iwq_button_class = $iwq_woo_style ? IWQ_Design::get_theme_button_class() : 'iwq-add-button';
 ?>
 <div class="<?php echo esc_attr( implode( ' ', $iwq_page_classes ) ); ?>">
 
@@ -31,7 +33,7 @@ $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty
 		<div class="iwq-empty">
 			<p><?php esc_html_e( 'Todavía no has añadido ningún producto a tu presupuesto.', 'imagina-woo-quotes' ); ?></p>
 
-			<a class="iwq-add-button" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">
+			<a class="<?php echo esc_attr( $iwq_woo_style ? $iwq_button_class . ' wc-backward' : 'iwq-add-button' ); ?>" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">
 				<?php esc_html_e( 'Ver el catálogo', 'imagina-woo-quotes' ); ?>
 			</a>
 		</div>
@@ -42,16 +44,24 @@ $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty
 
 	<?php if ( ! $iwq_is_empty ) : ?>
 
-		<div class="iwq-quote-page__list">
+		<div class="iwq-quote-page__list iwq-has-items">
 			<h2 class="iwq-quote-page__title"><?php echo esc_html( $iwq_list_title ? $iwq_list_title : __( 'Productos en tu solicitud', 'imagina-woo-quotes' ) ); ?></h2>
 
-			<?php iwq_get_template( 'quote/drawer-content.php', array( 'items' => $items ) ); ?>
+			<?php if ( $iwq_woo_style ) : ?>
 
-			<p class="iwq-quote-page__tools">
-				<button type="button" class="iwq-clear-list iwq-link-button">
-					<?php esc_html_e( 'Vaciar la lista', 'imagina-woo-quotes' ); ?>
-				</button>
-			</p>
+				<?php iwq_get_template( 'quote/quote-table.php', array( 'items' => $items ) ); ?>
+
+			<?php else : ?>
+
+				<?php iwq_get_template( 'quote/drawer-content.php', array( 'items' => $items ) ); ?>
+
+				<p class="iwq-quote-page__tools">
+					<button type="button" class="iwq-clear-list iwq-link-button">
+						<?php esc_html_e( 'Vaciar la lista', 'imagina-woo-quotes' ); ?>
+					</button>
+				</p>
+
+			<?php endif; ?>
 		</div>
 
 	<?php endif; ?>
@@ -79,7 +89,7 @@ $iwq_show_form    = ! $iwq_is_empty || iwq_option_enabled( 'show_form_when_empty
 					</p>
 				<?php endif; ?>
 
-				<button type="submit" class="iwq-add-button iwq-submit">
+				<button type="submit" class="<?php echo esc_attr( $iwq_woo_style ? IWQ_Design::get_theme_button_class( true ) . ' wc-forward iwq-submit' : 'iwq-add-button iwq-submit' ); ?>">
 					<span class="iwq-add-button__spinner" aria-hidden="true"></span>
 					<span class="iwq-add-button__label">
 						<?php echo esc_html( iwq_get_option( 'submit_label', __( 'Enviar solicitud', 'imagina-woo-quotes' ) ) ); ?>

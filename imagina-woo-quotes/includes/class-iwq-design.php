@@ -57,6 +57,7 @@ class IWQ_Design {
 			'drawer_overlay'          => '45',
 			'drawer_show_thumbs'      => 'yes',
 			'drawer_footer_label'     => '',
+			'page_list_style'         => 'woocommerce',
 			'page_layout'             => 'stacked',
 			'page_width'              => 'auto',
 			'page_columns'            => '40',
@@ -264,6 +265,33 @@ class IWQ_Design {
 	}
 
 	/**
+	 * Clases de botón del tema, como las usa el carrito de WooCommerce.
+	 *
+	 * En temas de bloques WooCommerce añade la clase de botón del tema
+	 * (wp-element-button) además de `button`; sin ella el tema no lo pinta.
+	 *
+	 * @param bool $alt Si es el botón principal (`alt`).
+	 * @return string
+	 */
+	public static function get_theme_button_class( $alt = false ) {
+		$classes = array( 'button' );
+
+		if ( $alt ) {
+			$classes[] = 'alt';
+		}
+
+		if ( function_exists( 'wc_wp_theme_get_element_class_name' ) ) {
+			$theme = wc_wp_theme_get_element_class_name( 'button' );
+
+			if ( $theme ) {
+				$classes[] = $theme;
+			}
+		}
+
+		return implode( ' ', $classes );
+	}
+
+	/**
 	 * Clases modificadoras de la página de solicitud.
 	 *
 	 * @param string $align Alineación pedida por el bloque o el shortcode
@@ -274,6 +302,13 @@ class IWQ_Design {
 		$classes = array();
 		$layout  = self::get( 'page_layout' );
 		$columns = 'columns' === $layout || 'columns_form_left' === $layout;
+
+		// Con la tabla del carrito, los botones también son los del tema.
+		if ( 'plugin' !== self::get( 'page_list_style' ) ) {
+			$classes[] = 'woocommerce';
+			$classes[] = 'iwq-quote-page--woo';
+			$classes[] = 'iwq-theme-buttons';
+		}
 
 		if ( $columns ) {
 			$classes[] = 'iwq-quote-page--columns';

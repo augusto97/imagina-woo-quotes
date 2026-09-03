@@ -440,6 +440,15 @@ class IWQ_Settings {
 					'title'  => __( 'Página de solicitud', 'imagina-woo-quotes' ),
 					'desc'   => __( 'La página con la lista de productos y el formulario. Los textos del formulario se cambian en la pestaña Formulario.', 'imagina-woo-quotes' ),
 					'fields' => array(
+						'page_list_style' => array(
+							'label'   => __( 'Lista de productos', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'woocommerce' => __( 'Como el carrito de WooCommerce', 'imagina-woo-quotes' ),
+								'plugin'      => __( 'Lista compacta del plugin', 'imagina-woo-quotes' ),
+							),
+							'desc'    => __( 'Con la tabla del carrito, la lista, la caja de cantidad, el aspa de quitar y los botones usan las mismas clases que el carrito, así que el tema los pinta idénticos. La lista compacta es la del panel lateral, con los colores de esta pestaña.', 'imagina-woo-quotes' ),
+						),
 						'page_layout'     => array(
 							'label'   => __( 'Disposición', 'imagina-woo-quotes' ),
 							'type'    => 'select',

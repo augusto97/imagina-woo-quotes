@@ -462,7 +462,19 @@ class IWQ_Session {
 
 		self::update_quantity( $key, $quantity );
 
-		wp_send_json_success( $this->get_response_payload() );
+		$payload = $this->get_response_payload();
+		$items   = self::get_items();
+
+		// Subtotal de la línea, para que la tabla lo refresque sin recargar.
+		if ( isset( $items[ $key ] ) ) {
+			$product = wc_get_product( $items[ $key ]['variation_id'] ? $items[ $key ]['variation_id'] : $items[ $key ]['product_id'] );
+
+			if ( $product && ! IWQ_Exclusions::should_hide_price( $product ) && '' !== $product->get_price() ) {
+				$payload['subtotal'] = wc_price( wc_get_price_to_display( $product, array( 'qty' => $items[ $key ]['quantity'] ) ) );
+			}
+		}
+
+		wp_send_json_success( $payload );
 	}
 
 	/**

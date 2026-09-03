@@ -169,6 +169,60 @@
 }
 
 /* ---------------------------------------------------------------------
+ * Página de solicitud: tabla como la del carrito
+ *
+ * La tabla lleva las clases de cart/cart.php, así que la pintan
+ * WooCommerce y el tema. Aquí solo lo que ninguno cubre.
+ * ------------------------------------------------------------------ */
+
+.iwq-cart-table .iwq-cart-row.is-removing {
+	opacity: 0.4;
+	pointer-events: none;
+}
+
+.iwq-cart-table td.actions {
+	text-align: left;
+}
+
+/* El enlace con clase de botón mide como el <button>: sin esto, a ancho
+   completo en móvil se sale de la celda por el relleno. */
+.iwq-cart-table td.actions .button {
+	box-sizing: border-box;
+}
+
+.iwq-cart-table td.actions .button + .button {
+	margin-left: 8px;
+}
+
+/* En pantallas pequeñas WooCommerce pone cada botón a ancho completo. */
+@media ( max-width: 768px ) {
+	.iwq-cart-table td.actions .button + .button {
+		margin-left: 0;
+		margin-top: 8px;
+	}
+}
+
+.iwq-no-thumbs .iwq-cart-table .product-thumbnail {
+	display: none;
+}
+
+/* Botones del tema: el indicador de carga solo ocupa sitio mientras carga. */
+.iwq-theme-buttons .iwq-add-button__spinner {
+	display: none;
+}
+
+.iwq-theme-buttons .is-loading .iwq-add-button__spinner {
+	display: inline-block;
+	margin-right: 8px;
+	vertical-align: middle;
+	opacity: 1;
+}
+
+.iwq-theme-buttons .iwq-submit {
+	margin-top: 8px;
+}
+
+/* ---------------------------------------------------------------------
  * Página de solicitud: disposición y tarjetas
  * ------------------------------------------------------------------ */
 
