@@ -236,7 +236,7 @@
 			design_accent: '#2563eb', design_accent_hover: '#1d4ed8', design_accent_contrast: '#ffffff',
 			design_text: '#1f2937', design_text_muted: '#6b7280', design_surface: '#ffffff',
 			design_surface_alt: '#f9fafb', design_border: '#e5e7eb', design_radius: '8',
-			drawer_width: '480', drawer_overlay: '45', drawer_thumb_size: '64'
+			drawer_width: '480', drawer_overlay: '45', drawer_thumb_size: '48', drawer_title_size: '20', drawer_font_size: '14', drawer_button_size: '14', drawer_button_padding: '12'
 		};
 
 		var colorVars = {
@@ -251,7 +251,9 @@
 			design_radius: '--iwq-radius', button_radius: '--iwq-btn-radius',
 			button_padding_y: '--iwq-btn-pad-y', button_padding_x: '--iwq-btn-pad-x',
 			button_font_size: '--iwq-btn-size', field_radius: '--iwq-field-radius',
-			drawer_thumb_size: '--iwq-drawer-thumb'
+			drawer_thumb_size: '--iwq-drawer-thumb', drawer_title_size: '--iwq-drawer-title-size',
+			drawer_font_size: '--iwq-drawer-font', drawer_button_size: '--iwq-drawer-btn-size',
+			drawer_button_padding: '--iwq-drawer-btn-pad'
 		};
 
 		function val( key ) {
@@ -317,8 +319,22 @@
 			var $drawer = $( doc ).find( '[data-preview="drawer"]' );
 			$drawer.toggleClass( 'iwq-drawer--accent-header', val( 'drawer_header_style' ) === 'accent' );
 			$drawer.toggleClass( 'iwq-no-thumbs', val( 'drawer_show_thumbs' ) === 'no' );
+			$drawer.toggleClass( 'iwq-drawer--compact', val( 'drawer_layout' ) !== 'stacked' );
 			$( doc ).find( '[data-preview="drawer-title"]' ).text( val( 'drawer_title' ) || $( '#iwq_drawer_title' ).attr( 'placeholder' ) );
 			$( doc ).find( '[data-preview="drawer-footer"]' ).text( val( 'drawer_footer_label' ) || $( '#iwq_drawer_footer_label' ).attr( 'placeholder' ) );
+			$( doc ).find( '.iwq-drawer__count' ).toggle( val( 'drawer_show_count' ) !== 'no' );
+			$( doc ).find( '.iwq-drawer__subtotal' ).toggle( val( 'drawer_show_subtotal' ) !== 'no' );
+
+			var note = val( 'drawer_subtotal_desc' );
+			$( doc ).find( '.iwq-drawer__subtotal-desc' ).text( note || $( '#iwq_drawer_subtotal_desc' ).attr( 'placeholder' ) ).toggle( note.trim() !== '-' );
+
+			var $continue = $( doc ).find( '.iwq-drawer__continue' );
+			$continue.toggle( val( 'drawer_show_continue' ) !== 'no' ).text( val( 'drawer_continue_label' ) || $( '#iwq_drawer_continue_label' ).attr( 'placeholder' ) );
+			$( doc ).find( '.iwq-drawer__actions' ).toggleClass( 'iwq-drawer__actions--row', val( 'drawer_buttons_layout' ) === 'row' ).toggleClass( 'iwq-drawer__actions--stacked', val( 'drawer_buttons_layout' ) !== 'row' );
+
+			var hex = function ( key ) { var v = val( key ); return /^#[0-9a-f]{3,8}$/i.test( v ) ? v : ''; };
+			$( doc ).find( '.iwq-drawer__submit' ).css( { backgroundColor: hex( 'drawer_button_bg' ), borderColor: hex( 'drawer_button_bg' ), color: hex( 'drawer_button_text' ) } );
+			$continue.css( { backgroundColor: hex( 'drawer_button2_bg' ), color: hex( 'drawer_button2_text' ), borderColor: hex( 'drawer_button2_border' ) } );
 
 			var $page = $( doc ).find( '[data-preview="page"]' );
 			var card = val( 'page_card_style' );

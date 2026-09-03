@@ -418,14 +418,14 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 16px;
-	padding: 20px 16px 8px;
+	padding: 16px 16px 4px;
 }
 
 .iwq-drawer__title {
 	margin: 0;
-	font-size: clamp( 22px, 2.2vw, 30px );
-	font-weight: 500;
-	line-height: 1.2;
+	font-size: var( --iwq-drawer-title-size, 20px );
+	font-weight: 600;
+	line-height: 1.25;
 	letter-spacing: -0.01em;
 }
 
@@ -481,11 +481,12 @@
 	margin: 0;
 	border: 0;
 	border-collapse: collapse;
-	font-size: 0.95em;
+	font-size: var( --iwq-drawer-font, 14px );
+	line-height: 1.4;
 }
 
 .iwq-mini-items td {
-	padding: 16px 0;
+	padding: 14px 0;
 	border: 0;
 	border-bottom: 1px solid var( --iwq-border );
 	vertical-align: top;
@@ -498,14 +499,14 @@
 }
 
 .iwq-mini-item__image {
-	width: calc( var( --iwq-drawer-thumb, 64px ) + 16px );
-	padding-right: 16px !important;
+	width: calc( var( --iwq-drawer-thumb, 48px ) + 12px );
+	padding-right: 12px !important;
 }
 
 .iwq-mini-item__image img {
 	display: block;
-	width: var( --iwq-drawer-thumb, 64px );
-	height: var( --iwq-drawer-thumb, 64px );
+	width: var( --iwq-drawer-thumb, 48px );
+	height: var( --iwq-drawer-thumb, 48px );
 	max-width: none;
 	border: 1px solid var( --iwq-border );
 	border-radius: var( --iwq-thumb-radius, 0 );
@@ -555,8 +556,48 @@
 .iwq-mini-item__controls {
 	display: flex;
 	align-items: center;
-	gap: 12px;
-	margin-top: 10px;
+	gap: 10px;
+	margin-top: 8px;
+}
+
+/* Densidad compacta: precio y cantidad comparten línea. */
+.iwq-drawer--compact .iwq-mini-items td {
+	padding: 10px 0;
+}
+
+.iwq-drawer--compact .iwq-mini-item__product {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 12px;
+}
+
+.iwq-drawer--compact .iwq-mini-item__name {
+	flex: 1 0 100%;
+}
+
+.iwq-drawer--compact .iwq-mini-item__meta {
+	flex: 1 0 100%;
+	margin-top: 0;
+}
+
+.iwq-drawer--compact .iwq-mini-item__price {
+	margin-top: 0;
+}
+
+.iwq-drawer--compact .iwq-mini-item__controls {
+	margin-top: 0;
+	margin-left: auto;
+}
+
+.iwq-drawer--compact .iwq-qty {
+	grid-template-columns: 28px 36px 28px;
+	height: 28px;
+}
+
+.iwq-drawer--compact .iwq-mini-item__remove {
+	width: 28px;
+	height: 28px;
 }
 
 .iwq-mini-item__total {
@@ -684,7 +725,8 @@
 /* Pie */
 
 .iwq-drawer__footer {
-	padding: 16px;
+	padding: 14px 16px 16px;
+	font-size: var( --iwq-drawer-font, 14px );
 	border-top: 1px solid var( --iwq-border );
 	background: var( --iwq-surface );
 }
@@ -693,8 +735,8 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	gap: 4px 12px;
-	margin-bottom: 16px;
+	gap: 2px 12px;
+	margin-bottom: 12px;
 	font-weight: 600;
 }
 
@@ -707,8 +749,12 @@
 
 .iwq-drawer__actions {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
 	gap: 8px;
+}
+
+.iwq-drawer__actions--row {
+	grid-template-columns: 1fr 1fr;
 }
 
 .iwq-drawer .iwq-drawer__actions .button,
@@ -717,9 +763,16 @@
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
+	width: 100%;
 	margin: 0;
+	padding: var( --iwq-drawer-btn-pad, 12px ) 16px;
+	font-size: var( --iwq-drawer-btn-size, 14px );
 	text-align: center;
 	line-height: 1.3;
+}
+
+.iwq-drawer .iwq-drawer__shop {
+	width: auto;
 }
 
 /* El primer botón va en contorno, como «Ver mi carrito» del mini carrito. */
@@ -736,7 +789,7 @@
 }
 
 @media ( max-width: 480px ) {
-	.iwq-drawer__actions {
+	.iwq-drawer__actions--row {
 		grid-template-columns: 1fr;
 	}
 }

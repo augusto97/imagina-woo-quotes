@@ -68,7 +68,7 @@ ob_start();
 		</div>
 	</div>
 
-	<div class="iwq-drawer woocommerce is-open" data-preview="drawer">
+	<div class="iwq-drawer woocommerce iwq-drawer--compact is-open" data-preview="drawer">
 		<div class="iwq-drawer__overlay"></div>
 		<div class="iwq-drawer__panel">
 			<div class="iwq-drawer__header">
@@ -91,7 +91,7 @@ ob_start();
 			</div>
 			<div class="iwq-drawer__footer">
 				<div class="iwq-drawer__subtotal"><span><?php esc_html_e( 'Subtotal', 'imagina-woo-quotes' ); ?></span><span>890,00 €</span><div class="iwq-drawer__subtotal-desc"><?php esc_html_e( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto.', 'imagina-woo-quotes' ); ?></div></div>
-				<div class="iwq-drawer__actions"><button type="button" class="button wp-element-button iwq-drawer__continue"><?php esc_html_e( 'Seguir viendo productos', 'imagina-woo-quotes' ); ?></button><a class="button alt wp-element-button iwq-drawer__submit" href="#" data-preview="drawer-footer"><?php esc_html_e( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ); ?></a></div>
+				<div class="iwq-drawer__actions iwq-drawer__actions--stacked"><button type="button" class="button wp-element-button iwq-drawer__continue"><?php esc_html_e( 'Seguir viendo productos', 'imagina-woo-quotes' ); ?></button><a class="button alt wp-element-button iwq-drawer__submit" href="#" data-preview="drawer-footer"><?php esc_html_e( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ); ?></a></div>
 			</div>
 		</div>
 	</div>

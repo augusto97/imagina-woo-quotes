@@ -388,17 +388,49 @@ class IWQ_Settings {
 				),
 				'drawer' => array(
 					'title'  => __( 'Panel lateral', 'imagina-woo-quotes' ),
-					'desc'   => __( 'El panel que se abre al añadir un producto.', 'imagina-woo-quotes' ),
+					'desc'   => __( 'El panel que se abre al añadir un producto. Los tamaños vacíos heredan del tema.', 'imagina-woo-quotes' ),
 					'fields' => array(
 						'drawer_title'        => array(
 							'label'       => __( 'Título', 'imagina-woo-quotes' ),
 							'type'        => 'text',
 							'placeholder' => __( 'Tu presupuesto', 'imagina-woo-quotes' ),
 						),
-						'drawer_footer_label' => array(
-							'label'       => __( 'Texto del botón inferior', 'imagina-woo-quotes' ),
-							'type'        => 'text',
-							'placeholder' => __( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ),
+						'drawer_show_count'   => array(
+							'label' => __( 'Mostrar el número de productos junto al título', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'drawer_title_size'   => array(
+							'label' => __( 'Tamaño del título', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 12,
+							'max'   => 40,
+						),
+						'drawer_layout'       => array(
+							'label'   => __( 'Densidad de las filas', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'compact' => __( 'Compacta: precio y cantidad en la misma línea', 'imagina-woo-quotes' ),
+								'stacked' => __( 'Holgada, como el mini carrito de WooCommerce', 'imagina-woo-quotes' ),
+							),
+						),
+						'drawer_font_size'    => array(
+							'label' => __( 'Tamaño de letra de las filas', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 11,
+							'max'   => 20,
+						),
+						'drawer_show_thumbs'  => array(
+							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'drawer_thumb_size'   => array(
+							'label' => __( 'Tamaño de la miniatura', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 24,
+							'max'   => 200,
 						),
 						'drawer_position'     => array(
 							'label'   => __( 'Lado', 'imagina-woo-quotes' ),
@@ -431,16 +463,73 @@ class IWQ_Settings {
 							'max'   => 100,
 							'desc'  => __( 'Opacidad del velo sobre la página mientras el panel está abierto.', 'imagina-woo-quotes' ),
 						),
-						'drawer_show_thumbs'  => array(
-							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
+						'drawer_show_subtotal' => array(
+							'label' => __( 'Mostrar el subtotal', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',
 						),
-						'drawer_thumb_size'   => array(
-							'label' => __( 'Tamaño de la miniatura', 'imagina-woo-quotes' ),
+						'drawer_subtotal_desc' => array(
+							'label'       => __( 'Nota bajo el subtotal', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto.', 'imagina-woo-quotes' ),
+							'desc'        => __( 'Escribe un guion (-) para no mostrar ninguna nota.', 'imagina-woo-quotes' ),
+						),
+						'drawer_footer_label' => array(
+							'label'       => __( 'Texto del botón principal', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ),
+						),
+						'drawer_show_continue' => array(
+							'label' => __( 'Mostrar el botón de seguir comprando', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+						),
+						'drawer_continue_label' => array(
+							'label'       => __( 'Texto del botón de seguir comprando', 'imagina-woo-quotes' ),
+							'type'        => 'text',
+							'placeholder' => __( 'Seguir viendo productos', 'imagina-woo-quotes' ),
+						),
+						'drawer_buttons_layout' => array(
+							'label'   => __( 'Disposición de los botones', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'stacked' => __( 'Uno debajo del otro, a ancho completo', 'imagina-woo-quotes' ),
+								'row'     => __( 'Los dos en una fila', 'imagina-woo-quotes' ),
+							),
+						),
+						'drawer_button_size'  => array(
+							'label' => __( 'Tamaño de letra de los botones', 'imagina-woo-quotes' ),
 							'type'  => 'size',
 							'unit'  => 'px',
-							'min'   => 24,
-							'max'   => 200,
+							'min'   => 11,
+							'max'   => 24,
+						),
+						'drawer_button_padding' => array(
+							'label' => __( 'Altura de los botones (relleno vertical)', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 4,
+							'max'   => 32,
+						),
+						'drawer_button_bg'    => array(
+							'label' => __( 'Botón principal: fondo', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Vacío: el color de botón del tema.', 'imagina-woo-quotes' ),
+						),
+						'drawer_button_text'  => array(
+							'label' => __( 'Botón principal: texto', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'drawer_button2_bg'   => array(
+							'label' => __( 'Botón secundario: fondo', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+							'desc'  => __( 'Vacío: transparente, solo con borde.', 'imagina-woo-quotes' ),
+						),
+						'drawer_button2_text' => array(
+							'label' => __( 'Botón secundario: texto', 'imagina-woo-quotes' ),
+							'type'  => 'color',
+						),
+						'drawer_button2_border' => array(
+							'label' => __( 'Botón secundario: borde', 'imagina-woo-quotes' ),
+							'type'  => 'color',
 						),
 					),
 				),

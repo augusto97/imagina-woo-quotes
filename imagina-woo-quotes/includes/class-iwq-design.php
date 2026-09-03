@@ -56,8 +56,24 @@ class IWQ_Design {
 			'drawer_header_style'     => 'plain',
 			'drawer_overlay'          => '45',
 			'drawer_show_thumbs'      => 'yes',
-			'drawer_thumb_size'       => '64',
+			'drawer_thumb_size'       => '48',
+			'drawer_show_count'       => 'yes',
+			'drawer_title_size'       => '20',
+			'drawer_layout'           => 'compact',
+			'drawer_font_size'        => '14',
+			'drawer_show_subtotal'    => 'yes',
+			'drawer_subtotal_desc'    => '',
+			'drawer_show_continue'    => 'yes',
+			'drawer_continue_label'   => '',
 			'drawer_footer_label'     => '',
+			'drawer_buttons_layout'   => 'stacked',
+			'drawer_button_size'      => '14',
+			'drawer_button_padding'   => '12',
+			'drawer_button_bg'        => '',
+			'drawer_button_text'      => '',
+			'drawer_button2_bg'       => '',
+			'drawer_button2_text'     => '',
+			'drawer_button2_border'   => '',
 			'page_list_style'         => 'woocommerce',
 			'page_layout'             => 'stacked',
 			'page_width'              => 'auto',
@@ -131,6 +147,10 @@ class IWQ_Design {
 			'field_radius'      => '--iwq-field-radius',
 			'drawer_width'      => '--iwq-drawer-width',
 			'drawer_thumb_size' => '--iwq-drawer-thumb',
+			'drawer_title_size'     => '--iwq-drawer-title-size',
+			'drawer_font_size'      => '--iwq-drawer-font',
+			'drawer_button_size'    => '--iwq-drawer-btn-size',
+			'drawer_button_padding' => '--iwq-drawer-btn-pad',
 			'page_thumb_size'   => '--iwq-thumb',
 			'page_thumb_radius' => '--iwq-thumb-radius',
 		);
@@ -186,6 +206,48 @@ class IWQ_Design {
 
 		$css = '';
 
+		// Colores de los botones del panel: reglas explícitas, para que sin
+		// valor mande el tema (una variable sin definir anularía su color).
+		$rules   = '';
+		$primary = array();
+		$second  = array();
+
+		$bg = sanitize_hex_color( self::get( 'drawer_button_bg' ) );
+		$tx = sanitize_hex_color( self::get( 'drawer_button_text' ) );
+
+		if ( $bg ) {
+			$primary[] = 'background-color:' . $bg;
+			$primary[] = 'border-color:' . $bg;
+		}
+
+		if ( $tx ) {
+			$primary[] = 'color:' . $tx;
+		}
+
+		$bg2 = sanitize_hex_color( self::get( 'drawer_button2_bg' ) );
+		$tx2 = sanitize_hex_color( self::get( 'drawer_button2_text' ) );
+		$bd2 = sanitize_hex_color( self::get( 'drawer_button2_border' ) );
+
+		if ( $bg2 ) {
+			$second[] = 'background-color:' . $bg2;
+		}
+
+		if ( $tx2 ) {
+			$second[] = 'color:' . $tx2;
+		}
+
+		if ( $bd2 ) {
+			$second[] = 'border-color:' . $bd2;
+		}
+
+		if ( $primary ) {
+			$rules .= '.iwq-drawer .iwq-drawer__submit,.iwq-drawer .iwq-drawer__submit:hover,.iwq-drawer .iwq-drawer__shop{' . implode( ';', $primary ) . '}';
+		}
+
+		if ( $second ) {
+			$rules .= '.iwq-drawer .iwq-drawer__actions .iwq-drawer__continue,.iwq-drawer .iwq-drawer__actions .iwq-drawer__continue:hover{' . implode( ';', $second ) . '}';
+		}
+
 		if ( $vars ) {
 			$declarations = '';
 
@@ -195,6 +257,8 @@ class IWQ_Design {
 
 			$css .= '.iwq,:root{' . $declarations . '}';
 		}
+
+		$css .= $rules;
 
 		if ( 'yes' === self::get( 'design_dark_mode' ) ) {
 			$css .= '@media (prefers-color-scheme:dark){.iwq,:root{--iwq-text:#e5e7eb;--iwq-text-muted:#9ca3af;--iwq-surface:#1f2937;--iwq-surface-alt:#111827;--iwq-border:#374151;--iwq-shadow:0 10px 40px rgba(0,0,0,0.5);}}';
@@ -265,6 +329,10 @@ class IWQ_Design {
 
 		if ( 'no' === self::get( 'drawer_show_thumbs' ) ) {
 			$classes[] = 'iwq-no-thumbs';
+		}
+
+		if ( 'stacked' !== self::get( 'drawer_layout' ) ) {
+			$classes[] = 'iwq-drawer--compact';
 		}
 
 		return $classes;

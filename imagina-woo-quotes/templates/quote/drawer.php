@@ -16,8 +16,11 @@ defined( 'ABSPATH' ) || exit;
 $iwq_drawer_classes = array_merge( array( 'iwq', 'iwq-drawer', 'woocommerce' ), IWQ_Design::get_drawer_classes() );
 $iwq_drawer_title   = IWQ_Design::get( 'drawer_title' );
 $iwq_footer_label   = IWQ_Design::get( 'drawer_footer_label' );
+$iwq_continue_label = IWQ_Design::get( 'drawer_continue_label' );
+$iwq_subtotal_desc  = IWQ_Design::get( 'drawer_subtotal_desc' );
 $iwq_button         = IWQ_Design::get_theme_button_class();
 $iwq_quote_url      = get_permalink( (int) iwq_get_option( 'quote_page_id' ) );
+$iwq_actions_class  = 'row' === IWQ_Design::get( 'drawer_buttons_layout' ) ? 'iwq-drawer__actions--row' : 'iwq-drawer__actions--stacked';
 ?>
 <div id="iwq-drawer" class="<?php echo esc_attr( implode( ' ', $iwq_drawer_classes ) ); ?>" role="dialog" aria-modal="true" aria-labelledby="iwq-drawer-title" hidden>
 	<div class="iwq-drawer__overlay"></div>
@@ -26,7 +29,9 @@ $iwq_quote_url      = get_permalink( (int) iwq_get_option( 'quote_page_id' ) );
 		<div class="iwq-drawer__header">
 			<h2 id="iwq-drawer-title" class="iwq-drawer__title">
 				<?php echo esc_html( $iwq_drawer_title ? $iwq_drawer_title : __( 'Tu presupuesto', 'imagina-woo-quotes' ) ); ?>
-				<span class="iwq-drawer__count" hidden></span>
+				<?php if ( 'no' !== IWQ_Design::get( 'drawer_show_count' ) ) : ?>
+					<span class="iwq-drawer__count" hidden></span>
+				<?php endif; ?>
 			</h2>
 
 			<button type="button" class="iwq-drawer__close" aria-label="<?php esc_attr_e( 'Cerrar el panel', 'imagina-woo-quotes' ); ?>">
@@ -46,16 +51,22 @@ $iwq_quote_url      = get_permalink( (int) iwq_get_option( 'quote_page_id' ) );
 		</div>
 
 		<div class="iwq-drawer__footer iwq-has-items" hidden>
-			<div class="iwq-drawer__subtotal" hidden>
-				<span class="iwq-drawer__subtotal-label"><?php esc_html_e( 'Subtotal', 'imagina-woo-quotes' ); ?></span>
-				<span class="iwq-drawer__subtotal-value"></span>
-				<div class="iwq-drawer__subtotal-desc"><?php esc_html_e( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto.', 'imagina-woo-quotes' ); ?></div>
-			</div>
+			<?php if ( 'no' !== IWQ_Design::get( 'drawer_show_subtotal' ) ) : ?>
+				<div class="iwq-drawer__subtotal" hidden>
+					<span class="iwq-drawer__subtotal-label"><?php esc_html_e( 'Subtotal', 'imagina-woo-quotes' ); ?></span>
+					<span class="iwq-drawer__subtotal-value"></span>
+					<?php if ( '-' !== trim( $iwq_subtotal_desc ) ) : ?>
+						<div class="iwq-drawer__subtotal-desc"><?php echo esc_html( $iwq_subtotal_desc ? $iwq_subtotal_desc : __( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto.', 'imagina-woo-quotes' ) ); ?></div>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
 
-			<div class="iwq-drawer__actions">
-				<button type="button" class="<?php echo esc_attr( $iwq_button ); ?> iwq-drawer__continue">
-					<?php esc_html_e( 'Seguir viendo productos', 'imagina-woo-quotes' ); ?>
-				</button>
+			<div class="iwq-drawer__actions <?php echo esc_attr( $iwq_actions_class ); ?>">
+				<?php if ( 'no' !== IWQ_Design::get( 'drawer_show_continue' ) ) : ?>
+					<button type="button" class="<?php echo esc_attr( $iwq_button ); ?> iwq-drawer__continue">
+						<?php echo esc_html( $iwq_continue_label ? $iwq_continue_label : __( 'Seguir viendo productos', 'imagina-woo-quotes' ) ); ?>
+					</button>
+				<?php endif; ?>
 				<a class="<?php echo esc_attr( IWQ_Design::get_theme_button_class( true ) ); ?> iwq-drawer__submit" href="<?php echo esc_url( $iwq_quote_url ); ?>">
 					<?php echo esc_html( $iwq_footer_label ? $iwq_footer_label : __( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ) ); ?>
 				</a>

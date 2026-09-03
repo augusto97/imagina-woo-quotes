@@ -5,6 +5,21 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.9.0] - 2026-09-03
+
+### Añadido
+- Ajustes del panel lateral en Presupuestos → Diseño: título y su tamaño,
+  contador de productos opcional, densidad de las filas (compacta o como el
+  mini carrito), tamaño de letra de las filas, subtotal opcional con nota
+  editable, textos de los dos botones, botón de seguir comprando opcional,
+  botones en columna o en fila, tamaño de letra y altura de los botones y
+  colores de fondo, texto y borde de cada botón
+
+### Cambiado
+- El panel es más compacto por defecto: título a 20 px, filas con precio y
+  cantidad en la misma línea, miniatura a 48 px y botones uno debajo del
+  otro a ancho completo, para que no partan el texto en varias líneas
+
 ## [1.8.0] - 2026-09-03
 
 ### Añadido
@@ -228,6 +243,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.0
 [1.8.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.8.0
 [1.7.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.7.0
 [1.6.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.6.0
