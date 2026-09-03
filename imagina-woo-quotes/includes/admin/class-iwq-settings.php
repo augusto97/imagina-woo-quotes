@@ -414,6 +414,7 @@ class IWQ_Settings {
 							'unit'  => 'px',
 							'min'   => 280,
 							'max'   => 720,
+							'desc'  => __( 'El mini carrito de WooCommerce mide 480 px.', 'imagina-woo-quotes' ),
 						),
 						'drawer_header_style' => array(
 							'label'   => __( 'Cabecera', 'imagina-woo-quotes' ),

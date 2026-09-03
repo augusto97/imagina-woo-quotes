@@ -5,6 +5,22 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.8.0] - 2026-09-03
+
+### Añadido
+- Panel lateral rehecho con la disposición del mini carrito de WooCommerce:
+  título con contador de productos, filas con imagen, nombre, precio,
+  atributos, control de cantidad con más y menos, icono de quitar y total de
+  línea; pie con subtotal de catálogo y dos botones del tema (contorno para
+  seguir viendo productos, relleno para ver y enviar la solicitud); estado
+  vacío con enlace al catálogo. Ancho por defecto 480 px, como el mini
+  carrito
+- El contador del título, el subtotal y los totales de línea se actualizan
+  al añadir, cambiar cantidades o quitar, sin recargar
+
+### Cambiado
+- Los botones del panel usan las clases de botón del tema, como el carrito
+
 ## [1.7.0] - 2026-09-03
 
 ### Añadido
@@ -212,6 +228,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.8.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.8.0
 [1.7.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.7.0
 [1.6.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.6.0
 [1.5.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.5.0

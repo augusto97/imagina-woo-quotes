@@ -51,7 +51,7 @@ class IWQ_Design {
 			'link_color'              => '',
 			'link_hover_color'        => '',
 			'drawer_position'         => 'right',
-			'drawer_width'            => '420',
+			'drawer_width'            => '480',
 			'drawer_title'            => '',
 			'drawer_header_style'     => 'plain',
 			'drawer_overlay'          => '45',

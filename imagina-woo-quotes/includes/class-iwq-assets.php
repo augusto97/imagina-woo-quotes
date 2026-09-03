@@ -84,6 +84,9 @@ class IWQ_Assets {
 				'itemAdded' => __( 'Producto añadido a tu lista de presupuesto.', 'imagina-woo-quotes' ),
 				'itemRemoved' => __( 'Producto quitado de tu lista.', 'imagina-woo-quotes' ),
 				'closeDrawer' => __( 'Cerrar el panel', 'imagina-woo-quotes' ),
+				'countOne'    => __( '(1 producto)', 'imagina-woo-quotes' ),
+				/* translators: %d: número de productos. */
+				'countMany'   => __( '(%d productos)', 'imagina-woo-quotes' ),
 			),
 		);
 	}

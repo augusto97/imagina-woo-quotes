@@ -26,7 +26,7 @@ ob_start();
 <style>
 	html, body { margin: 0; background: transparent; }
 	body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #1f2937; }
-	.stage { display: grid; grid-template-columns: minmax( 0, 1fr ) 300px; gap: 24px; padding: 24px; }
+	.stage { display: grid; grid-template-columns: minmax( 0, 1fr ) 360px; gap: 24px; padding: 24px; }
 	.stage > * { min-width: 0; }
 	.card { padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; }
 	.card h4 { margin: 0 0 6px; font-size: 16px; }
@@ -34,7 +34,8 @@ ob_start();
 	.card .hint { margin: 14px 0 0; font-size: 12px; color: #9ca3af; }
 	.dummy { display: inline-block; padding: 0.7em 1.4em; border-radius: 8px; background: #111827; color: #fff; font-weight: 600; margin-right: 8px; }
 	.iwq-drawer { position: relative; inset: auto; z-index: 1; height: 100%; }
-	.iwq-drawer__panel { position: relative; width: 100%; height: auto; min-height: 380px; border-radius: 10px; transform: none !important; }
+	.iwq-drawer__panel { position: relative; width: 100%; height: auto; min-height: 380px; border-radius: 10px; border: 1px solid #e5e7eb; transform: none !important; }
+	.iwq-drawer .button { padding: 0.7em 1em; border-radius: 4px; background: #111827; color: #fff; font-weight: 500; font-size: 14px; text-decoration: none; cursor: pointer; }
 	.iwq-drawer__overlay { display: none; }
 	.iwq-quote-page__form { margin-top: 20px; }
 	.iwq-quote-page__form h3 { margin: 0 0 12px; font-size: 16px; }
@@ -67,28 +68,31 @@ ob_start();
 		</div>
 	</div>
 
-	<div class="iwq-drawer is-open" data-preview="drawer">
+	<div class="iwq-drawer woocommerce is-open" data-preview="drawer">
 		<div class="iwq-drawer__overlay"></div>
 		<div class="iwq-drawer__panel">
 			<div class="iwq-drawer__header">
-				<h2 class="iwq-drawer__title" data-preview="drawer-title"><?php esc_html_e( 'Tu presupuesto', 'imagina-woo-quotes' ); ?></h2>
-				<button type="button" class="iwq-drawer__close" aria-label="<?php esc_attr_e( 'Cerrar', 'imagina-woo-quotes' ); ?>"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+				<h2 class="iwq-drawer__title"><span data-preview="drawer-title"><?php esc_html_e( 'Tu presupuesto', 'imagina-woo-quotes' ); ?></span> <span class="iwq-drawer__count"><?php esc_html_e( '(3 productos)', 'imagina-woo-quotes' ); ?></span></h2>
+				<button type="button" class="iwq-drawer__close" aria-label="<?php esc_attr_e( 'Cerrar', 'imagina-woo-quotes' ); ?>"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
 			</div>
 			<div class="iwq-drawer__body">
-				<ul class="iwq-list">
-					<li class="iwq-list__row">
-						<a class="iwq-list__thumb" href="#"><img src="<?php echo esc_url( $iwq_thumb ); ?>" alt=""></a>
-						<div class="iwq-list__details"><a class="iwq-list__name" href="#"><?php esc_html_e( 'Silla de roble', 'imagina-woo-quotes' ); ?></a><div class="iwq-list__price">120,00 €</div><input type="number" class="iwq-quantity" value="2" min="1"></div>
-						<button type="button" class="iwq-remove-item"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-					</li>
-					<li class="iwq-list__row">
-						<a class="iwq-list__thumb" href="#"><img src="<?php echo esc_url( $iwq_thumb ); ?>" alt=""></a>
-						<div class="iwq-list__details"><a class="iwq-list__name" href="#"><?php esc_html_e( 'Mesa extensible', 'imagina-woo-quotes' ); ?></a><div class="iwq-list__meta">180 cm</div><div class="iwq-list__price">650,00 €</div><input type="number" class="iwq-quantity" value="1" min="1"></div>
-						<button type="button" class="iwq-remove-item"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-					</li>
-				</ul>
+				<table class="iwq-mini-items"><tbody>
+					<tr class="iwq-mini-item">
+						<td class="iwq-mini-item__image"><a href="#"><img src="<?php echo esc_url( $iwq_thumb ); ?>" alt=""></a></td>
+						<td class="iwq-mini-item__product"><a class="iwq-mini-item__name" href="#"><?php esc_html_e( 'Silla de roble', 'imagina-woo-quotes' ); ?></a><div class="iwq-mini-item__price">120,00 €</div><div class="iwq-mini-item__controls"><div class="iwq-qty"><input type="number" class="iwq-qty__input iwq-quantity" value="2" min="1"><button type="button" class="iwq-qty__button iwq-qty__button--minus">&minus;</button><button type="button" class="iwq-qty__button iwq-qty__button--plus">&#xFF0B;</button></div><button type="button" class="iwq-mini-item__remove"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg></button></div></td>
+						<td class="iwq-mini-item__total">240,00 €</td>
+					</tr>
+					<tr class="iwq-mini-item">
+						<td class="iwq-mini-item__image"><a href="#"><img src="<?php echo esc_url( $iwq_thumb ); ?>" alt=""></a></td>
+						<td class="iwq-mini-item__product"><a class="iwq-mini-item__name" href="#"><?php esc_html_e( 'Mesa extensible', 'imagina-woo-quotes' ); ?></a><div class="iwq-mini-item__price">650,00 €</div><div class="iwq-mini-item__meta">180 cm</div><div class="iwq-mini-item__controls"><div class="iwq-qty"><input type="number" class="iwq-qty__input iwq-quantity" value="1" min="1"><button type="button" class="iwq-qty__button iwq-qty__button--minus">&minus;</button><button type="button" class="iwq-qty__button iwq-qty__button--plus">&#xFF0B;</button></div><button type="button" class="iwq-mini-item__remove"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg></button></div></td>
+						<td class="iwq-mini-item__total">650,00 €</td>
+					</tr>
+				</tbody></table>
 			</div>
-			<div class="iwq-drawer__footer"><a class="iwq-add-button" href="#" data-preview="drawer-footer"><?php esc_html_e( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ); ?></a></div>
+			<div class="iwq-drawer__footer">
+				<div class="iwq-drawer__subtotal"><span><?php esc_html_e( 'Subtotal', 'imagina-woo-quotes' ); ?></span><span>890,00 €</span><div class="iwq-drawer__subtotal-desc"><?php esc_html_e( 'Precios de catálogo, orientativos. Te confirmaremos el presupuesto.', 'imagina-woo-quotes' ); ?></div></div>
+				<div class="iwq-drawer__actions"><button type="button" class="button wp-element-button iwq-drawer__continue"><?php esc_html_e( 'Seguir viendo productos', 'imagina-woo-quotes' ); ?></button><a class="button alt wp-element-button iwq-drawer__submit" href="#" data-preview="drawer-footer"><?php esc_html_e( 'Ver y enviar la solicitud', 'imagina-woo-quotes' ); ?></a></div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -160,6 +160,23 @@
 			node.hidden = state.count === 0;
 		} );
 
+		// Contador del título y subtotal del panel, como el mini carrito.
+		var quantity = typeof state.quantity === 'number' ? state.quantity : state.count;
+
+		document.querySelectorAll( '.iwq-drawer__count' ).forEach( function ( node ) {
+			node.textContent = quantity === 1 ? i18n.countOne : String( i18n.countMany || '(%d)' ).replace( '%d', quantity );
+			node.hidden = ! state.count;
+		} );
+
+		if ( typeof state.total === 'string' ) {
+			document.querySelectorAll( '.iwq-drawer__subtotal' ).forEach( function ( node ) {
+				node.hidden = state.total === '';
+				node.querySelector( '.iwq-drawer__subtotal-value' ).innerHTML = state.total;
+			} );
+		}
+
+		refreshEmptyState( state.count );
+
 		document.querySelectorAll( ADD_SELECTOR ).forEach( function ( button ) {
 			var id = parseInt( button.dataset.productId, 10 );
 
@@ -222,10 +239,8 @@
 
 		post( 'iwq_add_item', payload )
 			.then( function ( data ) {
-				var state = { count: data.count, ids: data.ids };
-
-				writeState( state );
-				syncUI( state );
+				writeState( { count: data.count, ids: data.ids } );
+				syncUI( data );
 				notify( i18n.itemAdded, 'success' );
 
 				if ( settings.redirect && settings.quoteUrl ) {
@@ -369,7 +384,7 @@
 			.then( function ( data ) {
 				body.innerHTML = data.html || '';
 				writeState( { count: data.count, ids: data.ids } );
-				syncUI( { count: data.count, ids: data.ids } );
+				syncUI( data );
 			} )
 			.catch( function () {
 				body.textContent = i18n.error;
@@ -399,17 +414,43 @@
 
 		post( 'iwq_remove_item', { key: row.dataset.itemKey } )
 			.then( function ( data ) {
-				writeState( { count: data.count, ids: data.ids } );
-				syncUI( { count: data.count, ids: data.ids } );
-				notify( i18n.itemRemoved, 'success' );
-
 				row.remove();
-				refreshEmptyState( data.count );
+				writeState( { count: data.count, ids: data.ids } );
+				syncUI( data );
+				notify( i18n.itemRemoved, 'success' );
 			} )
 			.catch( function ( error ) {
 				row.classList.remove( 'is-removing' );
 				notify( error.message || i18n.error, 'error' );
 			} );
+	}
+
+	/**
+	 * Botones más y menos del control de cantidad del panel.
+	 *
+	 * @param {HTMLElement} button Botón pulsado.
+	 */
+	function stepQuantity( button ) {
+		var wrap = button.closest( '.iwq-qty' );
+		var input = wrap && wrap.querySelector( '.iwq-quantity' );
+
+		if ( ! input ) {
+			return;
+		}
+
+		var value = parseInt( input.value, 10 ) || 1;
+		var min = parseInt( input.min, 10 ) || 1;
+		var max = parseInt( input.max, 10 ) || Infinity;
+
+		value += button.classList.contains( 'iwq-qty__button--minus' ) ? -1 : 1;
+		value = Math.min( max, Math.max( min, value ) );
+
+		if ( String( value ) === input.value ) {
+			return;
+		}
+
+		input.value = value;
+		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 	}
 
 	var quantityTimer = null;
@@ -432,7 +473,7 @@
 			post( 'iwq_update_item', { key: row.dataset.itemKey, quantity: input.value } )
 				.then( function ( data ) {
 					writeState( { count: data.count, ids: data.ids } );
-					syncUI( { count: data.count, ids: data.ids } );
+					syncUI( data );
 
 					// La tabla tipo carrito muestra el subtotal de la línea; el
 					// HTML viene de wc_price() en nuestro propio endpoint.
@@ -458,20 +499,18 @@
 
 		post( 'iwq_clear_list', {} )
 			.then( function ( data ) {
-				writeState( { count: 0, ids: [] } );
-				syncUI( { count: 0, ids: [] } );
-
 				var body = drawer && drawer.querySelector( '.iwq-drawer__body' );
 
-				if ( body && data.html ) {
-					body.innerHTML = data.html;
+				if ( body ) {
+					body.innerHTML = data.html || '';
 				}
 
 				document.querySelectorAll( '.iwq-list__row, .iwq-cart-row' ).forEach( function ( row ) {
 					row.remove();
 				} );
 
-				refreshEmptyState( 0 );
+				writeState( { count: 0, ids: [] } );
+				syncUI( data );
 			} )
 			.catch( function ( error ) {
 				notify( error.message || i18n.error, 'error' );
@@ -720,6 +759,20 @@
 			}
 
 			if ( target.closest( '.iwq-drawer__close' ) || target.closest( '.iwq-drawer__overlay' ) ) {
+				event.preventDefault();
+				closeDrawer();
+				return;
+			}
+
+			var step = target.closest( '.iwq-qty__button' );
+
+			if ( step ) {
+				event.preventDefault();
+				stepQuantity( step );
+				return;
+			}
+
+			if ( target.closest( '.iwq-drawer__continue' ) ) {
 				event.preventDefault();
 				closeDrawer();
 				return;

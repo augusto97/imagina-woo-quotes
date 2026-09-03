@@ -236,7 +236,7 @@
 			design_accent: '#2563eb', design_accent_hover: '#1d4ed8', design_accent_contrast: '#ffffff',
 			design_text: '#1f2937', design_text_muted: '#6b7280', design_surface: '#ffffff',
 			design_surface_alt: '#f9fafb', design_border: '#e5e7eb', design_radius: '8',
-			drawer_width: '420', drawer_overlay: '45', drawer_thumb_size: '64'
+			drawer_width: '480', drawer_overlay: '45', drawer_thumb_size: '64'
 		};
 
 		var colorVars = {

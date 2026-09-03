@@ -512,17 +512,44 @@ class IWQ_Session {
 			'count'    => self::count(),
 			'quantity' => self::get_total_quantity(),
 			'ids'      => self::get_product_ids(),
+			'total'    => self::get_total_html(),
 		);
 
 		if ( $with_html ) {
 			$payload['html'] = iwq_get_template(
-				'quote/drawer-content.php',
+				'quote/drawer-items.php',
 				array( 'items' => self::get_items() ),
 				true
 			);
 		}
 
 		return $payload;
+	}
+
+	/**
+	 * Subtotal de la lista con precios de catálogo, formateado.
+	 *
+	 * Vacío si ningún producto muestra precio: el panel oculta entonces la
+	 * fila de subtotal.
+	 *
+	 * @return string
+	 */
+	public static function get_total_html() {
+		$total   = 0.0;
+		$visible = false;
+
+		foreach ( self::get_items() as $item ) {
+			$product = wc_get_product( $item['variation_id'] ? $item['variation_id'] : $item['product_id'] );
+
+			if ( ! $product || IWQ_Exclusions::should_hide_price( $product ) || '' === $product->get_price() ) {
+				continue;
+			}
+
+			$visible = true;
+			$total  += (float) wc_get_price_to_display( $product, array( 'qty' => max( 1, (int) $item['quantity'] ) ) );
+		}
+
+		return $visible ? wc_price( $total ) : '';
 	}
 
 	/**
