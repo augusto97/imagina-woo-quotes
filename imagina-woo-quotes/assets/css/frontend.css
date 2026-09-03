@@ -180,6 +180,27 @@
 	pointer-events: none;
 }
 
+/* WooCommerce genera la miniatura a 300 px; fuera del carrito muchos temas
+   no la limitan. El tamaño se elige en Presupuestos → Diseño. */
+.iwq-cart-table td.product-thumbnail {
+	width: calc( var( --iwq-thumb, 64px ) + 24px );
+}
+
+.iwq-cart-table td.product-thumbnail img {
+	display: block;
+	width: var( --iwq-thumb, 64px );
+	max-width: none;
+	height: auto;
+	border-radius: var( --iwq-thumb-radius, 0 );
+	box-shadow: none;
+}
+
+@media ( max-width: 768px ) {
+	.iwq-cart-table td.product-thumbnail {
+		width: auto;
+	}
+}
+
 .iwq-cart-table td.actions {
 	text-align: left;
 }
@@ -475,9 +496,13 @@ body.iwq-drawer-open {
 	list-style: none;
 }
 
+/* Tamaño de miniatura por contexto: panel lateral y página tienen el suyo. */
+.iwq-drawer { --iwq-list-thumb: var( --iwq-drawer-thumb, 64px ); }
+.iwq-quote-page { --iwq-list-thumb: var( --iwq-thumb, 64px ); }
+
 .iwq-list__row {
 	display: grid;
-	grid-template-columns: 64px 1fr auto;
+	grid-template-columns: var( --iwq-list-thumb, 64px ) 1fr auto;
 	gap: 12px;
 	align-items: start;
 	padding-bottom: var( --iwq-gap );
@@ -497,9 +522,9 @@ body.iwq-drawer-open {
 
 .iwq-list__thumb img {
 	display: block;
-	width: 64px;
-	height: 64px;
-	border-radius: var( --iwq-radius );
+	width: var( --iwq-list-thumb, 64px );
+	height: var( --iwq-list-thumb, 64px );
+	border-radius: var( --iwq-thumb-radius, var( --iwq-radius ) );
 	object-fit: cover;
 }
 

@@ -5,6 +5,17 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.7.0] - 2026-09-03
+
+### Añadido
+- Controles de miniatura en Presupuestos → Diseño: tamaño y redondeo de la
+  imagen en la página de solicitud (tabla y lista compacta) y tamaño en el
+  panel lateral. Por defecto 64 px
+
+### Corregido
+- La miniatura de la tabla de la página de solicitud salía a 300 px en los
+  temas que solo limitan la imagen dentro del formulario del carrito
+
 ## [1.6.0] - 2026-09-03
 
 ### Añadido
@@ -201,6 +212,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.7.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.7.0
 [1.6.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.6.0
 [1.5.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.5.0
 [1.4.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.4.0

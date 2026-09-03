@@ -56,6 +56,7 @@ class IWQ_Design {
 			'drawer_header_style'     => 'plain',
 			'drawer_overlay'          => '45',
 			'drawer_show_thumbs'      => 'yes',
+			'drawer_thumb_size'       => '64',
 			'drawer_footer_label'     => '',
 			'page_list_style'         => 'woocommerce',
 			'page_layout'             => 'stacked',
@@ -65,6 +66,8 @@ class IWQ_Design {
 			'page_sticky_list'        => 'yes',
 			'page_card_style'         => 'plain',
 			'page_show_thumbs'        => 'yes',
+			'page_thumb_size'         => '64',
+			'page_thumb_radius'       => '0',
 			'page_list_title'         => '',
 			'field_style'             => 'default',
 			'field_radius'            => '',
@@ -125,8 +128,11 @@ class IWQ_Design {
 			'button_padding_y' => '--iwq-btn-pad-y',
 			'button_padding_x' => '--iwq-btn-pad-x',
 			'button_font_size' => '--iwq-btn-size',
-			'field_radius'     => '--iwq-field-radius',
-			'drawer_width'     => '--iwq-drawer-width',
+			'field_radius'      => '--iwq-field-radius',
+			'drawer_width'      => '--iwq-drawer-width',
+			'drawer_thumb_size' => '--iwq-drawer-thumb',
+			'page_thumb_size'   => '--iwq-thumb',
+			'page_thumb_radius' => '--iwq-thumb-radius',
 		);
 
 		foreach ( $sizes as $key => $var ) {

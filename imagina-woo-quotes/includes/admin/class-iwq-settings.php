@@ -434,6 +434,13 @@ class IWQ_Settings {
 							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',
 						),
+						'drawer_thumb_size'   => array(
+							'label' => __( 'Tamaño de la miniatura', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 24,
+							'max'   => 200,
+						),
 					),
 				),
 				'page' => array(
@@ -510,6 +517,20 @@ class IWQ_Settings {
 						'page_show_thumbs' => array(
 							'label' => __( 'Mostrar miniaturas', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',
+						),
+						'page_thumb_size'  => array(
+							'label' => __( 'Tamaño de la miniatura', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'min'   => 24,
+							'max'   => 300,
+							'desc'  => __( 'Ancho de la imagen en la lista. WooCommerce genera la miniatura a 300 px y el tema no siempre la limita fuera del carrito.', 'imagina-woo-quotes' ),
+						),
+						'page_thumb_radius' => array(
+							'label' => __( 'Redondeo de la miniatura', 'imagina-woo-quotes' ),
+							'type'  => 'size',
+							'unit'  => 'px',
+							'max'   => 150,
 						),
 						'field_style'     => array(
 							'label'   => __( 'Estilo de los campos', 'imagina-woo-quotes' ),
