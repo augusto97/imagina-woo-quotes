@@ -479,18 +479,27 @@
 .iwq-mini-items {
 	width: 100%;
 	margin: 0;
-	border: 0;
-	border-collapse: collapse;
+	border: 0 !important;
+	border-collapse: collapse !important;
+	border-spacing: 0;
 	font-size: var( --iwq-drawer-font, 14px );
 	line-height: 1.4;
+	background: transparent;
+}
+
+/* El separador va como sombra interior en cada celda: los temas suelen
+   redefinir los bordes de las tablas (y quitarlos en la última celda), y
+   eso partía la línea. */
+.iwq-mini-items tr,
+.iwq-mini-items td {
+	border: 0 !important;
+	background: transparent !important;
 }
 
 .iwq-mini-items td {
 	padding: 14px 0;
-	border: 0;
-	border-bottom: 1px solid var( --iwq-border );
+	box-shadow: inset 0 -1px 0 var( --iwq-border );
 	vertical-align: top;
-	background: transparent;
 }
 
 .iwq-mini-item.is-removing {
