@@ -798,6 +798,22 @@
 			}
 		} );
 
+		// Escribir la cantidad también cuenta, sin esperar a perder el foco.
+		document.addEventListener( 'input', function ( event ) {
+			if ( event.target.matches( '.iwq-quantity' ) ) {
+				updateQuantity( event.target );
+			}
+		} );
+
+		// Muchos temas sustituyen la caja de cantidad por su propio control
+		// con más y menos y anuncian el cambio con jQuery: ese evento no llega
+		// a los oyentes nativos, así que lo escuchamos también por jQuery.
+		if ( window.jQuery ) {
+			window.jQuery( document ).on( 'change input', '.iwq-quantity', function () {
+				updateQuantity( this );
+			} );
+		}
+
 		document.addEventListener( 'submit', function ( event ) {
 			if ( event.target.matches( '.iwq-request-form' ) ) {
 				event.preventDefault();

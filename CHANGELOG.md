@@ -5,6 +5,14 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.9.3] - 2026-09-03
+
+### Corregido
+- En la página de solicitud el subtotal no cambiaba al tocar la cantidad en
+  temas que sustituyen la caja por su propio control de más y menos y
+  anuncian el cambio con jQuery: ese evento no llega a los oyentes nativos.
+  Las cantidades se escuchan ahora también por jQuery y al escribir
+
 ## [1.9.2] - 2026-09-03
 
 ### Corregido
@@ -259,6 +267,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.3
 [1.9.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.2
 [1.9.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.1
 [1.9.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.0
