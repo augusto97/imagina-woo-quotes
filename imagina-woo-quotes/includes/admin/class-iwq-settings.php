@@ -699,6 +699,26 @@ class IWQ_Settings {
 						),
 					),
 				),
+				'reports' => array(
+					'title'  => __( 'Informes y listado de pedidos', 'imagina-woo-quotes' ),
+					'desc'   => __( 'Los presupuestos son pedidos de WooCommerce con estados propios. Mientras no se pagan quedan fuera de los informes y de WooCommerce Analytics; aquí decides cómo entran cuando se convierten en venta y cómo se muestran en el listado.', 'imagina-woo-quotes' ),
+					'fields' => array(
+						'sale_date'            => array(
+							'label'   => __( 'Fecha de la venta', 'imagina-woo-quotes' ),
+							'type'    => 'select',
+							'options' => array(
+								'paid'    => __( 'La del pago: el pedido se fecha cuando el cliente paga (recomendado)', 'imagina-woo-quotes' ),
+								'created' => __( 'La de la solicitud: el pedido conserva la fecha en que se pidió el presupuesto', 'imagina-woo-quotes' ),
+							),
+							'desc'    => __( 'Afecta a la fecha con la que Analytics cuenta la venta cuando un presupuesto aceptado se paga. La fecha de la solicitud queda anotada en el pedido.', 'imagina-woo-quotes' ),
+						),
+						'hide_from_all_orders' => array(
+							'label' => __( 'Ocultar los presupuestos de la vista «Todos» de Pedidos', 'imagina-woo-quotes' ),
+							'type'  => 'checkbox',
+							'desc'  => __( 'Siguen visibles en sus filtros por estado (solicitados, enviados, aceptados, rechazados, vencidos) y en Presupuestos → Inicio.', 'imagina-woo-quotes' ),
+						),
+					),
+				),
 			),
 
 			'form' => array(

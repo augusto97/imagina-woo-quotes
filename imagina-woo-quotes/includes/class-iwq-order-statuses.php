@@ -36,8 +36,11 @@ class IWQ_Order_Statuses {
 		add_action( 'init', array( __CLASS__, 'register' ) );
 		add_filter( 'wc_order_statuses', array( __CLASS__, 'add_to_order_statuses' ) );
 		add_filter( 'woocommerce_reports_order_statuses', array( __CLASS__, 'exclude_from_reports' ) );
+		add_filter( 'woocommerce_analytics_excluded_order_statuses', array( __CLASS__, 'exclude_from_analytics' ) );
+		add_action( 'woocommerce_order_status_changed', array( __CLASS__, 'date_sale_on_payment' ), 10, 4 );
 		add_filter( 'wc_order_is_editable', array( __CLASS__, 'make_editable' ), 10, 2 );
 		add_filter( 'woocommerce_valid_order_statuses_for_payment', array( __CLASS__, 'valid_for_payment' ), 10, 2 );
+		add_filter( 'woocommerce_valid_order_statuses_for_payment_complete', array( __CLASS__, 'valid_for_payment_complete' ), 10, 2 );
 		add_filter( 'woocommerce_valid_order_statuses_for_cancel', array( __CLASS__, 'valid_for_cancel' ), 10, 2 );
 		add_action( 'admin_head', array( __CLASS__, 'print_status_styles' ) );
 	}
@@ -81,7 +84,7 @@ class IWQ_Order_Statuses {
 					'label'                     => $label,
 					'public'                    => false,
 					'exclude_from_search'       => false,
-					'show_in_admin_all_list'    => true,
+					'show_in_admin_all_list'    => ! iwq_option_enabled( 'hide_from_all_orders' ),
 					'show_in_admin_status_list' => true,
 					'label_count'               => $counts[ $status ],
 				)
@@ -117,6 +120,23 @@ class IWQ_Order_Statuses {
 	}
 
 	/**
+	 * Permite que el pago de un presupuesto aceptado se complete.
+	 *
+	 * Las pasarelas cierran el pago con payment_complete(), que solo cambia
+	 * el estado si el pedido está en uno de los estados de WooCommerce. Sin
+	 * esto, un presupuesto aceptado y pagado se quedaba en «Aceptado».
+	 *
+	 * @param string[] $statuses Estados válidos, sin prefijo.
+	 * @param WC_Order $order    Pedido.
+	 * @return string[]
+	 */
+	public static function valid_for_payment_complete( $statuses, $order ) {
+		$statuses[] = 'iwq-accepted';
+
+		return $statuses;
+	}
+
+	/**
 	 * Excluye los presupuestos de los informes de ventas.
 	 *
 	 * Un presupuesto sin aceptar no es una venta y contarlo distorsionaría
@@ -127,6 +147,66 @@ class IWQ_Order_Statuses {
 	 */
 	public static function exclude_from_reports( $statuses ) {
 		return array_diff( $statuses, iwq_get_quote_statuses() );
+	}
+
+	/**
+	 * Excluye los presupuestos de WooCommerce Analytics.
+	 *
+	 * Analytics cuenta todos los estados salvo los de su lista de exclusión
+	 * (pendiente, fallido y cancelado por defecto); sin esto, un presupuesto
+	 * sin pagar, rechazado o vencido sumaría en ingresos, pedidos, productos
+	 * y clientes. El filtro actúa al consultar, así que corrige también el
+	 * histórico. Un presupuesto solo cuenta cuando se paga y WooCommerce lo
+	 * pasa a un estado de venta.
+	 *
+	 * @param string[] $statuses Estados excluidos (sin el prefijo wc-).
+	 * @return string[]
+	 */
+	public static function exclude_from_analytics( $statuses ) {
+		return array_values( array_unique( array_merge( (array) $statuses, iwq_get_quote_statuses() ) ) );
+	}
+
+	/**
+	 * Fecha la venta en el momento del pago.
+	 *
+	 * Un presupuesto aceptado y pagado se convierte en pedido, pero su fecha
+	 * de creación es la de la solicitud, y Analytics lo contaría como venta
+	 * de aquel día. Con el ajuste «Fecha de la venta» en «La del pago», la
+	 * fecha de creación pasa a ser la del pago. Solo una vez, y solo al
+	 * salir de un estado de presupuesto hacia un estado de venta.
+	 *
+	 * @param int      $order_id ID del pedido.
+	 * @param string   $from     Estado anterior, sin prefijo.
+	 * @param string   $to       Estado nuevo, sin prefijo.
+	 * @param WC_Order $order    Pedido.
+	 * @return void
+	 */
+	public static function date_sale_on_payment( $order_id, $from, $to, $order ) {
+		if ( 'created' === iwq_get_option( 'sale_date', 'paid' ) ) {
+			return;
+		}
+
+		if ( ! in_array( $from, iwq_get_quote_statuses(), true ) || ! in_array( $to, wc_get_is_paid_statuses(), true ) ) {
+			return;
+		}
+
+		if ( ! $order instanceof WC_Order || $order->get_meta( '_iwq_sale_dated' ) ) {
+			return;
+		}
+
+		$requested = $order->get_date_created();
+
+		$order->set_date_created( time() );
+		$order->update_meta_data( '_iwq_sale_dated', 'yes' );
+		$order->update_meta_data( '_iwq_requested_at', $requested ? $requested->getTimestamp() : 0 );
+		$order->add_order_note(
+			sprintf(
+				/* translators: %s: fecha de la solicitud. */
+				__( 'Presupuesto convertido en pedido. La fecha del pedido pasa a ser la del pago; la solicitud se hizo el %s.', 'imagina-woo-quotes' ),
+				$requested ? wc_format_datetime( $requested ) : ''
+			)
+		);
+		$order->save();
 	}
 
 	/**

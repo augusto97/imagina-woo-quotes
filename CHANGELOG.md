@@ -6,6 +6,28 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.0] - 2026-09-04
+
+### Añadido
+- Ajuste «Fecha de la venta» en Presupuestos → Presupuestos → Informes:
+  cuando un presupuesto aceptado se paga, el pedido puede fecharse en el
+  momento del pago (recomendado, por defecto) o conservar la fecha de la
+  solicitud. La fecha original queda anotada en el pedido
+- Ajuste «Ocultar los presupuestos de la vista "Todos" de Pedidos»: los
+  presupuestos quedan solo en sus filtros por estado, con y sin HPOS
+
+### Corregido
+- Un presupuesto aceptado que se pagaba con una pasarela que completa el
+  pago automáticamente (tarjeta, PayPal…) se quedaba en «Presupuesto
+  aceptado» en vez de pasar a «Procesando» o «Completado», porque
+  WooCommerce solo completa el pago desde sus propios estados. Ahora
+  «Aceptado» es un estado válido para completar el pago
+- WooCommerce Analytics contaba los presupuestos (solicitados, enviados,
+  aceptados sin pagar, rechazados, vencidos y de ejemplo) en ingresos,
+  pedidos, productos y clientes. Ahora los cinco estados quedan excluidos,
+  también en el histórico; un presupuesto solo cuenta cuando se paga y pasa
+  a un estado de venta
+
 ## [1.10.0] - 2026-09-04
 
 ### Añadido
@@ -309,6 +331,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.0
 [1.10.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.10.0
 [1.9.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.6
 [1.9.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.5

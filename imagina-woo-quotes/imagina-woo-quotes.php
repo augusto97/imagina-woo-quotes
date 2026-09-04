@@ -3,7 +3,7 @@
  * Plugin Name: Imagina Woo Quotes
  * Plugin URI:  https://github.com/augusto97/imagina-woo-quotes
  * Description: Permite a los clientes armar una lista de productos y solicitar un presupuesto. El presupuesto se gestiona como un pedido de WooCommerce, con PDF, emails y formulario configurable.
- * Version:     1.10.0
+ * Version:     1.11.0
  * Author:      Imagina
  * Text Domain: imagina-woo-quotes
  * Domain Path: /languages
@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'IWQ_VERSION', '1.10.0' );
+define( 'IWQ_VERSION', '1.11.0' );
 define( 'IWQ_FILE', __FILE__ );
 define( 'IWQ_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IWQ_URL', plugin_dir_url( __FILE__ ) );
