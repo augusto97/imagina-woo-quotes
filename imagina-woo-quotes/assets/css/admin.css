@@ -71,7 +71,10 @@
 }
 
 @media ( max-width: 782px ) {
-	.iwq-app__header { top: 46px; }
+	.iwq-app__header { top: 46px; padding: 0 16px; gap: 10px; }
+	/* En pantallas estrechas los botones de la cabecera se quedan en icono. */
+	.iwq-app__header-actions .iwq-btn--ghost { padding-left: 8px; padding-right: 8px; }
+	.iwq-app__header-actions .iwq-btn--ghost svg + * { display: none; }
 }
 
 .iwq-app__brand {

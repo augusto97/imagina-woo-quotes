@@ -6,6 +6,13 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.4] - 2026-09-04
+
+### Añadido
+- Enlace a la documentación (https://imaginawp.com/docs/woo-quotes/) en la
+  cabecera de la pantalla del plugin, en los accesos rápidos de Inicio y en
+  la fila del plugin en Plugins
+
 ## [1.11.3] - 2026-09-04
 
 ### Corregido
@@ -367,6 +374,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.4
 [1.11.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.3
 [1.11.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.2
 [1.11.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.1

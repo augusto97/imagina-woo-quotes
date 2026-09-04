@@ -162,6 +162,7 @@ class IWQ_Admin {
 	public static function icon( $name ) {
 		$paths = array(
 			'home'    => '<path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+			'book'    => '<path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/>',
 			'chart'   => '<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>',
 			'eye'     => '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
 			'sliders' => '<path d="M4 6h10"/><path d="M18 6h2"/><path d="M4 12h2"/><path d="M10 12h10"/><path d="M4 18h12"/><path d="M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
@@ -200,6 +201,11 @@ class IWQ_Admin {
 				'<a href="%s">%s</a>',
 				esc_url( admin_url( 'admin.php?page=iwq-settings' ) ),
 				esc_html__( 'Ajustes', 'imagina-woo-quotes' )
+			),
+			sprintf(
+				'<a href="%s" target="_blank" rel="noopener">%s</a>',
+				esc_url( IWQ_DOCS_URL ),
+				esc_html__( 'Documentación', 'imagina-woo-quotes' )
 			)
 		);
 

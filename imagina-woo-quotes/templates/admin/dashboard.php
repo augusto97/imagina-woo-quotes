@@ -121,6 +121,12 @@ $iwq_icon    = array( IWQ_Admin::class, 'icon' );
 					<?php esc_html_e( 'Reglas', 'imagina-woo-quotes' ); ?>
 					<small><?php esc_html_e( 'Qué productos admiten presupuesto', 'imagina-woo-quotes' ); ?></small>
 				</a>
+
+				<a class="iwq-quicklink" href="<?php echo esc_url( IWQ_DOCS_URL ); ?>" target="_blank" rel="noopener">
+					<?php echo call_user_func( $iwq_icon, 'book' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php esc_html_e( 'Documentación', 'imagina-woo-quotes' ); ?>
+					<small><?php esc_html_e( 'Manual de uso y de cada ajuste', 'imagina-woo-quotes' ); ?></small>
+				</a>
 			</div>
 		</div>
 	</section>

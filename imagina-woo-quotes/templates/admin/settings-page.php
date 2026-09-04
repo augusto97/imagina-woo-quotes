@@ -39,9 +39,14 @@ foreach ( $tabs as $iwq_slug => $iwq_tab ) {
 		</div>
 
 		<div class="iwq-app__header-actions">
-			<a class="iwq-btn iwq-btn--ghost iwq-btn--sm" href="<?php echo esc_url( IWQ_Dashboard::get_orders_url() ); ?>">
+			<a class="iwq-btn iwq-btn--ghost iwq-btn--sm" href="<?php echo esc_url( IWQ_DOCS_URL ); ?>" target="_blank" rel="noopener" title="<?php esc_attr_e( 'Documentación', 'imagina-woo-quotes' ); ?>">
+				<?php echo IWQ_Admin::icon( 'book' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG estático. ?>
+				<span><?php esc_html_e( 'Documentación', 'imagina-woo-quotes' ); ?></span>
+			</a>
+
+			<a class="iwq-btn iwq-btn--ghost iwq-btn--sm" href="<?php echo esc_url( IWQ_Dashboard::get_orders_url() ); ?>" title="<?php esc_attr_e( 'Pedidos', 'imagina-woo-quotes' ); ?>">
 				<?php echo IWQ_Admin::icon( 'orders' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG estático. ?>
-				<?php esc_html_e( 'Pedidos', 'imagina-woo-quotes' ); ?>
+				<span><?php esc_html_e( 'Pedidos', 'imagina-woo-quotes' ); ?></span>
 			</a>
 
 			<?php if ( $iwq_has_form ) : ?>
