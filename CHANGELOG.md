@@ -6,6 +6,15 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.1] - 2026-09-04
+
+### Corregido
+- Con la disposición en dos columnas, si el tema no daba al contenido el
+  ancho amplio, la tabla de productos se salía de su columna y se montaba
+  sobre el formulario. La página ahora mide su propio ancho: por debajo de
+  760 px apila las columnas y la tabla se desplaza dentro de su columna en
+  vez de desbordarla
+
 ## [1.11.0] - 2026-09-04
 
 ### Añadido
@@ -331,6 +340,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.1
 [1.11.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.0
 [1.10.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.10.0
 [1.9.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.6

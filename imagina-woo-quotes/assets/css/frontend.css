@@ -275,11 +275,37 @@
 	margin-top: 0;
 }
 
+/* La página mide su propio ancho: si el tema no le da sitio para dos
+   columnas, se apilan aunque la ventana sea grande. */
+.iwq-quote-page {
+	container-type: inline-size;
+}
+
 .iwq-quote-page--columns .iwq-quote-page__layout {
 	display: grid;
 	grid-template-columns: minmax( 0, var( --iwq-col-list, 5fr ) ) minmax( 0, var( --iwq-col-form, 7fr ) );
 	gap: var( --iwq-col-gap, 48px );
 	align-items: start;
+}
+
+/* La tabla tipo carrito nunca se sale de su columna. */
+.iwq-quote-page__list .iwq-cart {
+	overflow-x: auto;
+}
+
+@container ( max-width: 760px ) {
+	.iwq-quote-page--columns .iwq-quote-page__layout {
+		grid-template-columns: 1fr;
+		gap: 32px;
+	}
+
+	.iwq-quote-page--form-left .iwq-quote-page__list {
+		order: 0;
+	}
+
+	.iwq-quote-page--sticky .iwq-quote-page__list {
+		position: static;
+	}
 }
 
 /* La lista acompaña al formulario mientras se rellena. */
