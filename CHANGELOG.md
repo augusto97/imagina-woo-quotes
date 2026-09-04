@@ -6,6 +6,15 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.2] - 2026-09-04
+
+### Corregido
+- En dos columnas, si la columna de la lista era más estrecha que la tabla
+  de productos, la tabla se recortaba y dejaba fuera el subtotal. Ahora la
+  columna mide su propio ancho y, cuando no cabe la tabla completa, cada
+  línea pasa al formato apilado que WooCommerce usa en el móvil (etiqueta:
+  valor), como hace el propio carrito
+
 ## [1.11.1] - 2026-09-04
 
 ### Corregido
@@ -340,6 +349,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.2
 [1.11.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.1
 [1.11.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.0
 [1.10.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.10.0

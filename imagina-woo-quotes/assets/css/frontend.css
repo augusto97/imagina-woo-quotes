@@ -293,6 +293,68 @@
 	overflow-x: auto;
 }
 
+/* La columna de la lista mide su propio ancho: cuando no cabe la tabla
+   completa, cada línea pasa al formato apilado que WooCommerce usa en el
+   móvil (etiqueta: valor), igual que hace el carrito con
+   shop_table_responsive, en vez de recortarse. */
+.iwq-quote-page__list {
+	container: iwq-list / inline-size;
+}
+
+@container iwq-list ( max-width: 620px ) {
+	.iwq-cart-table thead {
+		display: none;
+	}
+
+	.iwq-cart-table tr {
+		display: block;
+	}
+
+	.iwq-cart-table tbody tr:first-child td:first-child {
+		border-top: 0;
+	}
+
+	.iwq-cart-table tr:nth-child( 2n ) td {
+		background-color: rgba( 0, 0, 0, 0.025 );
+	}
+
+	.iwq-cart-table td {
+		display: block;
+		text-align: right;
+	}
+
+	.iwq-cart-table td::before {
+		content: attr( data-title ) ': ';
+		font-weight: 700;
+		float: left;
+	}
+
+	.iwq-cart-table td.product-remove::before,
+	.iwq-cart-table td.actions::before,
+	.iwq-cart-table td.iwq-cart-total__label::before {
+		display: none;
+	}
+
+	.iwq-cart-table .product-thumbnail,
+	.iwq-cart-table tr.iwq-cart-total .iwq-cart-total__label {
+		display: none;
+	}
+
+	.iwq-cart-table td.actions {
+		text-align: left;
+	}
+
+	.iwq-cart-table td.actions .button {
+		display: block;
+		width: 100%;
+	}
+
+	.iwq-cart-table td.actions .button + .button {
+		margin-left: 0;
+		margin-top: 8px;
+	}
+}
+
 @container ( max-width: 760px ) {
 	.iwq-quote-page--columns .iwq-quote-page__layout {
 		grid-template-columns: 1fr;
