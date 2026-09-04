@@ -107,6 +107,7 @@
 	h1 { font-size: 2.4rem; font-weight: 700; margin: 0 0 0.4rem; }
 	h2 { font-size: 1.7rem; font-weight: 600; margin: 3.2rem 0 1rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
 	h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+	h2, h3 { scroll-margin-top: 24px; }
 	h3 { font-size: 1.2rem; font-weight: 600; margin: 2rem 0 0.6rem; }
 	h4 { font-size: 1rem; font-weight: 600; margin: 1.4rem 0 0.4rem; }
 	p, ul, ol { margin: 0 0 1rem; }
@@ -205,15 +206,70 @@
 		text-decoration: none;
 	}
 	.toc a:hover { color: var(--ink); border-color: var(--line-2); }
+	.toc a[aria-current="location"] { color: var(--accent); border-color: var(--accent); font-weight: 600; background: var(--accent-soft); }
+	.toc li.is-parent > a { color: var(--ink); border-color: var(--line-2); }
+	.toc ol ol { margin: 0; }
 	.toc ol ol a { padding-left: 22px; font-size: 0.86rem; }
-	main { padding-top: 36px; }
+	.toc__toggle { display: none; }
+	main { padding-top: 36px; min-width: 0; }
 	@media (max-width: 900px) {
-		.masthead__inner { grid-template-columns: 1fr; }
+		.masthead__inner { grid-template-columns: 1fr; gap: 12px; }
+		.masthead__inner { padding: 28px 20px 22px; }
 		.masthead__meta { text-align: left; }
-		.layout { grid-template-columns: 1fr; gap: 0; }
-		.toc { position: static; max-height: none; border-bottom: 1px solid var(--line); }
-		.toc ol { columns: 2; column-gap: 24px; }
-		.toc ol ol { columns: 1; }
+		h1 { font-size: 1.9rem; }
+		h2 { font-size: 1.45rem; margin-top: 2.4rem; }
+		h2, h3 { scroll-margin-top: 66px; }
+		.layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 20px 60px; }
+		.toc {
+			position: sticky;
+			top: 0;
+			z-index: 20;
+			margin: 0 -20px;
+			padding: 0;
+			max-height: none;
+			overflow: visible;
+			background: var(--paper);
+			border-bottom: 1px solid var(--line);
+		}
+		.toc__title { display: none; }
+		.toc__toggle {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			width: 100%;
+			padding: 12px 20px;
+			border: 0;
+			background: transparent;
+			color: var(--ink);
+			font: inherit;
+			text-align: left;
+			cursor: pointer;
+		}
+		.toc__toggle-label {
+			font-family: var(--display);
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: var(--ink-3);
+			flex: none;
+		}
+		.toc__current { flex: 1; min-width: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.toc__chevron { flex: none; width: 10px; height: 10px; border-right: 2px solid var(--ink-3); border-bottom: 2px solid var(--ink-3); transform: rotate(45deg); transition: transform 0.15s; margin-top: -4px; }
+		.toc__toggle[aria-expanded="true"] .toc__chevron { transform: rotate(-135deg); margin-top: 4px; }
+		.toc > ol { display: none; padding: 4px 20px 14px; max-height: calc(100vh - 60px); overflow-y: auto; margin: 0; }
+		.toc.is-open > ol { display: block; }
+		.toc ol ol { margin: 0; }
+		.toc a { padding: 8px 10px; }
+		main { padding-top: 24px; }
+		footer.colophon { padding: 0 20px 40px; }
+	}
+	@media (max-width: 560px) {
+		.flow { grid-template-columns: minmax(0, 1fr); }
+		.shots-2 { grid-template-columns: 1fr; }
+		.grid-2 { grid-template-columns: 1fr; }
+		.masthead__meta { font-size: 0.84rem; }
+		body { font-size: 16px; }
 	}
 
 	/* Piezas */
@@ -300,7 +356,7 @@
 	.flow__step:last-child::after { display: none; }
 	.flow__who { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-family: var(--display); font-weight: 600; }
 	.flow__step p { font-size: 0.9rem; color: var(--ink-2); margin: 6px 0 0; line-height: 1.4; }
-	@media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } .flow__step::after { display: none; } }
+	@media (max-width: 900px) { .flow { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .flow__step::after { display: none; } }
 
 	.pill {
 		display: inline-block;
@@ -320,7 +376,7 @@
 	.pill--expired { color: var(--st-expired); }
 	.pill--sale { color: var(--ok); }
 
-	.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 0 0 1.4rem; }
+	.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; margin: 0 0 1.4rem; }
 	.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
 	.card h4 { margin: 0 0 6px; }
 	.card p { font-size: 0.95rem; color: var(--ink-2); margin: 0; }
@@ -369,7 +425,7 @@
 	}
 	figure.shot figcaption { margin-top: 8px; font-size: 0.9rem; color: var(--ink-2); max-width: 68ch; }
 	figure.shot figcaption b { font-family: var(--display); font-weight: 600; color: var(--ink); }
-	.shots-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+	.shots-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; }
 	.shots-2 figure.shot { margin: 0.6rem 0 1.4rem; }
 </style>
 </head>
@@ -383,7 +439,7 @@
 			<p class="lead">Solicitud de presupuestos para WooCommerce. Esta guía explica cómo funciona de principio a fin, qué ve el cliente y qué hace cada ajuste.</p>
 		</div>
 		<div class="masthead__meta">
-			<div>Versión del manual <b>1.11</b></div>
+			<div>Versión del manual <b>1.11.1</b></div>
 			<div>Requiere <b>WordPress 6.4</b> · <b>WooCommerce 8.0</b> · <b>PHP 8.1</b></div>
 			<div class="theme-switch" role="group" aria-label="Tema de la página">
 				<button type="button" data-mode="light" aria-pressed="false">Claro</button>
@@ -396,8 +452,13 @@
 
 <div class="layout">
 	<nav class="toc" aria-label="Índice">
+		<button type="button" class="toc__toggle" aria-expanded="false" aria-controls="toc-list">
+			<span class="toc__toggle-label">Índice</span>
+			<span class="toc__current">Qué es y cómo funciona</span>
+			<span class="toc__chevron" aria-hidden="true"></span>
+		</button>
 		<p class="toc__title">Índice</p>
-		<ol>
+		<ol id="toc-list">
 			<li><a href="#que-es">Qué es y cómo funciona</a></li>
 			<li><a href="#instalacion">Instalación y puesta en marcha</a></li>
 			<li><a href="#cliente">Lo que ve el cliente</a></li>
@@ -433,7 +494,7 @@
 			<div class="flow__step"><span class="flow__who">Cliente</span><p>Paga el pedido. Pasa a «Procesando» y ya es una venta.</p></div>
 		</div>
 		<p>Todo vive dentro de WooCommerce: los presupuestos son pedidos, los emails son emails de WooCommerce y las plantillas de PDF se editan con el editor de bloques. No hay tablas ni pantallas ajenas que aprender.</p>
-<figure class="shot"><img src="images/admin-inicio.png" alt="<b>Presupuestos › Inicio.</b> Solicitudes de los últimos treinta días, la lista de puesta en marcha con lo que falta por configurar, accesos rápidos y la actividad reciente." loading="lazy"><figcaption><b>Presupuestos › Inicio.</b> Solicitudes de los últimos treinta días, la lista de puesta en marcha con lo que falta por configurar, accesos rápidos y la actividad reciente.</figcaption></figure>
+<figure class="shot"><img src="images/admin-inicio.png" width="1280" height="800" alt="Presupuestos › Inicio. Solicitudes de los últimos treinta días, la lista de puesta en marcha con lo que falta por configurar, accesos rápidos y la actividad reciente." loading="lazy"><figcaption><b>Presupuestos › Inicio.</b> Solicitudes de los últimos treinta días, la lista de puesta en marcha con lo que falta por configurar, accesos rápidos y la actividad reciente.</figcaption></figure>
 
 		<h2 id="instalacion">Instalación y puesta en marcha</h2>
 		<ol class="steps">
@@ -449,18 +510,18 @@
 
 		<h2 id="cliente">Lo que ve el cliente</h2>
 		<h3>El botón</h3>
-<figure class="shot"><img src="images/front-product.png" alt="<b>Ficha de producto.</b> El botón «Solicitar presupuesto» debajo del botón de compra del tema. Cuando el producto ya está en la lista cambia su texto y lleva a la solicitud." loading="lazy"><figcaption><b>Ficha de producto.</b> El botón «Solicitar presupuesto» debajo del botón de compra del tema. Cuando el producto ya está en la lista cambia su texto y lleva a la solicitud.</figcaption></figure>
+<figure class="shot"><img src="images/front-product.png" width="1280" height="620" alt="Ficha de producto. El botón «Solicitar presupuesto» debajo del botón de compra del tema. Cuando el producto ya está en la lista cambia su texto y lleva a la solicitud." loading="lazy"><figcaption><b>Ficha de producto.</b> El botón «Solicitar presupuesto» debajo del botón de compra del tema. Cuando el producto ya está en la lista cambia su texto y lleva a la solicitud.</figcaption></figure>
 		<p>Aparece en la ficha de producto, debajo o encima del botón de compra según prefieras, y opcionalmente en el catálogo y en el carrito. En productos variables, el cliente elige primero la variación. Cuando un producto ya está en la lista, el botón cambia su texto y lleva a la página de solicitud.</p>
 		<h3>El panel lateral</h3>
-<figure class="shot"><img src="images/front-drawer.png" alt="<b>Panel lateral.</b> Se abre al añadir: lista con cantidades y totales de línea, subtotal orientativo y los dos botones del tema." loading="lazy"><figcaption><b>Panel lateral.</b> Se abre al añadir: lista con cantidades y totales de línea, subtotal orientativo y los dos botones del tema.</figcaption></figure>
+<figure class="shot"><img src="images/front-drawer.png" width="1280" height="800" alt="Panel lateral. Se abre al añadir: lista con cantidades y totales de línea, subtotal orientativo y los dos botones del tema." loading="lazy"><figcaption><b>Panel lateral.</b> Se abre al añadir: lista con cantidades y totales de línea, subtotal orientativo y los dos botones del tema.</figcaption></figure>
 		<p>Al añadir un producto se abre un panel con la lista, en el mismo estilo que el mini carrito de WooCommerce: imagen, nombre, precio de catálogo, control de cantidad con más y menos, papelera, subtotal orientativo y dos botones: seguir viendo productos o ir a la solicitud. Puedes cambiar su lado, ancho, textos, colores y densidad en <span class="path">Diseño<span>›</span>Panel lateral</span>.</p>
 		<h3>La página de solicitud</h3>
-<figure class="shot"><img src="images/front-quote-page.png" alt="<b>Página de solicitud a dos columnas.</b> La tabla de productos con la misma estructura que el carrito de WooCommerce y el formulario con los campos que hayas configurado." loading="lazy"><figcaption><b>Página de solicitud a dos columnas.</b> La tabla de productos con la misma estructura que el carrito de WooCommerce y el formulario con los campos que hayas configurado.</figcaption></figure>
+<figure class="shot"><img src="images/front-quote-page.png" width="1440" height="840" alt="Página de solicitud a dos columnas. La tabla de productos con la misma estructura que el carrito de WooCommerce y el formulario con los campos que hayas configurado." loading="lazy"><figcaption><b>Página de solicitud a dos columnas.</b> La tabla de productos con la misma estructura que el carrito de WooCommerce y el formulario con los campos que hayas configurado.</figcaption></figure>
 		<p>Muestra la lista de productos con la misma tabla que el carrito de WooCommerce (cantidad, subtotal y total) y el formulario. Puede ir en una columna o en dos. Al enviar, el cliente ve un mensaje de confirmación o se le lleva a la página de agradecimiento que hayas elegido. El formulario se envía sin recargar la página y marca los errores junto a cada campo.</p>
 		<h3>Mi cuenta</h3>
 		<div class="shots-2">
-<figure class="shot"><img src="images/account-quotes.png" alt="<b>Mi cuenta › Presupuestos.</b> Todos los presupuestos del cliente con número, fecha, estado y total." loading="lazy"><figcaption><b>Mi cuenta › Presupuestos.</b> Todos los presupuestos del cliente con número, fecha, estado y total.</figcaption></figure>
-<figure class="shot"><img src="images/account-quote-detail.png" alt="<b>Detalle de un presupuesto.</b> Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda." loading="lazy"><figcaption><b>Detalle de un presupuesto.</b> Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda.</figcaption></figure>
+<figure class="shot"><img src="images/account-quotes.png" width="1280" height="640" alt="Mi cuenta › Presupuestos. Todos los presupuestos del cliente con número, fecha, estado y total." loading="lazy"><figcaption><b>Mi cuenta › Presupuestos.</b> Todos los presupuestos del cliente con número, fecha, estado y total.</figcaption></figure>
+<figure class="shot"><img src="images/account-quote-detail.png" width="1280" height="2062" alt="Detalle de un presupuesto. Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda." loading="lazy"><figcaption><b>Detalle de un presupuesto.</b> Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda.</figcaption></figure>
 		</div>
 		<p>Los clientes registrados tienen una sección <strong>«Presupuestos»</strong> en Mi cuenta con todos los suyos: número, fecha, estado y total. Dentro de cada uno pueden descargar el PDF, aceptar, rechazar o proponer otro precio, y ver la conversación con la tienda. Los visitantes sin cuenta gestionan todo desde los enlaces del email.</p>
 		<h3>Aceptar y pagar</h3>
@@ -469,7 +530,7 @@
 		<h2 id="gestion">Gestionar un presupuesto</h2>
 		<p>Cada presupuesto es un pedido en <span class="path">WooCommerce<span>›</span>Pedidos</span>. Ahí tienes las líneas, el cliente, las notas y el historial, más dos cajas del plugin: <strong>Presupuesto</strong> (vencimiento, plantilla de PDF, botón «Ver el PDF» y la conversación con el cliente) y <strong>Datos de la solicitud</strong> (las respuestas del formulario y los archivos adjuntos).</p>
 
-<figure class="shot"><img src="images/admin-orders.png" alt="<b>WooCommerce › Pedidos.</b> Los presupuestos aparecen con sus propios estados y filtros. Aquí, filtrados por «Presupuesto solicitado»." loading="lazy"><figcaption><b>WooCommerce › Pedidos.</b> Los presupuestos aparecen con sus propios estados y filtros. Aquí, filtrados por «Presupuesto solicitado».</figcaption></figure>
+<figure class="shot"><img src="images/admin-orders.png" width="1280" height="800" alt="WooCommerce › Pedidos. Los presupuestos aparecen con sus propios estados y filtros. Aquí, filtrados por «Presupuesto solicitado»." loading="lazy"><figcaption><b>WooCommerce › Pedidos.</b> Los presupuestos aparecen con sus propios estados y filtros. Aquí, filtrados por «Presupuesto solicitado».</figcaption></figure>
 
 		<h3 id="estados">Estados</h3>
 		<div class="table-wrap">
@@ -493,7 +554,7 @@
 			<li><strong>Elige el vencimiento y la plantilla</strong> En la caja «Presupuesto» puedes fijar la fecha de vencimiento (vacía para que no venza) y una plantilla de PDF distinta de la general.</li>
 			<li><strong>Envíalo</strong> En «Acciones del pedido» elige <strong>«Enviar el presupuesto al cliente»</strong> y pulsa el botón de aplicar. El plugin recalcula totales, fija la validez, genera el PDF definitivo, pasa el pedido a «Presupuesto enviado» y manda el email.</li>
 		</ol>
-<figure class="shot"><img src="images/admin-order.png" alt="<b>Un presupuesto abierto.</b> A la derecha, la caja «Presupuesto» con el vencimiento, la plantilla de PDF, el botón para ver el PDF y la conversación; debajo, «Datos de la solicitud» con las respuestas del formulario. La acción «Enviar el presupuesto al cliente» está en «Acciones del pedido»." loading="lazy"><figcaption><b>Un presupuesto abierto.</b> A la derecha, la caja «Presupuesto» con el vencimiento, la plantilla de PDF, el botón para ver el PDF y la conversación; debajo, «Datos de la solicitud» con las respuestas del formulario. La acción «Enviar el presupuesto al cliente» está en «Acciones del pedido».</figcaption></figure>
+<figure class="shot"><img src="images/admin-order.png" width="1280" height="2761" alt="Un presupuesto abierto. A la derecha, la caja «Presupuesto» con el vencimiento, la plantilla de PDF, el botón para ver el PDF y la conversación; debajo, «Datos de la solicitud» con las respuestas del formulario. La acción «Enviar el presupuesto al cliente» está en «Acciones del pedido»." loading="lazy"><figcaption><b>Un presupuesto abierto.</b> A la derecha, la caja «Presupuesto» con el vencimiento, la plantilla de PDF, el botón para ver el PDF y la conversación; debajo, «Datos de la solicitud» con las respuestas del formulario. La acción «Enviar el presupuesto al cliente» está en «Acciones del pedido».</figcaption></figure>
 		<div class="note note--warn">
 			<p><strong>Cambiar el estado a mano no envía el correo.</strong> Si eliges «Presupuesto enviado» en el desplegable de estado, el pedido cambia pero el cliente no recibe nada. El envío siempre va por la acción «Enviar el presupuesto al cliente». Así un cambio de estado accidental nunca dispara un email.</p>
 		</div>
@@ -518,7 +579,7 @@
 				</tbody>
 			</table>
 		</div>
-<figure class="shot"><img src="images/admin-wc-emails.png" alt="<b>WooCommerce › Ajustes › Emails.</b> Los seis emails del plugin se activan y personalizan aquí, junto a los demás de la tienda." loading="lazy"><figcaption><b>WooCommerce › Ajustes › Emails.</b> Los seis emails del plugin se activan y personalizan aquí, junto a los demás de la tienda.</figcaption></figure>
+<figure class="shot"><img src="images/admin-wc-emails.png" width="1280" height="4192" alt="WooCommerce › Ajustes › Emails. Los seis emails del plugin se activan y personalizan aquí, junto a los demás de la tienda." loading="lazy"><figcaption><b>WooCommerce › Ajustes › Emails.</b> Los seis emails del plugin se activan y personalizan aquí, junto a los demás de la tienda.</figcaption></figure>
 		<h3>Diseños</h3>
 		<div class="grid-2">
 			<div class="card"><h4>Moderno</h4><p>Tarjeta blanca con barra de color, resumen destacado y botones grandes. Es el diseño por defecto.</p></div>
@@ -527,15 +588,15 @@
 		</div>
 		<h3>Vista previa y pruebas</h3>
 		<div class="shots-2">
-<figure class="shot"><img src="images/admin-preview.png" alt="<b>Vista previa de un email.</b> Asunto, remitente, destinatario, adjuntos y el contenido tal como llega." loading="lazy"><figcaption><b>Vista previa de un email.</b> Asunto, remitente, destinatario, adjuntos y el contenido tal como llega.</figcaption></figure>
-<figure class="shot"><img src="images/admin-preview-pdf.png" alt="<b>El PDF adjunto</b>, visto desde la misma pestaña." loading="lazy"><figcaption><b>El PDF adjunto</b>, visto desde la misma pestaña.</figcaption></figure>
+<figure class="shot"><img src="images/admin-preview.png" width="1280" height="800" alt="Vista previa de un email. Asunto, remitente, destinatario, adjuntos y el contenido tal como llega." loading="lazy"><figcaption><b>Vista previa de un email.</b> Asunto, remitente, destinatario, adjuntos y el contenido tal como llega.</figcaption></figure>
+<figure class="shot"><img src="images/admin-preview-pdf.png" width="1280" height="800" alt="El PDF adjunto, visto desde la misma pestaña." loading="lazy"><figcaption><b>El PDF adjunto</b>, visto desde la misma pestaña.</figcaption></figure>
 		</div>
 		<p>En <span class="path">Presupuestos<span>›</span>Vista previa</span> eliges un email y un presupuesto y ves exactamente lo que recibe el destinatario: asunto, remitente, adjuntos y contenido, en HTML, texto plano o el PDF adjunto. Si el email está desactivado en WooCommerce, lo avisa. Puedes enviar una prueba a cualquier dirección y, si la tienda aún no tiene presupuestos, crear uno de ejemplo con descuento, validez y contraoferta.</p>
 
 		<h2 id="pdf">PDF y plantillas</h2>
 		<p>Cada presupuesto lleva un PDF que se genera al enviarlo y se adjunta a los emails. El cliente también lo descarga desde Mi cuenta. Se guarda en una carpeta protegida y se regenera solo si el pedido o la plantilla cambian.</p>
 		<h3>Plantillas con bloques</h3>
-<figure class="shot"><img src="images/admin-pdf-editor.png" alt="<b>Editor de una plantilla de PDF.</b> Los bloques del plugin se muestran ya rellenos con datos de un presupuesto real, para ver cómo quedará el documento." loading="lazy"><figcaption><b>Editor de una plantilla de PDF.</b> Los bloques del plugin se muestran ya rellenos con datos de un presupuesto real, para ver cómo quedará el documento.</figcaption></figure>
+<figure class="shot"><img src="images/admin-pdf-editor.png" width="1280" height="800" alt="Editor de una plantilla de PDF. Los bloques del plugin se muestran ya rellenos con datos de un presupuesto real, para ver cómo quedará el documento." loading="lazy"><figcaption><b>Editor de una plantilla de PDF.</b> Los bloques del plugin se muestran ya rellenos con datos de un presupuesto real, para ver cómo quedará el documento.</figcaption></figure>
 		<p>Las plantillas se editan en <span class="path">WooCommerce<span>›</span>Plantillas de PDF</span> con el editor de bloques de WordPress. Puedes tener varias y elegir una por defecto en <span class="path">Presupuestos<span>›</span>PDF</span> o una distinta en cada pedido. Combina texto, encabezados, imágenes y columnas con estos siete bloques del plugin, que en el editor se muestran ya rellenos con datos de un presupuesto real o de ejemplo:</p>
 		<div class="table-wrap">
 			<table>
@@ -577,7 +638,7 @@
 
 		<h2 id="formulario">Formulario</h2>
 		<p>En <span class="path">Presupuestos<span>›</span>Formulario</span> construyes el formulario arrastrando campos. Cada campo tiene etiqueta, tipo, marcador de posición, texto de ayuda, ancho (fila completa, media o un tercio), si es obligatorio y si está activo.</p>
-<figure class="shot"><img src="images/admin-form.png" alt="<b>Presupuestos › Formulario.</b> El constructor de campos: arrastra para ordenar, «Editar» para configurar cada campo, «Añadir campo» para crear uno nuevo." loading="lazy"><figcaption><b>Presupuestos › Formulario.</b> El constructor de campos: arrastra para ordenar, «Editar» para configurar cada campo, «Añadir campo» para crear uno nuevo.</figcaption></figure>
+<figure class="shot"><img src="images/admin-form.png" width="1280" height="800" alt="Presupuestos › Formulario. El constructor de campos: arrastra para ordenar, «Editar» para configurar cada campo, «Añadir campo» para crear uno nuevo." loading="lazy"><figcaption><b>Presupuestos › Formulario.</b> El constructor de campos: arrastra para ordenar, «Editar» para configurar cada campo, «Añadir campo» para crear uno nuevo.</figcaption></figure>
 		<h3>Campos del sistema</h3>
 		<p>Nombre, apellidos, email, teléfono, empresa y mensaje vienen de serie. Puedes renombrarlos y desactivarlos, pero no borrarlos: el email es la forma de contactar al cliente y crear su presupuesto.</p>
 		<h3>Tipos de campo</h3>
@@ -597,11 +658,11 @@
 		<h3>Reglas</h3>
 		<p>En <span class="path">Presupuestos<span>›</span>Reglas</span> decides el alcance: todo el catálogo o solo lo que incluyas por categorías, etiquetas y productos, con exclusiones por los mismos criterios, condición de stock (solo agotados o solo con stock) y si entran los productos externos y agrupados. En <span class="path">General</span> limitas quién puede pedir presupuesto: visitantes sin cuenta y roles concretos.</p>
 		<h3>Por producto</h3>
-<figure class="shot"><img src="images/admin-product.png" alt="<b>Ficha de producto en el admin.</b> El ajuste «Presupuestos» en la pestaña General decide si ese producto admite presupuesto, solo presupuesto o nunca." loading="lazy"><figcaption><b>Ficha de producto en el admin.</b> El ajuste «Presupuestos» en la pestaña General decide si ese producto admite presupuesto, solo presupuesto o nunca.</figcaption></figure>
+<figure class="shot"><img src="images/admin-product.png" width="1280" height="1785" alt="Ficha de producto en el admin. El ajuste «Presupuestos» en la pestaña General decide si ese producto admite presupuesto, solo presupuesto o nunca." loading="lazy"><figcaption><b>Ficha de producto en el admin.</b> El ajuste «Presupuestos» en la pestaña General decide si ese producto admite presupuesto, solo presupuesto o nunca.</figcaption></figure>
 		<p>Cada producto tiene un ajuste «Presupuestos» en su pestaña General: según los ajustes generales, permitir presupuesto, <strong>solo presupuesto</strong> (oculta precio y compra de ese producto) o nunca presupuestar. También verás cuántas veces se ha pedido presupuesto de ese producto, y una columna ordenable en el listado.</p>
 
 		<h2 id="diseno">Diseño</h2>
-<figure class="shot"><img src="images/admin-design.png" alt="<b>Presupuestos › Diseño.</b> La vista previa de arriba cambia con cada ajuste antes de guardar." loading="lazy"><figcaption><b>Presupuestos › Diseño.</b> La vista previa de arriba cambia con cada ajuste antes de guardar.</figcaption></figure>
+<figure class="shot"><img src="images/admin-design.png" width="1280" height="800" alt="Presupuestos › Diseño. La vista previa de arriba cambia con cada ajuste antes de guardar." loading="lazy"><figcaption><b>Presupuestos › Diseño.</b> La vista previa de arriba cambia con cada ajuste antes de guardar.</figcaption></figure>
 		<p>La pestaña <span class="path">Presupuestos<span>›</span>Diseño</span> tiene una vista previa arriba que cambia al instante con cada ajuste, antes de guardar. Los valores vacíos heredan del tema; con los valores por defecto el plugin no añade ninguna hoja de estilos extra.</p>
 		<div class="grid-2">
 			<div class="card"><h4>Colores y forma</h4><p>Color principal y sus variantes, textos, fondos, bordes, redondeo general y modo oscuro automático.</p></div>
@@ -618,7 +679,7 @@
 			<li><strong>Fecha de la venta.</strong> Al pagarse un presupuesto aceptado, el pedido puede fecharse en el momento del pago (recomendado, así Analytics lo cuenta el día que se vendió) o conservar la fecha de la solicitud. La fecha original queda anotada en el pedido.</li>
 			<li><strong>Vista «Todos» de Pedidos.</strong> Puedes ocultar ahí los presupuestos para que solo aparezcan las ventas; siguen en sus filtros por estado.</li>
 		</ul>
-<figure class="shot"><img src="images/admin-stats.png" alt="<b>Presupuestos › Estadísticas.</b> Tasa de aceptación y de respuesta, valor aceptado, reparto por estado y productos más solicitados." loading="lazy"><figcaption><b>Presupuestos › Estadísticas.</b> Tasa de aceptación y de respuesta, valor aceptado, reparto por estado y productos más solicitados.</figcaption></figure>
+<figure class="shot"><img src="images/admin-stats.png" width="1280" height="800" alt="Presupuestos › Estadísticas. Tasa de aceptación y de respuesta, valor aceptado, reparto por estado y productos más solicitados." loading="lazy"><figcaption><b>Presupuestos › Estadísticas.</b> Tasa de aceptación y de respuesta, valor aceptado, reparto por estado y productos más solicitados.</figcaption></figure>
 		<p>Las <span class="path">Estadísticas</span> del plugin muestran, por periodo, cuántas solicitudes entran, cuántas se aceptan, la tasa de aceptación y de respuesta, el valor aceptado, el reparto por estado y los productos más solicitados. Un producto muy solicitado y poco vendido suele avisar de que su precio no está claro.</p>
 
 		<h2 id="bloques">Bloques y shortcodes</h2>
@@ -636,7 +697,7 @@
 		<h2 id="ajustes">Referencia de ajustes</h2>
 		<p>Todo está en <span class="path">WooCommerce<span>›</span>Presupuestos</span>. Guarda con el botón de la barra inferior o con <kbd>Ctrl</kbd> + <kbd>S</kbd>; la barra avisa si hay cambios sin guardar.</p>
 
-<figure class="shot"><img src="images/admin-general.png" alt="<b>Presupuestos › General.</b> Cada sección es una tarjeta; la barra inferior guarda y avisa de cambios pendientes." loading="lazy"><figcaption><b>Presupuestos › General.</b> Cada sección es una tarjeta; la barra inferior guarda y avisa de cambios pendientes.</figcaption></figure>
+<figure class="shot"><img src="images/admin-general.png" width="1280" height="800" alt="Presupuestos › General. Cada sección es una tarjeta; la barra inferior guarda y avisa de cambios pendientes." loading="lazy"><figcaption><b>Presupuestos › General.</b> Cada sección es una tarjeta; la barra inferior guarda y avisa de cambios pendientes.</figcaption></figure>
 		<h3>General</h3>
 		<div class="table-wrap"><table>
 			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
@@ -765,7 +826,7 @@ add_filter( 'iwq_design_css', fn( $css ) => $css . '.iwq-add-button{letter-spaci
 	</main>
 </div>
 
-<footer class="colophon">Imagina Woo Quotes · Manual actualizado para la versión 1.11.0. Las capturas proceden de una tienda de pruebas con WordPress en inglés; el plugin se muestra en español.</footer>
+<footer class="colophon">Imagina Woo Quotes · Manual actualizado para la versión 1.11.1. Las capturas proceden de una tienda de pruebas con WordPress en inglés; el plugin se muestra en español.</footer>
 
 <script>
 (function () {
@@ -780,6 +841,74 @@ add_filter( 'iwq_design_css', fn( $css ) => $css . '.iwq-add-button{letter-spaci
 	}
 	buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.mode); }); });
 	apply(saved || (root.getAttribute('data-theme') || 'auto'));
+})();
+
+/* Índice: marca la sección que se está leyendo y se pliega en pantallas estrechas. */
+(function () {
+	var toc = document.querySelector('.toc');
+	if (!toc) { return; }
+	var toggle = toc.querySelector('.toc__toggle');
+	var current = toc.querySelector('.toc__current');
+	var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+	var targets = links.map(function (a) {
+		return { link: a, el: document.getElementById(a.getAttribute('href').slice(1)) };
+	}).filter(function (t) { return t.el; });
+	var narrow = window.matchMedia('(max-width: 900px)');
+	var active = null;
+	var ticking = false;
+
+	function offset() { return narrow.matches ? 120 : 96; }
+
+	function setActive(t) {
+		if (t === active) { return; }
+		active = t;
+		links.forEach(function (a) { a.removeAttribute('aria-current'); });
+		toc.querySelectorAll('li.is-parent').forEach(function (li) { li.classList.remove('is-parent'); });
+		if (!t) { return; }
+		t.link.setAttribute('aria-current', 'location');
+		var parent = t.link.closest('ol ol');
+		if (parent) { parent.parentElement.classList.add('is-parent'); }
+		if (current) { current.textContent = t.link.textContent; }
+		if (!narrow.matches && typeof t.link.scrollIntoView === 'function') {
+			var r = t.link.getBoundingClientRect(), box = toc.getBoundingClientRect();
+			if (r.top < box.top || r.bottom > box.bottom) { t.link.scrollIntoView({ block: 'nearest' }); }
+		}
+	}
+
+	function update() {
+		ticking = false;
+		var y = offset();
+		var found = null;
+		for (var i = 0; i < targets.length; i++) {
+			if (targets[i].el.getBoundingClientRect().top <= y) { found = targets[i]; } else { break; }
+		}
+		if (!found) { found = targets[0]; }
+		if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) { found = targets[targets.length - 1]; }
+		setActive(found);
+	}
+
+	function onScroll() {
+		if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+	}
+
+	function close() {
+		toc.classList.remove('is-open');
+		if (toggle) { toggle.setAttribute('aria-expanded', 'false'); }
+	}
+
+	if (toggle) {
+		toggle.addEventListener('click', function () {
+			var open = !toc.classList.contains('is-open');
+			toc.classList.toggle('is-open', open);
+			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+		});
+	}
+	links.forEach(function (a) { a.addEventListener('click', close); });
+	document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { close(); } });
+	window.addEventListener('scroll', onScroll, { passive: true });
+	window.addEventListener('resize', onScroll);
+	window.addEventListener('load', update);
+	update();
 })();
 </script>
 </body>

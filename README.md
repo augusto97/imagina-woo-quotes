@@ -102,10 +102,16 @@ en las páginas que los necesitan.
 
 ## Manual de uso
 
-La guía para clientes está en [`docs/manual.html`](docs/manual.html): un
-archivo HTML autónomo que se puede abrir en el navegador o subir a cualquier
+La guía para clientes vive en la rama [`docs`](https://github.com/augusto97/imagina-woo-quotes/tree/docs),
+siempre actualizada y lista para descargar: un solo archivo HTML con las
+capturas incrustadas, o un zip con `index.html` e `images/` para subirlo a un
 servidor. Explica el flujo completo, lo que ve el cliente, cada pestaña de
-ajustes, los bloques y shortcodes, y las preguntas frecuentes.
+ajustes, los bloques y shortcodes, y las preguntas frecuentes. El índice
+marca la sección que se está leyendo y la página se adapta al móvil.
+
+Se edita en `docs/manual.src.html` (las capturas van en `docs/images/`), se
+reconstruye con `python3 docs/build-manual.py` y se publica con
+`./publish-docs.sh` seguido de `git push origin docs`.
 
 ## Requisitos
 
