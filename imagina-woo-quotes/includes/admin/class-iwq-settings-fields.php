@@ -21,9 +21,16 @@ class IWQ_Settings_Fields {
 	 */
 	public static function render( $key, $field ) {
 		$name  = 'iwq_' . $key;
-		$value = get_option( $name, '' );
+		$value = get_option( $name, null );
 
-		// Los ajustes de diseño nunca guardados muestran su valor efectivo.
+		// Un ajuste nunca guardado muestra su valor efectivo, el mismo que
+		// aplica el front: si no, un interruptor podía verse apagado mientras
+		// la función estaba activa.
+		if ( null === $value ) {
+			$defaults = IWQ_Install::get_default_options();
+			$value    = array_key_exists( $key, $defaults ) ? $defaults[ $key ] : '';
+		}
+
 		$design_defaults = IWQ_Design::get_defaults();
 
 		if ( '' === $value && isset( $design_defaults[ $key ] ) ) {

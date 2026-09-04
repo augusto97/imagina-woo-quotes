@@ -6,6 +6,24 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.3] - 2026-09-04
+
+### Corregido
+- Un interruptor de los ajustes podía verse apagado mientras la función
+  estaba activa (por ejemplo «Activar los presupuestos» apagado con los
+  botones visibles en la tienda): la página leía la opción en bruto y el
+  front aplicaba su valor por defecto cuando nunca se había guardado. Ahora
+  hay una sola lista de valores por defecto que usan la instalación, el
+  front y la página de ajustes
+- Si el plugin se actualizaba o se instalaba sin pasar por la activación
+  (subida por FTP, actualizadores que activan en silencio), las opciones
+  nuevas, las capacidades y la carpeta de adjuntos no se creaban. Ahora se
+  completan solos la primera vez que carga cada versión
+- El aviso «Connection lost. Saving has been disabled until you are
+  reconnected» de WooCommerce ya no aparece en la pantalla de ajustes del
+  plugin: los ajustes se guardan con un envío normal del formulario y no
+  dependen del latido de WordPress
+
 ## [1.11.2] - 2026-09-04
 
 ### Corregido
@@ -349,6 +367,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.3
 [1.11.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.2
 [1.11.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.1
 [1.11.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.0

@@ -29,7 +29,24 @@ function iwq_missing_woocommerce_notice() {
  * @return mixed
  */
 function iwq_get_option( $key, $default = '' ) {
-	return get_option( 'iwq_' . $key, $default );
+	$value = get_option( 'iwq_' . $key, null );
+
+	if ( null !== $value ) {
+		return $value;
+	}
+
+	// Opción nunca guardada: vale el mismo valor por defecto que siembra la
+	// instalación, para que el admin y el front cuenten lo mismo. Los
+	// textos traducibles obligan a esperar a `init`.
+	if ( did_action( 'init' ) ) {
+		$defaults = IWQ_Install::get_default_options();
+
+		if ( array_key_exists( $key, $defaults ) ) {
+			return $defaults[ $key ];
+		}
+	}
+
+	return $default;
 }
 
 /**

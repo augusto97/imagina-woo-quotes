@@ -18,6 +18,7 @@ class IWQ_Admin {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_action( 'admin_notices', array( $this, 'remove_lost_connection_notice' ), 0 );
 		add_filter( 'plugin_action_links_' . IWQ_BASENAME, array( $this, 'action_links' ) );
 
 		// Columna del contador de solicitudes en el listado de productos.
@@ -46,6 +47,40 @@ class IWQ_Admin {
 			'iwq-settings',
 			array( IWQ_Settings::class, 'render_page' )
 		);
+	}
+
+	/**
+	 * Retira de nuestra pantalla el aviso «Connection lost» de WooCommerce.
+	 *
+	 * WooCommerce imprime en sus pantallas un aviso oculto que el latido de
+	 * WordPress destapa cuando admin-ajax falla; algunos gestores de avisos
+	 * lo muestran siempre. Nuestros ajustes se guardan con un envío normal
+	 * del formulario y no dependen del latido, así que aquí solo confunde.
+	 *
+	 * @return void
+	 */
+	public function remove_lost_connection_notice() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || false === strpos( $screen->id, 'iwq-settings' ) ) {
+			return;
+		}
+
+		global $wp_filter;
+
+		if ( empty( $wp_filter['admin_notices'] ) ) {
+			return;
+		}
+
+		foreach ( $wp_filter['admin_notices']->callbacks as $priority => $callbacks ) {
+			foreach ( $callbacks as $callback ) {
+				$function = $callback['function'];
+
+				if ( is_array( $function ) && isset( $function[1] ) && 'render_lost_connection_notice' === $function[1] ) {
+					remove_action( 'admin_notices', $function, $priority );
+				}
+			}
+		}
 	}
 
 	/**

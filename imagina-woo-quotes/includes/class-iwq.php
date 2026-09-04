@@ -49,6 +49,7 @@ final class IWQ {
 		$this->init_modules();
 
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( 'IWQ_Install', 'maybe_update' ), 20 );
 
 		/**
 		 * Se dispara cuando el plugin terminó de cargar sus módulos.

@@ -9,6 +9,10 @@
 	var settings = window.iwqAdmin || {};
 	var i18n = settings.i18n || {};
 
+	// Red de seguridad por si algún otro plugin imprime el aviso «Connection
+	// lost» del latido en esta pantalla: aquí nada depende del latido.
+	$( '#lost-connection-notice' ).remove();
+
 	// WordPress limpia settings-updated de la URL con un script en línea que
 	// corre antes que este, así que la marca llega en el DOM.
 	var justSaved = $( '.iwq-app' ).data( 'saved' ) === 1;

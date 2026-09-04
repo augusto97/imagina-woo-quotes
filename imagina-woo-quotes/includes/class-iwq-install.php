@@ -83,41 +83,104 @@ class IWQ_Install {
 	}
 
 	/**
-	 * Siembra las opciones por defecto sin pisar las que ya existan.
+	 * Valores por defecto de las opciones de comportamiento.
 	 *
-	 * @return void
+	 * Es la única lista: la activación los siembra, `iwq_get_option()` los
+	 * devuelve cuando la opción no existe y la página de ajustes los pinta.
+	 * Así el interruptor del admin y lo que hace el front nunca discrepan.
+	 * Los de diseño viven en IWQ_Design::get_defaults().
+	 *
+	 * @return array<string,mixed>
 	 */
-	private static function add_default_options() {
-		$defaults = array(
+	public static function get_default_options() {
+		return array(
 			// Comportamiento general.
 			'enabled'                  => 'yes',
+			'allow_guests'             => 'yes',
+			'rate_limit'               => 5,
 			'hide_price'               => 'no',
+			'hide_price_text'          => __( 'Precio bajo consulta', 'imagina-woo-quotes' ),
 			'hide_add_to_cart'         => 'no',
 			'button_label'             => __( 'Solicitar presupuesto', 'imagina-woo-quotes' ),
 			'button_label_added'       => __( 'Ya está en tu presupuesto', 'imagina-woo-quotes' ),
+			'button_position_single'   => 'after_add_to_cart',
 			'show_on_shop'             => 'yes',
 			'show_on_product'          => 'yes',
-			'allow_guests'             => 'yes',
+			'show_on_cart'             => 'no',
+			'open_drawer_after_add'    => 'yes',
 			'redirect_after_add'       => 'no',
 			// Presupuesto.
 			'expiry_days'              => 7,
 			'auto_expire'              => 'yes',
 			'reminder_days_before'     => 2,
 			'reminders_enabled'        => 'yes',
+			'allow_counter_offers'     => 'yes',
+			'redirect_to_payment'      => 'yes',
 			'allow_customer_notes'     => 'yes',
 			'allow_quantity_change'    => 'yes',
+			'min_quantity'             => 0,
+			'max_quantity'             => 0,
+			'sale_date'                => 'paid',
+			'hide_from_all_orders'     => 'no',
+			// Formulario.
+			'form_title'               => __( 'Cuéntanos qué necesitas', 'imagina-woo-quotes' ),
+			'submit_label'             => __( 'Enviar solicitud', 'imagina-woo-quotes' ),
+			'success_message'          => __( '¡Gracias! Hemos recibido tu solicitud y te responderemos en breve.', 'imagina-woo-quotes' ),
+			'show_form_when_empty'     => 'no',
+			'autocomplete_form'        => 'yes',
+			'recaptcha_enabled'        => 'no',
+			'recaptcha_version'        => 'v3',
+			'recaptcha_threshold'      => 0.5,
+			'upload_max_size'          => 5,
+			'form_fields'              => iwq_get_default_form_fields(),
+			'form_privacy_text'        => __( 'Tus datos se usarán para procesar tu solicitud y responderte. Consulta nuestra [privacy_policy].', 'imagina-woo-quotes' ),
 			// PDF.
 			'pdf_enabled'              => 'yes',
 			'pdf_attach_to_email'      => 'yes',
 			'pdf_paper_size'           => 'A4',
 			'pdf_orientation'          => 'portrait',
+			'pdf_font'                 => 'DejaVu Sans',
 			'pdf_filename'             => 'presupuesto-{order_number}',
-			// Formulario.
-			'form_fields'              => iwq_get_default_form_fields(),
-			'form_privacy_text'        => __( 'Tus datos se usarán para procesar tu solicitud y responderte. Consulta nuestra [privacy_policy].', 'imagina-woo-quotes' ),
+			'pdf_show_actions'         => 'yes',
+			'pdf_show_strikethrough'   => 'yes',
+			'pdf_show_footer'          => 'yes',
+			// Emails.
+			'email_style'              => 'moderno',
+			// Reglas.
+			'scope'                    => 'all',
+			'stock_rule'               => 'any',
+			'allow_external_grouped'   => 'no',
+			'empty_cart_after_transfer' => 'no',
 		);
+	}
 
-		foreach ( $defaults as $key => $value ) {
+	/**
+	 * Completa la instalación cuando el plugin se actualizó sin pasar por la
+	 * activación (subida por FTP, actualizadores que activan en silencio,
+	 * WP-CLI): siembra las opciones nuevas, las capacidades y la carpeta de
+	 * adjuntos. Se ejecuta una vez por versión.
+	 *
+	 * @return void
+	 */
+	public static function maybe_update() {
+		if ( IWQ_VERSION === get_option( 'iwq_version' ) ) {
+			return;
+		}
+
+		self::add_default_options();
+		self::add_capabilities();
+		self::create_upload_dir();
+
+		update_option( 'iwq_version', IWQ_VERSION );
+	}
+
+	/**
+	 * Siembra las opciones por defecto sin pisar las que ya existan.
+	 *
+	 * @return void
+	 */
+	private static function add_default_options() {
+		foreach ( self::get_default_options() as $key => $value ) {
 			if ( false === get_option( 'iwq_' . $key, false ) ) {
 				add_option( 'iwq_' . $key, $value );
 			}
