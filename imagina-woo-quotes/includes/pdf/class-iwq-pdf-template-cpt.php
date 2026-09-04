@@ -155,7 +155,7 @@ class IWQ_PDF_Template_CPT {
 		wp_enqueue_script(
 			'iwq-pdf-blocks',
 			IWQ_URL . 'blocks/pdf-blocks.js',
-			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-server-side-render' ),
 			IWQ_VERSION,
 			true
 		);
@@ -167,7 +167,52 @@ class IWQ_PDF_Template_CPT {
 			IWQ_VERSION
 		);
 
+		// Los estilos del documento, acotados al lienzo del editor, para que
+		// la vista previa de cada bloque se parezca al PDF.
+		wp_add_inline_style( 'iwq-pdf-blocks', self::get_editor_css() );
+
 		wp_set_script_translations( 'iwq-pdf-blocks', 'imagina-woo-quotes' );
+	}
+
+	/**
+	 * Reglas de pdf.css que afectan a los bloques, con el prefijo del editor.
+	 *
+	 * Se descartan las reglas de página, cuerpo y encabezados, que en el
+	 * editor pisarían la interfaz de WordPress.
+	 *
+	 * @return string
+	 */
+	private static function get_editor_css() {
+		$css = file_get_contents( IWQ_DIR . 'assets/css/pdf.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+		if ( ! $css ) {
+			return '';
+		}
+
+		$css    = preg_replace( '#/\*.*?\*/#s', '', $css );
+		$output = '';
+
+		foreach ( explode( '}', $css ) as $rule ) {
+			if ( false === strpos( $rule, '{' ) ) {
+				continue;
+			}
+
+			list( $selectors, $body ) = explode( '{', $rule, 2 );
+
+			if ( false === strpos( $selectors, '.iwq-pdf' ) ) {
+				continue;
+			}
+
+			$prefixed = array();
+
+			foreach ( explode( ',', $selectors ) as $selector ) {
+				$prefixed[] = '.editor-styles-wrapper ' . trim( $selector );
+			}
+
+			$output .= implode( ', ', $prefixed ) . '{' . trim( $body ) . '}';
+		}
+
+		return $output;
 	}
 
 	/**

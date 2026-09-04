@@ -5,7 +5,7 @@
  * el plugin no necesita npm, webpack ni un paso de compilación, y el archivo
  * que se publica es exactamente el que se lee en el repositorio.
  */
-( function ( blocks, element, blockEditor, components, i18n ) {
+( function ( blocks, element, blockEditor, components, i18n, ServerSideRender ) {
 	'use strict';
 
 	var el = element.createElement;
@@ -14,6 +14,34 @@
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
 	var ToggleControl = components.ToggleControl;
+
+	/**
+	 * Vista previa real del bloque: el servidor lo pinta con el mismo código
+	 * que genera el PDF, sobre un presupuesto reciente o datos de ejemplo.
+	 *
+	 * @param {string} name       Nombre del bloque con espacio de nombres.
+	 * @param {Object} attributes Atributos actuales.
+	 * @param {string} title      Título del bloque.
+	 * @param {string} help       Texto de ayuda si el bloque no pinta nada.
+	 * @return {Object} Elemento de React.
+	 */
+	function livePreview( name, attributes, title, help ) {
+		return el(
+			'div',
+			{ className: 'iwq-block-live' },
+			el( 'span', { className: 'iwq-block-live__badge' }, __( 'Vista previa con datos de ejemplo', 'imagina-woo-quotes' ) ),
+			el( ServerSideRender, {
+				block: name,
+				attributes: attributes,
+				EmptyResponsePlaceholder: function () {
+					return preview( title, help );
+				},
+				LoadingResponsePlaceholder: function () {
+					return el( 'div', { className: 'iwq-block-live__loading' }, components.Spinner ? el( components.Spinner ) : null );
+				}
+			} )
+		);
+	}
 
 	/**
 	 * Marca de posición que se ve en el editor.
@@ -47,8 +75,8 @@
 			icon: icon,
 			category: 'design',
 			supports: { html: false, multiple: false },
-			edit: function () {
-				return el( 'div', useBlockProps(), preview( title, help ) );
+			edit: function ( props ) {
+				return el( 'div', useBlockProps(), livePreview( 'imagina-quotes/' + name, props.attributes, title, help ) );
 			},
 			save: function () {
 				return null;
@@ -139,7 +167,9 @@
 				el(
 					'div',
 					useBlockProps(),
-					preview(
+					livePreview(
+						'imagina-quotes/quote-table',
+						props.attributes,
 						__( 'Tabla de productos', 'imagina-woo-quotes' ),
 						__( 'Las líneas del presupuesto con cantidades y precios.', 'imagina-woo-quotes' )
 					)
@@ -155,5 +185,6 @@
 	window.wp.element,
 	window.wp.blockEditor,
 	window.wp.components,
-	window.wp.i18n
+	window.wp.i18n,
+	window.wp.serverSideRender
 ) );

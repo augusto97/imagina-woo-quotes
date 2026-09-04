@@ -39,7 +39,125 @@ class IWQ_PDF_Blocks {
 	 * @return IWQ_Quote|null
 	 */
 	private static function quote() {
-		return self::$context;
+		if ( self::$context ) {
+			return self::$context;
+		}
+
+		// En el editor de bloques, WordPress pide cada bloque por la API
+		// REST sin ningún pedido en contexto: se pinta con datos de ejemplo
+		// para que se vea cómo queda el documento.
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' ) ) {
+			return self::get_sample_quote();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Presupuesto en caché para las vistas previas del editor.
+	 *
+	 * @var IWQ_Quote|false|null
+	 */
+	private static $sample = null;
+
+	/**
+	 * Presupuesto con el que se previsualizan los bloques en el editor.
+	 *
+	 * Primero el presupuesto de ejemplo creado desde la vista previa, luego
+	 * el último presupuesto enviado con líneas y, si la tienda no tiene
+	 * ninguno, un pedido en memoria que no se guarda.
+	 *
+	 * @return IWQ_Quote|null
+	 */
+	public static function get_sample_quote() {
+		if ( null !== self::$sample ) {
+			return self::$sample ? self::$sample : null;
+		}
+
+		self::$sample = false;
+
+		$queries = array(
+			array(
+				'status'     => iwq_get_quote_statuses(),
+				'limit'      => 1,
+				'orderby'    => 'date',
+				'order'      => 'DESC',
+				'meta_key'   => '_iwq_sample', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'meta_value' => 'yes', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			),
+			array(
+				'status'  => array( 'iwq-pending', 'iwq-accepted' ),
+				'limit'   => 1,
+				'orderby' => 'date',
+				'order'   => 'DESC',
+			),
+			array(
+				'status'  => iwq_get_quote_statuses(),
+				'limit'   => 1,
+				'orderby' => 'date',
+				'order'   => 'DESC',
+			),
+		);
+
+		foreach ( $queries as $args ) {
+			$orders = wc_get_orders( $args );
+
+			if ( $orders && count( $orders[0]->get_items() ) ) {
+				self::$sample = new IWQ_Quote( $orders[0] );
+				return self::$sample;
+			}
+		}
+
+		self::$sample = self::build_memory_sample();
+
+		return self::$sample ? self::$sample : null;
+	}
+
+	/**
+	 * Pedido de ejemplo en memoria, sin guardar nada en la base de datos.
+	 *
+	 * @return IWQ_Quote|false
+	 */
+	private static function build_memory_sample() {
+		try {
+			$order = new WC_Order();
+			$order->set_billing_first_name( __( 'Ana', 'imagina-woo-quotes' ) );
+			$order->set_billing_last_name( __( 'García', 'imagina-woo-quotes' ) );
+			$order->set_billing_company( __( 'Estudio Ejemplo S.L.', 'imagina-woo-quotes' ) );
+			$order->set_billing_address_1( __( 'Calle Mayor 12, 3.º B', 'imagina-woo-quotes' ) );
+			$order->set_billing_postcode( '28001' );
+			$order->set_billing_city( 'Madrid' );
+			$order->set_billing_country( 'ES' );
+			$order->set_billing_email( 'ana@ejemplo.com' );
+			$order->set_billing_phone( '600 000 000' );
+			$order->set_currency( get_woocommerce_currency() );
+			$order->set_date_created( time() );
+
+			$lines = array(
+				array( __( 'Silla de roble', 'imagina-woo-quotes' ), 4, 120 ),
+				array( __( 'Mesa extensible 180 cm', 'imagina-woo-quotes' ), 1, 650 ),
+			);
+
+			foreach ( $lines as $line ) {
+				$item = new WC_Order_Item_Product();
+				$item->set_name( $line[0] );
+				$item->set_quantity( $line[1] );
+				$item->set_subtotal( $line[1] * $line[2] );
+				$item->set_total( $line[1] * $line[2] * 0.9 );
+				$order->add_item( $item );
+			}
+
+			$order->set_status( 'iwq-pending' );
+			$order->update_meta_data( IWQ_Quote::META_IS_QUOTE, 'yes' );
+			$order->update_meta_data( IWQ_Quote::META_PRICES_VISIBLE, 'yes' );
+			$order->update_meta_data( IWQ_Quote::META_EXPIRY, gmdate( 'Y-m-d', time() + 15 * DAY_IN_SECONDS ) );
+			$order->update_meta_data( IWQ_Quote::META_FORM_DATA, array( 'message' => __( 'Necesitamos amueblar una sala de reuniones. ¿Podéis entregarlo antes de fin de mes?', 'imagina-woo-quotes' ) ) );
+			$order->calculate_totals( false );
+
+			return new IWQ_Quote( $order );
+		} catch ( \Throwable $e ) {
+			return false;
+		}
 	}
 
 	/**
