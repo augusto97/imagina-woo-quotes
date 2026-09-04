@@ -100,6 +100,13 @@ en las páginas que los necesitan.
   script. El guardado usa la API de ajustes de WordPress con nonce,
   capacidad `manage_woocommerce` y saneado por campo
 
+## Manual de uso
+
+La guía para clientes está en [`docs/manual.html`](docs/manual.html): un
+archivo HTML autónomo que se puede abrir en el navegador o subir a cualquier
+servidor. Explica el flujo completo, lo que ve el cliente, cada pestaña de
+ajustes, los bloques y shortcodes, y las preguntas frecuentes.
+
 ## Requisitos
 
 - WordPress 6.4 o superior

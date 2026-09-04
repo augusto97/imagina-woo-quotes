@@ -1,0 +1,694 @@
+<title>Manual de Imagina Woo Quotes</title>
+<meta name="description" content="Guía completa para usar y configurar el plugin de presupuestos Imagina Woo Quotes para WooCommerce.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+	:root {
+		--paper: #fbfaf7;
+		--surface: #ffffff;
+		--surface-2: #f2f0ea;
+		--ink: #1b2233;
+		--ink-2: #4c5563;
+		--ink-3: #7c8492;
+		--line: #e3e1da;
+		--line-2: #cfccc3;
+		--accent: #1f5fd1;
+		--accent-ink: #ffffff;
+		--accent-soft: #e6eefc;
+		--ok: #0f7a4f;
+		--ok-soft: #e2f4ec;
+		--warn: #a05a00;
+		--warn-soft: #fbefdc;
+		--st-new: #3730a3;
+		--st-pending: #92400e;
+		--st-accepted: #065f46;
+		--st-rejected: #991b1b;
+		--st-expired: #4b5563;
+		--code-bg: #eef0f4;
+		--shadow: 0 1px 2px rgba(27, 34, 51, 0.05), 0 10px 30px rgba(27, 34, 51, 0.06);
+		--display: "Sora", "Segoe UI", system-ui, sans-serif;
+		--body: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+		--mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+		color-scheme: light;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme="light"]) {
+			--paper: #12161e;
+			--surface: #1a202b;
+			--surface-2: #222937;
+			--ink: #e7e9ee;
+			--ink-2: #b4bac6;
+			--ink-3: #7f8797;
+			--line: #2c3442;
+			--line-2: #3d4655;
+			--accent: #6e9cf5;
+			--accent-ink: #0d1424;
+			--accent-soft: #1d2b46;
+			--ok: #4fc48d;
+			--ok-soft: #14301f;
+			--warn: #f0b35a;
+			--warn-soft: #3a2a10;
+			--st-new: #a5a0f0;
+			--st-pending: #f0b35a;
+			--st-accepted: #4fc48d;
+			--st-rejected: #f08a8a;
+			--st-expired: #9aa3b2;
+			--code-bg: #0f131a;
+			--shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
+			color-scheme: dark;
+		}
+	}
+	:root[data-theme="dark"] {
+		--paper: #12161e;
+		--surface: #1a202b;
+		--surface-2: #222937;
+		--ink: #e7e9ee;
+		--ink-2: #b4bac6;
+		--ink-3: #7f8797;
+		--line: #2c3442;
+		--line-2: #3d4655;
+		--accent: #6e9cf5;
+		--accent-ink: #0d1424;
+		--accent-soft: #1d2b46;
+		--ok: #4fc48d;
+		--ok-soft: #14301f;
+		--warn: #f0b35a;
+		--warn-soft: #3a2a10;
+		--st-new: #a5a0f0;
+		--st-pending: #f0b35a;
+		--st-accepted: #4fc48d;
+		--st-rejected: #f08a8a;
+		--st-expired: #9aa3b2;
+		--code-bg: #0f131a;
+		--shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
+		color-scheme: dark;
+	}
+
+	* { box-sizing: border-box; }
+	html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+	@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+	body {
+		margin: 0;
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--body);
+		font-size: 17px;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+	a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+	a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+	h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); text-wrap: balance; letter-spacing: -0.01em; line-height: 1.2; }
+	h1 { font-size: 2.4rem; font-weight: 700; margin: 0 0 0.4rem; }
+	h2 { font-size: 1.7rem; font-weight: 600; margin: 3.2rem 0 1rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+	h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+	h3 { font-size: 1.2rem; font-weight: 600; margin: 2rem 0 0.6rem; }
+	h4 { font-size: 1rem; font-weight: 600; margin: 1.4rem 0 0.4rem; }
+	p, ul, ol { margin: 0 0 1rem; }
+	li { margin: 0.25rem 0; }
+	p, li { max-width: 68ch; }
+	strong { font-weight: 600; }
+	code, kbd {
+		font-family: var(--mono);
+		font-size: 0.86em;
+		background: var(--code-bg);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+		color: var(--ink);
+	}
+	pre {
+		background: var(--code-bg);
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		padding: 14px 16px;
+		overflow-x: auto;
+		font-family: var(--mono);
+		font-size: 0.86rem;
+		line-height: 1.55;
+		margin: 0 0 1rem;
+	}
+	pre code { background: transparent; padding: 0; font-size: inherit; }
+
+	/* Cabecera */
+	.masthead {
+		border-bottom: 1px solid var(--line);
+		background: var(--surface);
+	}
+	.masthead__inner {
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 40px 28px 30px;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 24px;
+		align-items: end;
+	}
+	.eyebrow {
+		font-family: var(--display);
+		font-size: 0.74rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-3);
+		margin: 0 0 10px;
+	}
+	.masthead p.lead { font-size: 1.15rem; color: var(--ink-2); margin: 0.4rem 0 0; max-width: 60ch; }
+	.masthead__meta {
+		display: grid;
+		gap: 6px;
+		font-size: 0.9rem;
+		color: var(--ink-2);
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.masthead__meta b { font-family: var(--display); font-weight: 600; color: var(--ink); }
+
+	/* Disposición */
+	.layout {
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 0 28px 80px;
+		display: grid;
+		grid-template-columns: 250px minmax(0, 1fr);
+		gap: 56px;
+		align-items: start;
+	}
+	.toc {
+		position: sticky;
+		top: 20px;
+		padding: 20px 0;
+		font-size: 0.92rem;
+		max-height: calc(100vh - 40px);
+		overflow-y: auto;
+	}
+	.toc__title {
+		font-family: var(--display);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-3);
+		margin: 0 0 10px;
+	}
+	.toc ol { list-style: none; margin: 0 0 18px; padding: 0; }
+	.toc li { margin: 0; }
+	.toc a {
+		display: block;
+		padding: 5px 10px;
+		border-left: 2px solid var(--line);
+		color: var(--ink-2);
+		text-decoration: none;
+	}
+	.toc a:hover { color: var(--ink); border-color: var(--line-2); }
+	.toc ol ol a { padding-left: 22px; font-size: 0.86rem; }
+	main { padding-top: 36px; }
+	@media (max-width: 900px) {
+		.masthead__inner { grid-template-columns: 1fr; }
+		.masthead__meta { text-align: left; }
+		.layout { grid-template-columns: 1fr; gap: 0; }
+		.toc { position: static; max-height: none; border-bottom: 1px solid var(--line); }
+		.toc ol { columns: 2; column-gap: 24px; }
+		.toc ol ol { columns: 1; }
+	}
+
+	/* Piezas */
+	.note {
+		border-left: 3px solid var(--accent);
+		background: var(--accent-soft);
+		padding: 12px 16px;
+		border-radius: 0 8px 8px 0;
+		margin: 0 0 1.2rem;
+	}
+	.note--warn { border-color: var(--warn); background: var(--warn-soft); }
+	.note--ok { border-color: var(--ok); background: var(--ok-soft); }
+	.note p:last-child { margin-bottom: 0; }
+	.path { font-family: var(--display); font-size: 0.86em; font-weight: 600; color: var(--ink-2); }
+	.path span { color: var(--ink-3); padding: 0 0.3em; }
+
+	.table-wrap { overflow-x: auto; margin: 0 0 1.4rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+	table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+	th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+	th {
+		font-family: var(--display);
+		font-size: 0.74rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-3);
+		background: var(--surface-2);
+	}
+	tr:last-child td { border-bottom: 0; }
+	td:first-child { font-weight: 600; white-space: nowrap; }
+	td code { white-space: nowrap; }
+
+	.steps { counter-reset: step; list-style: none; padding: 0; margin: 0 0 1.4rem; }
+	.steps > li {
+		counter-increment: step;
+		position: relative;
+		padding: 0 0 18px 48px;
+		max-width: none;
+	}
+	.steps > li::before {
+		content: counter(step);
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: var(--accent);
+		color: var(--accent-ink);
+		font-family: var(--display);
+		font-weight: 600;
+		font-size: 0.9rem;
+		display: grid;
+		place-items: center;
+	}
+	.steps > li > strong { display: block; font-family: var(--display); font-weight: 600; margin-bottom: 2px; }
+
+	.flow {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 10px;
+		margin: 0 0 1.4rem;
+	}
+	.flow__step {
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		padding: 14px 14px 12px;
+		box-shadow: var(--shadow);
+		position: relative;
+	}
+	.flow__step::after {
+		content: "";
+		position: absolute;
+		right: -8px;
+		top: 50%;
+		width: 12px;
+		height: 12px;
+		border-top: 1px solid var(--line-2);
+		border-right: 1px solid var(--line-2);
+		transform: translateY(-50%) rotate(45deg);
+		background: var(--paper);
+	}
+	.flow__step:last-child::after { display: none; }
+	.flow__who { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-family: var(--display); font-weight: 600; }
+	.flow__step p { font-size: 0.9rem; color: var(--ink-2); margin: 6px 0 0; line-height: 1.4; }
+	@media (max-width: 900px) { .flow { grid-template-columns: 1fr 1fr; } .flow__step::after { display: none; } }
+
+	.pill {
+		display: inline-block;
+		padding: 2px 10px;
+		border-radius: 999px;
+		font-family: var(--display);
+		font-size: 0.78rem;
+		font-weight: 600;
+		white-space: nowrap;
+		border: 1px solid currentColor;
+		background: transparent;
+	}
+	.pill--new { color: var(--st-new); }
+	.pill--pending { color: var(--st-pending); }
+	.pill--accepted { color: var(--st-accepted); }
+	.pill--rejected { color: var(--st-rejected); }
+	.pill--expired { color: var(--st-expired); }
+	.pill--sale { color: var(--ok); }
+
+	.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 0 0 1.4rem; }
+	.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+	.card h4 { margin: 0 0 6px; }
+	.card p { font-size: 0.95rem; color: var(--ink-2); margin: 0; }
+	.card p + p { margin-top: 6px; }
+
+	dl.faq { margin: 0 0 1.4rem; }
+	dl.faq dt { font-family: var(--display); font-weight: 600; margin: 1.1rem 0 0.3rem; }
+	dl.faq dd { margin: 0; max-width: 68ch; color: var(--ink-2); }
+
+	footer.colophon { max-width: 1180px; margin: 0 auto; padding: 0 28px 60px; color: var(--ink-3); font-size: 0.9rem; }
+</style>
+
+<header class="masthead">
+	<div class="masthead__inner">
+		<div>
+			<p class="eyebrow">Manual de uso</p>
+			<h1>Imagina Woo Quotes</h1>
+			<p class="lead">Solicitud de presupuestos para WooCommerce. Esta guía explica cómo funciona de principio a fin, qué ve el cliente y qué hace cada ajuste.</p>
+		</div>
+		<div class="masthead__meta">
+			<div>Versión del manual <b>1.11</b></div>
+			<div>Requiere <b>WordPress 6.4</b> · <b>WooCommerce 8.0</b> · <b>PHP 8.1</b></div>
+		</div>
+	</div>
+</header>
+
+<div class="layout">
+	<nav class="toc" aria-label="Índice">
+		<p class="toc__title">Índice</p>
+		<ol>
+			<li><a href="#que-es">Qué es y cómo funciona</a></li>
+			<li><a href="#instalacion">Instalación y puesta en marcha</a></li>
+			<li><a href="#cliente">Lo que ve el cliente</a></li>
+			<li><a href="#gestion">Gestionar un presupuesto</a>
+				<ol>
+					<li><a href="#estados">Estados</a></li>
+					<li><a href="#enviar">Valorar y enviar</a></li>
+					<li><a href="#negociar">Contraofertas y vencimiento</a></li>
+				</ol>
+			</li>
+			<li><a href="#emails">Emails</a></li>
+			<li><a href="#pdf">PDF y plantillas</a></li>
+			<li><a href="#formulario">Formulario</a></li>
+			<li><a href="#catalogo">Botones, precios y reglas</a></li>
+			<li><a href="#diseno">Diseño</a></li>
+			<li><a href="#informes">Informes y Analytics</a></li>
+			<li><a href="#bloques">Bloques y shortcodes</a></li>
+			<li><a href="#ajustes">Referencia de ajustes</a></li>
+			<li><a href="#faq">Preguntas frecuentes</a></li>
+			<li><a href="#avanzado">Para desarrolladores</a></li>
+		</ol>
+	</nav>
+
+	<main>
+
+		<h2 id="que-es">Qué es y cómo funciona</h2>
+		<p>Imagina Woo Quotes añade a tu tienda un botón <strong>«Solicitar presupuesto»</strong>. El cliente reúne productos en una lista, rellena un formulario y lo envía. Tú recibes la solicitud como un pedido de WooCommerce con estado propio, pones los precios, la envías con un PDF adjunto y el cliente la acepta y paga desde el mismo correo. Nada se vende hasta que el cliente paga.</p>
+		<div class="flow" aria-label="Flujo de un presupuesto">
+			<div class="flow__step"><span class="flow__who">Cliente</span><p>Añade productos y envía el formulario.</p></div>
+			<div class="flow__step"><span class="flow__who">Tienda</span><p>Recibe la solicitud como pedido «Presupuesto solicitado».</p></div>
+			<div class="flow__step"><span class="flow__who">Tienda</span><p>Ajusta precios y pulsa «Enviar el presupuesto al cliente».</p></div>
+			<div class="flow__step"><span class="flow__who">Cliente</span><p>Recibe el email con el PDF y acepta, rechaza o contraoferta.</p></div>
+			<div class="flow__step"><span class="flow__who">Cliente</span><p>Paga el pedido. Pasa a «Procesando» y ya es una venta.</p></div>
+		</div>
+		<p>Todo vive dentro de WooCommerce: los presupuestos son pedidos, los emails son emails de WooCommerce y las plantillas de PDF se editan con el editor de bloques. No hay tablas ni pantallas ajenas que aprender.</p>
+
+		<h2 id="instalacion">Instalación y puesta en marcha</h2>
+		<ol class="steps">
+			<li><strong>Instala el plugin</strong> En <span class="path">Plugins<span>›</span>Añadir nuevo<span>›</span>Subir plugin</span>, elige <code>imagina-woo-quotes.zip</code> y actívalo. WooCommerce debe estar activo. El zip ya incluye la librería de PDF; no hace falta instalar nada más en el servidor.</li>
+			<li><strong>Comprueba la página de solicitud</strong> Al activarse, el plugin crea la página «Solicitar presupuesto» con el bloque «Lista de presupuesto». Si prefieres otra página, ponle ese bloque o el shortcode <code>[iwq_quote_list]</code> y elígela en <span class="path">WooCommerce<span>›</span>Presupuestos<span>›</span>General</span>.</li>
+			<li><strong>Revisa la lista de puesta en marcha</strong> La pestaña <span class="path">Presupuestos<span>›</span>Inicio</span> muestra qué falta: sistema activo, página publicada, PDF disponible, plantilla elegida, aviso de nueva solicitud y protección contra spam. Cada punto pendiente enlaza a su ajuste.</li>
+			<li><strong>Elige diseño de emails y PDF</strong> En <span class="path">Emails</span> escoge uno de los tres diseños y tu logotipo; en <span class="path">PDF</span> la plantilla, el logotipo y el tamaño de papel. Compruébalo todo en <span class="path">Vista previa</span> sin enviar nada.</li>
+			<li><strong>Haz una prueba completa</strong> Entra en la tienda, pide presupuesto de un producto, envíalo y gestiónalo desde <span class="path">WooCommerce<span>›</span>Pedidos</span>. En dos minutos habrás visto el flujo entero.</li>
+		</ol>
+		<div class="note">
+			<p><strong>Actualizar</strong> Sube el zip nuevo desde <span class="path">Plugins<span>›</span>Añadir nuevo<span>›</span>Subir plugin</span> y elige «Reemplazar el actual». Los ajustes, los presupuestos y las plantillas se conservan.</p>
+		</div>
+
+		<h2 id="cliente">Lo que ve el cliente</h2>
+		<h3>El botón</h3>
+		<p>Aparece en la ficha de producto, debajo o encima del botón de compra según prefieras, y opcionalmente en el catálogo y en el carrito. En productos variables, el cliente elige primero la variación. Cuando un producto ya está en la lista, el botón cambia su texto y lleva a la página de solicitud.</p>
+		<h3>El panel lateral</h3>
+		<p>Al añadir un producto se abre un panel con la lista, en el mismo estilo que el mini carrito de WooCommerce: imagen, nombre, precio de catálogo, control de cantidad con más y menos, papelera, subtotal orientativo y dos botones: seguir viendo productos o ir a la solicitud. Puedes cambiar su lado, ancho, textos, colores y densidad en <span class="path">Diseño<span>›</span>Panel lateral</span>.</p>
+		<h3>La página de solicitud</h3>
+		<p>Muestra la lista de productos con la misma tabla que el carrito de WooCommerce (cantidad, subtotal y total) y el formulario. Puede ir en una columna o en dos. Al enviar, el cliente ve un mensaje de confirmación o se le lleva a la página de agradecimiento que hayas elegido. El formulario se envía sin recargar la página y marca los errores junto a cada campo.</p>
+		<h3>Mi cuenta</h3>
+		<p>Los clientes registrados tienen una sección <strong>«Presupuestos»</strong> en Mi cuenta con todos los suyos: número, fecha, estado y total. Dentro de cada uno pueden descargar el PDF, aceptar, rechazar o proponer otro precio, y ver la conversación con la tienda. Los visitantes sin cuenta gestionan todo desde los enlaces del email.</p>
+		<h3>Aceptar y pagar</h3>
+		<p>El email «Presupuesto enviado» y el PDF llevan enlaces firmados de aceptar y rechazar, válidos solo para ese presupuesto. Al aceptar, el cliente va a la página de pago de WooCommerce con los métodos de pago de tu tienda. Puedes desactivar la redirección al pago si prefieres cobrar de otra forma.</p>
+
+		<h2 id="gestion">Gestionar un presupuesto</h2>
+		<p>Cada presupuesto es un pedido en <span class="path">WooCommerce<span>›</span>Pedidos</span>. Ahí tienes las líneas, el cliente, las notas y el historial, más dos cajas del plugin: <strong>Presupuesto</strong> (vencimiento, plantilla de PDF, botón «Ver el PDF» y la conversación con el cliente) y <strong>Datos de la solicitud</strong> (las respuestas del formulario y los archivos adjuntos).</p>
+
+		<h3 id="estados">Estados</h3>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>Estado</th><th>Qué significa</th><th>Qué puedes hacer</th></tr></thead>
+				<tbody>
+					<tr><td><span class="pill pill--new">Presupuesto solicitado</span></td><td>Acaba de llegar. Tiene los precios de catálogo como importe orientativo.</td><td>Editar líneas y precios, y enviarlo.</td></tr>
+					<tr><td><span class="pill pill--pending">Presupuesto enviado</span></td><td>El cliente tiene el email con el PDF y los enlaces. Cuenta la validez.</td><td>Reenviarlo si cambias algo, responder a contraofertas, aceptar o rechazar en su nombre.</td></tr>
+					<tr><td><span class="pill pill--accepted">Presupuesto aceptado</span></td><td>El cliente aceptó. Falta el pago.</td><td>Esperar el pago o marcarlo como pagado si cobras fuera.</td></tr>
+					<tr><td><span class="pill pill--rejected">Presupuesto rechazado</span></td><td>El cliente lo rechazó, con motivo opcional en las notas.</td><td>Editar y volver a enviarlo con otra propuesta.</td></tr>
+					<tr><td><span class="pill pill--expired">Presupuesto vencido</span></td><td>Pasó la fecha de validez sin respuesta.</td><td>Ampliar la validez y reenviarlo.</td></tr>
+					<tr><td><span class="pill pill--sale">Procesando / Completado</span></td><td>Pagado. Ya es un pedido normal de WooCommerce y cuenta como venta.</td><td>Lo habitual: preparar, enviar, completar.</td></tr>
+				</tbody>
+			</table>
+		</div>
+
+		<h3 id="enviar">Valorar y enviar</h3>
+		<ol class="steps">
+			<li><strong>Abre el pedido</strong> Desde <span class="path">Pedidos</span>, filtrando por «Presupuesto solicitado», o desde los accesos de <span class="path">Presupuestos<span>›</span>Inicio</span>.</li>
+			<li><strong>Ajusta las líneas</strong> Cambia precios, cantidades, añade o quita productos y aplica descuentos como en cualquier pedido. Mientras el presupuesto está solicitado, enviado o vencido, las líneas siguen editables.</li>
+			<li><strong>Elige el vencimiento y la plantilla</strong> En la caja «Presupuesto» puedes fijar la fecha de vencimiento (vacía para que no venza) y una plantilla de PDF distinta de la general.</li>
+			<li><strong>Envíalo</strong> En «Acciones del pedido» elige <strong>«Enviar el presupuesto al cliente»</strong> y pulsa el botón de aplicar. El plugin recalcula totales, fija la validez, genera el PDF definitivo, pasa el pedido a «Presupuesto enviado» y manda el email.</li>
+		</ol>
+		<div class="note note--warn">
+			<p><strong>Cambiar el estado a mano no envía el correo.</strong> Si eliges «Presupuesto enviado» en el desplegable de estado, el pedido cambia pero el cliente no recibe nada. El envío siempre va por la acción «Enviar el presupuesto al cliente». Así un cambio de estado accidental nunca dispara un email.</p>
+		</div>
+		<p>Si el presupuesto mejora el precio de catálogo, el email y el PDF muestran el precio original tachado. Puedes regenerar el PDF en cualquier momento con la acción «Regenerar el PDF».</p>
+
+		<h3 id="negociar">Contraofertas y vencimiento</h3>
+		<p>Con las contraofertas activadas, el cliente puede proponer otro importe desde Mi cuenta o desde el enlace del email, con un comentario. Recibes el email «Contraoferta del cliente» y en la caja «Presupuesto» aparece la propuesta con la conversación completa. Puedes responder con un mensaje, ajustar las líneas y reenviar el presupuesto, o aceptar en nombre del cliente.</p>
+		<p>La validez se calcula al enviar a partir de los «Días de validez». Un proceso diario, a las tres de la madrugada, marca como vencidos los presupuestos que pasaron su fecha y envía el recordatorio con la antelación que hayas configurado. Reenviar un presupuesto vencido lo devuelve a «enviado» con una validez nueva.</p>
+
+		<h2 id="emails">Emails</h2>
+		<p>Son seis emails de WooCommerce. Se activan, desactivan y personalizan (asunto, destinatario) en <span class="path">WooCommerce<span>›</span>Ajustes<span>›</span>Emails</span>, como el resto. Su diseño se elige una vez para todos en <span class="path">Presupuestos<span>›</span>Emails</span>.</p>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>Email</th><th>Para</th><th>Cuándo se envía</th><th>PDF</th></tr></thead>
+				<tbody>
+					<tr><td>Nueva solicitud de presupuesto</td><td>Administrador</td><td>Al llegar una solicitud.</td><td>Sí</td></tr>
+					<tr><td>Solicitud recibida</td><td>Cliente</td><td>Al llegar una solicitud, como confirmación.</td><td>Sí</td></tr>
+					<tr><td>Presupuesto enviado</td><td>Cliente</td><td>Al usar «Enviar el presupuesto al cliente». Lleva los botones de aceptar y rechazar.</td><td>Sí</td></tr>
+					<tr><td>Respuesta del cliente</td><td>Administrador</td><td>Cuando el cliente acepta o rechaza.</td><td>No</td></tr>
+					<tr><td>Contraoferta del cliente</td><td>Administrador</td><td>Cuando el cliente propone otro precio.</td><td>No</td></tr>
+					<tr><td>Recordatorio de vencimiento</td><td>Cliente</td><td>Los días de antelación configurados antes de vencer.</td><td>Sí</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<h3>Diseños</h3>
+		<div class="grid-2">
+			<div class="card"><h4>Moderno</h4><p>Tarjeta blanca con barra de color, resumen destacado y botones grandes. Es el diseño por defecto.</p></div>
+			<div class="card"><h4>Minimalista</h4><p>Texto sobre fondo blanco, sin tarjetas ni colores de fondo. Sobrio y muy legible.</p></div>
+			<div class="card"><h4>Como WooCommerce</h4><p>Usa la cabecera, el pie y los colores configurados en WooCommerce, para encajar con los demás emails de la tienda.</p></div>
+		</div>
+		<h3>Vista previa y pruebas</h3>
+		<p>En <span class="path">Presupuestos<span>›</span>Vista previa</span> eliges un email y un presupuesto y ves exactamente lo que recibe el destinatario: asunto, remitente, adjuntos y contenido, en HTML, texto plano o el PDF adjunto. Si el email está desactivado en WooCommerce, lo avisa. Puedes enviar una prueba a cualquier dirección y, si la tienda aún no tiene presupuestos, crear uno de ejemplo con descuento, validez y contraoferta.</p>
+
+		<h2 id="pdf">PDF y plantillas</h2>
+		<p>Cada presupuesto lleva un PDF que se genera al enviarlo y se adjunta a los emails. El cliente también lo descarga desde Mi cuenta. Se guarda en una carpeta protegida y se regenera solo si el pedido o la plantilla cambian.</p>
+		<h3>Plantillas con bloques</h3>
+		<p>Las plantillas se editan en <span class="path">WooCommerce<span>›</span>Plantillas de PDF</span> con el editor de bloques de WordPress. Puedes tener varias y elegir una por defecto en <span class="path">Presupuestos<span>›</span>PDF</span> o una distinta en cada pedido. Combina texto, encabezados, imágenes y columnas con estos siete bloques del plugin, que en el editor se muestran ya rellenos con datos de un presupuesto real o de ejemplo:</p>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>Bloque</th><th>Qué imprime</th></tr></thead>
+				<tbody>
+					<tr><td>Logotipo de la tienda</td><td>El logo de los ajustes del PDF, o el del tema.</td></tr>
+					<tr><td>Datos del presupuesto</td><td>Número, fecha de la solicitud y fecha de vencimiento.</td></tr>
+					<tr><td>Datos del cliente</td><td>Nombre, empresa, dirección de facturación, email y teléfono.</td></tr>
+					<tr><td>Tabla de productos</td><td>Líneas con cantidades y precios; con opciones para mostrar imágenes y SKU. Respeta los precios ocultos.</td></tr>
+					<tr><td>Totales del presupuesto</td><td>Subtotal, impuestos, envío y total.</td></tr>
+					<tr><td>Respuestas del formulario</td><td>Lo que el cliente escribió al solicitar el presupuesto.</td></tr>
+					<tr><td>Botones de respuesta</td><td>Enlaces para aceptar o rechazar, solo mientras el presupuesto admite respuesta.</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<h3>Marcadores de texto</h3>
+		<p>Dentro de cualquier párrafo o encabezado de la plantilla puedes escribir estos marcadores, que se sustituyen al generar el documento:</p>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>Marcador</th><th>Se sustituye por</th></tr></thead>
+				<tbody>
+					<tr><td><code>{order_number}</code></td><td>Número del presupuesto</td></tr>
+					<tr><td><code>{order_date}</code></td><td>Fecha de la solicitud</td></tr>
+					<tr><td><code>{expiry_date}</code></td><td>Fecha de vencimiento</td></tr>
+					<tr><td><code>{customer_name}</code></td><td>Nombre completo del cliente</td></tr>
+					<tr><td><code>{customer_email}</code></td><td>Email del cliente</td></tr>
+					<tr><td><code>{customer_phone}</code></td><td>Teléfono del cliente</td></tr>
+					<tr><td><code>{company}</code></td><td>Empresa del cliente</td></tr>
+					<tr><td><code>{quote_total}</code></td><td>Importe total</td></tr>
+					<tr><td><code>{quote_status}</code></td><td>Estado del presupuesto</td></tr>
+					<tr><td><code>{accept_url}</code></td><td>Enlace para aceptar</td></tr>
+					<tr><td><code>{reject_url}</code></td><td>Enlace para rechazar</td></tr>
+					<tr><td><code>{site_title}</code></td><td>Nombre de la tienda</td></tr>
+					<tr><td><code>{site_url}</code></td><td>Dirección de la tienda</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p>El nombre del archivo admite <code>{order_number}</code>, <code>{order_id}</code>, <code>{date}</code> y <code>{site_title}</code>. El generador entiende CSS 2.1: tablas, márgenes y colores sí; flexbox y grid no.</p>
+
+		<h2 id="formulario">Formulario</h2>
+		<p>En <span class="path">Presupuestos<span>›</span>Formulario</span> construyes el formulario arrastrando campos. Cada campo tiene etiqueta, tipo, marcador de posición, texto de ayuda, ancho (fila completa, media o un tercio), si es obligatorio y si está activo.</p>
+		<h3>Campos del sistema</h3>
+		<p>Nombre, apellidos, email, teléfono, empresa y mensaje vienen de serie. Puedes renombrarlos y desactivarlos, pero no borrarlos: el email es la forma de contactar al cliente y crear su presupuesto.</p>
+		<h3>Tipos de campo</h3>
+		<p>Texto, email, teléfono, número, área de texto, desplegable, selección múltiple, opción única, casillas, país, provincia o estado, fecha, hora, archivo adjunto, aceptación (casilla obligatoria, útil para la política de privacidad) y encabezado para separar secciones.</p>
+		<h3>Guardar en el pedido como</h3>
+		<p>Cualquier campo puede enlazarse con un dato de facturación del pedido (nombre, apellidos, empresa, email, teléfono, dirección, ciudad, provincia, código postal, país) o con la nota del pedido. Lo que el cliente escriba ahí aparece en el lugar habitual de WooCommerce, y el resto de respuestas en la caja «Datos de la solicitud».</p>
+		<h3>Adjuntos</h3>
+		<p>Los archivos se guardan en una carpeta protegida y solo se descargan desde el admin con un enlace firmado. Por defecto se admiten imágenes, PDF, Office, CSV, TXT, ZIP y planos DWG y DXF; cada campo de archivo puede limitar sus extensiones, y el tamaño máximo se fija en la pestaña.</p>
+		<h3>Protección contra spam</h3>
+		<p>El formulario lleva siempre un límite de solicitudes por hora e IP. Además puedes activar reCAPTCHA v3 (invisible) o v2 (casilla) con tus claves de Google; el script solo se carga en la página del formulario.</p>
+
+		<h2 id="catalogo">Botones, precios y reglas</h2>
+		<h3>Dónde aparece el botón</h3>
+		<p>Ficha de producto (encima o debajo del botón de compra), catálogo y carrito. Al añadir puede abrirse el panel lateral o llevar directamente a la página de solicitud. Los textos del botón se cambian aquí.</p>
+		<h3>Ocultar precios y compra</h3>
+		<p>Puedes ocultar los precios a todos o solo a ciertos roles, sustituyéndolos por un texto como «Precio bajo consulta». También puedes quitar la compra: el producto deja de ser comprable de verdad, no solo se esconde el botón. Un presupuesto de un producto con precio oculto no muestra importes al cliente hasta que tú se los envías.</p>
+		<h3>Reglas</h3>
+		<p>En <span class="path">Presupuestos<span>›</span>Reglas</span> decides el alcance: todo el catálogo o solo lo que incluyas por categorías, etiquetas y productos, con exclusiones por los mismos criterios, condición de stock (solo agotados o solo con stock) y si entran los productos externos y agrupados. En <span class="path">General</span> limitas quién puede pedir presupuesto: visitantes sin cuenta y roles concretos.</p>
+		<h3>Por producto</h3>
+		<p>Cada producto tiene un ajuste «Presupuestos» en su pestaña General: según los ajustes generales, permitir presupuesto, <strong>solo presupuesto</strong> (oculta precio y compra de ese producto) o nunca presupuestar. También verás cuántas veces se ha pedido presupuesto de ese producto, y una columna ordenable en el listado.</p>
+
+		<h2 id="diseno">Diseño</h2>
+		<p>La pestaña <span class="path">Presupuestos<span>›</span>Diseño</span> tiene una vista previa arriba que cambia al instante con cada ajuste, antes de guardar. Los valores vacíos heredan del tema; con los valores por defecto el plugin no añade ninguna hoja de estilos extra.</p>
+		<div class="grid-2">
+			<div class="card"><h4>Colores y forma</h4><p>Color principal y sus variantes, textos, fondos, bordes, redondeo general y modo oscuro automático.</p></div>
+			<div class="card"><h4>Botón</h4><p>Relleno o contorno, tipografía, tamaño, grosor, mayúsculas, relleno, redondeo hasta píldora, sombra y ancho completo; color de los enlaces.</p></div>
+			<div class="card"><h4>Panel lateral</h4><p>Título y contador, densidad de filas, tamaño de letra y miniaturas, lado y ancho, cabecera, velo, subtotal con nota, textos, disposición, tamaño y colores de los dos botones.</p></div>
+			<div class="card"><h4>Página de solicitud</h4><p>Tabla como el carrito o lista compacta, una o dos columnas, ancho en escritorio, reparto y separación de columnas, lista fija al hacer scroll, tarjetas, miniaturas y estilo de los campos.</p></div>
+		</div>
+		<p>Con la tabla tipo carrito y el panel lateral, los botones usan las clases de botón de tu tema, así que se ven como los del carrito sin configurar nada. Para lo que no cubran los ajustes hay un campo de CSS adicional que se imprime solo donde carga el plugin.</p>
+
+		<h2 id="informes">Informes y Analytics</h2>
+		<p>Un presupuesto no es una venta hasta que se paga. Por eso los cinco estados de presupuesto quedan fuera de los informes de WooCommerce y de WooCommerce Analytics, no descuentan stock y no suman en el contador de ventas del producto. Cuando el cliente paga, WooCommerce pasa el pedido a «Procesando» y desde ese momento cuenta como cualquier otro.</p>
+		<p>En <span class="path">Presupuestos<span>›</span>Presupuestos<span>›</span>Informes y listado de pedidos</span> decides dos cosas:</p>
+		<ul>
+			<li><strong>Fecha de la venta.</strong> Al pagarse un presupuesto aceptado, el pedido puede fecharse en el momento del pago (recomendado, así Analytics lo cuenta el día que se vendió) o conservar la fecha de la solicitud. La fecha original queda anotada en el pedido.</li>
+			<li><strong>Vista «Todos» de Pedidos.</strong> Puedes ocultar ahí los presupuestos para que solo aparezcan las ventas; siguen en sus filtros por estado.</li>
+		</ul>
+		<p>Las <span class="path">Estadísticas</span> del plugin muestran, por periodo, cuántas solicitudes entran, cuántas se aceptan, la tasa de aceptación y de respuesta, el valor aceptado, el reparto por estado y los productos más solicitados. Un producto muy solicitado y poco vendido suele avisar de que su precio no está claro.</p>
+
+		<h2 id="bloques">Bloques y shortcodes</h2>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>Elemento</th><th>Bloque</th><th>Shortcode</th><th>Notas</th></tr></thead>
+				<tbody>
+					<tr><td>Lista y formulario</td><td>Lista de presupuesto</td><td><code>[iwq_quote_list]</code></td><td>Admite <code>width="content"</code>, <code>"wide"</code> o <code>"full"</code>. La alineación del bloque en el editor manda sobre el ajuste de ancho.</td></tr>
+					<tr><td>Contador con enlace al panel</td><td>Contador de presupuesto</td><td><code>[iwq_quote_count label="Presupuesto" icon="yes"]</code></td><td>Para cabeceras y menús. Se actualiza sin recargar.</td></tr>
+					<tr><td>Botón de un producto</td><td>—</td><td><code>[iwq_quote_button id="123"]</code></td><td>Para páginas de aterrizaje o contenidos fuera de la ficha.</td></tr>
+				</tbody>
+			</table>
+		</div>
+
+		<h2 id="ajustes">Referencia de ajustes</h2>
+		<p>Todo está en <span class="path">WooCommerce<span>›</span>Presupuestos</span>. Guarda con el botón de la barra inferior o con <kbd>Ctrl</kbd> + <kbd>S</kbd>; la barra avisa si hay cambios sin guardar.</p>
+
+		<h3>General</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Activar los presupuestos</td><td>Apaga el sistema sin desinstalar: desaparecen los botones y la página de solicitud queda vacía.</td></tr>
+				<tr><td>Página de la solicitud</td><td>La página con el bloque «Lista de presupuesto» o el shortcode.</td></tr>
+				<tr><td>Página de agradecimiento</td><td>Opcional. Vacía, el cliente ve el mensaje sin salir de la página.</td></tr>
+				<tr><td>Permitir a visitantes sin cuenta</td><td>Si está apagado, solo los usuarios registrados ven el botón.</td></tr>
+				<tr><td>Limitar a estos roles</td><td>Vacío, todo el mundo. Con roles, solo ellos (y «Visitantes sin cuenta» si lo incluyes).</td></tr>
+				<tr><td>Máximo de solicitudes por hora e IP</td><td>Límite contra el envío masivo. Cero lo desactiva.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>Botones y catálogo</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Texto del botón / cuando ya está añadido</td><td>Los dos textos del botón.</td></tr>
+				<tr><td>Mostrar en la ficha / Posición en la ficha</td><td>Debajo o encima del botón de compra.</td></tr>
+				<tr><td>Mostrar en el catálogo</td><td>Botón en las cuadrículas de productos.</td></tr>
+				<tr><td>Mostrar en el carrito</td><td>Botón para pasar el carrito entero a presupuesto.</td></tr>
+				<tr><td>Abrir el panel al añadir / Ir a la página al añadir</td><td>Qué pasa justo después de añadir.</td></tr>
+				<tr><td>Ocultar precios / Texto en lugar del precio / solo a estos roles</td><td>Sustituye el precio por un texto, para todos o para ciertos roles.</td></tr>
+				<tr><td>Ocultar el botón de compra / solo a estos roles</td><td>El producto deja de ser comprable, para todos o para ciertos roles.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>Presupuestos</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Los presupuestos vencen / Días de validez</td><td>La validez se cuenta desde el envío. Cada pedido puede tener una fecha propia.</td></tr>
+				<tr><td>Enviar recordatorio / Días de antelación</td><td>Email «Recordatorio de vencimiento» al cliente.</td></tr>
+				<tr><td>Permitir contraofertas del cliente</td><td>El cliente puede proponer otro precio en vez de solo aceptar o rechazar.</td></tr>
+				<tr><td>Llevar al pago tras aceptar</td><td>Al aceptar, el cliente va a la página de pago del pedido.</td></tr>
+				<tr><td>Cantidad mínima / máxima por línea</td><td>Cero para no imponer límite.</td></tr>
+				<tr><td>Fecha de la venta</td><td>La del pago (recomendado) o la de la solicitud, al convertirse en pedido.</td></tr>
+				<tr><td>Ocultar los presupuestos de la vista «Todos»</td><td>Solo se ven en sus filtros por estado.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>Formulario</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Campos del formulario</td><td>El constructor: arrastra para ordenar, «Editar» para configurar, «Añadir campo» para crear.</td></tr>
+				<tr><td>Título sobre el formulario / Texto del botón de envío / Mensaje tras enviar</td><td>Los textos de la página de solicitud.</td></tr>
+				<tr><td>Texto de privacidad</td><td>Debajo del formulario. Usa <code>[privacy_policy]</code> para enlazar la política.</td></tr>
+				<tr><td>Mostrar el formulario con la lista vacía</td><td>Permite pedir presupuesto sin productos, solo con el mensaje.</td></tr>
+				<tr><td>Precargar los datos del cliente registrado</td><td>Rellena nombre, email, teléfono y dirección desde su cuenta.</td></tr>
+				<tr><td>reCAPTCHA: activar, versión, claves, puntuación mínima</td><td>Claves de Google reCAPTCHA. En v3, puntuación entre 0 y 1 (0,5 por defecto).</td></tr>
+				<tr><td>Tamaño máximo por archivo (MB)</td><td>Límite de los campos de archivo adjunto.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>PDF</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Generar PDF / Adjuntarlo al email</td><td>Interruptores generales del documento.</td></tr>
+				<tr><td>Plantilla</td><td>La plantilla por defecto; cada pedido puede usar otra.</td></tr>
+				<tr><td>Logotipo</td><td>Vacío, se usa el logo del tema.</td></tr>
+				<tr><td>Nombre del archivo</td><td>Admite <code>{order_number}</code>, <code>{order_id}</code>, <code>{date}</code> y <code>{site_title}</code>.</td></tr>
+				<tr><td>Tamaño / Orientación</td><td>A4, Carta u Oficio; vertical u horizontal.</td></tr>
+				<tr><td>Incluir los enlaces de aceptar y rechazar</td><td>Botones dentro del PDF mientras admite respuesta.</td></tr>
+				<tr><td>Tachar el precio de catálogo si el presupuesto mejora</td><td>Muestra el precio original tachado junto al presupuestado.</td></tr>
+				<tr><td>Pie de página / Texto del pie / CSS adicional</td><td>Pie del documento y estilos extra (CSS 2.1).</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>Emails</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Diseño</td><td>Moderno, Minimalista o Como WooCommerce, para los seis emails.</td></tr>
+				<tr><td>Color de acento</td><td>Botones y barra superior. Vacío: azul, o el color de WooCommerce en el diseño «Como WooCommerce».</td></tr>
+				<tr><td>Logotipo</td><td>Vacío, se usa el del PDF o el del tema.</td></tr>
+				<tr><td>Pie de los emails</td><td>Vacío, nombre y dirección de la tienda.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h3>Reglas</h3>
+		<div class="table-wrap"><table>
+			<thead><tr><th>Ajuste</th><th>Qué hace</th></tr></thead>
+			<tbody>
+				<tr><td>Ofrecer presupuesto en</td><td>Todo el catálogo, o solo lo que indiquen las inclusiones.</td></tr>
+				<tr><td>Según el stock</td><td>Sin condición, solo agotados o solo con stock.</td></tr>
+				<tr><td>Incluir productos externos y agrupados</td><td>Por defecto quedan fuera.</td></tr>
+				<tr><td>Inclusiones / Exclusiones</td><td>Categorías, etiquetas y productos. Las exclusiones ganan a las inclusiones.</td></tr>
+			</tbody>
+		</table></div>
+
+		<h2 id="faq">Preguntas frecuentes</h2>
+		<dl class="faq">
+			<dt>El botón no aparece en un producto</dt>
+			<dd>Revisa, por este orden: que el sistema está activo en General, que el producto no está excluido en Reglas ni marcado como «Nunca presupuestar» en su ficha, la condición de stock, y si el visitante tiene un rol permitido. Los productos externos y agrupados requieren su interruptor en Reglas.</dd>
+			<dt>El cliente no recibe el email del presupuesto</dt>
+			<dd>Comprueba que usaste la acción «Enviar el presupuesto al cliente» y no solo el cambio de estado, que el email «Presupuesto enviado» está activo en <span class="path">WooCommerce<span>›</span>Ajustes<span>›</span>Emails</span>, y que la tienda envía correo (un plugin SMTP ayuda). En <span class="path">Vista previa</span> puedes mandarte una prueba.</dd>
+			<dt>El PDF sale vacío o no se genera</dt>
+			<dd>La pestaña Inicio indica si el generador está disponible. Si instalaste el plugin desde el zip publicado, la librería ya viene incluida. Si el pedido no tiene líneas con precio, la tabla queda vacía; regenera el PDF desde «Acciones del pedido» tras editar.</dd>
+			<dt>Los presupuestos salen en Analytics como ventas</dt>
+			<dd>Desde la versión 1.11 quedan excluidos automáticamente, incluido el histórico. Solo cuentan al pagarse.</dd>
+			<dt>Aparece un aviso de incompatibilidad con características de WooCommerce</dt>
+			<dd>El plugin declara compatibilidad con HPOS, los bloques de carrito y finalizar compra y el editor de productos nuevo. Si otro plugin retrasa la carga de este hasta validar una licencia, WooCommerce no ve la declaración y muestra el aviso; desaparece cuando el plugin carga con normalidad.</dd>
+			<dt>La vista previa del PDF no se ve en Chrome</dt>
+			<dd>Actualiza a la versión 1.9.6 o superior: Chrome no muestra PDF dentro de marcos aislados y el visor se ajustó.</dd>
+			<dt>¿Puedo cambiar los textos que ve el cliente?</dt>
+			<dd>Los del botón, panel, formulario y emails tienen ajuste propio. Para el resto, el plugin está preparado para traducirse con Loco Translate o cualquier herramienta de traducción de WordPress.</dd>
+		</dl>
+
+		<h2 id="avanzado">Para desarrolladores</h2>
+		<p>Todas las plantillas del front, los emails y el PDF se sobreescriben desde el tema copiándolas a <code>tu-tema/imagina-woo-quotes/</code> con la misma ruta relativa. Por ejemplo, el botón vive en <code>quote/add-to-quote-button.php</code> y las partes de los emails en <code>emails/parts/</code>.</p>
+		<p>Los estilos del front se rigen por variables CSS sobre <code>.iwq</code>: <code>--iwq-accent</code>, <code>--iwq-text</code>, <code>--iwq-surface</code>, <code>--iwq-border</code>, <code>--iwq-radius</code>, <code>--iwq-drawer-width</code>, <code>--iwq-col-list</code>, <code>--iwq-col-form</code> y <code>--iwq-col-gap</code>, entre otras. Los ajustes de la pestaña Diseño se traducen a esas variables.</p>
+		<pre><code>// Acciones al cambiar de estado.
+add_action( 'iwq_quote_sent',     function ( $order_id, $quote ) { /* ... */ }, 10, 2 );
+add_action( 'iwq_quote_accepted', function ( $order_id, $quote ) { /* ... */ }, 10, 2 );
+add_action( 'iwq_quote_rejected', function ( $order_id, $quote ) { /* ... */ }, 10, 2 );
+
+// Cargar los assets del plugin también en la portada.
+add_filter( 'iwq_enqueue_assets', fn( $load ) => $load || is_front_page() );
+
+// Ajustar el CSS generado desde la pestaña Diseño.
+add_filter( 'iwq_design_css', fn( $css ) => $css . '.iwq-add-button{letter-spacing:.02em}' );</code></pre>
+		<p>Los presupuestos son objetos <code>IWQ_Quote</code> sobre un <code>WC_Order</code>: <code>send()</code>, <code>accept()</code>, <code>reject()</code>, <code>get_expiry_date()</code>, <code>get_accept_url()</code> y <code>get_form_data()</code> cubren lo habitual. Las peticiones AJAX del front usan los endpoints <code>wc-ajax</code> de WooCommerce con nonce; los enlaces de aceptar y rechazar van firmados y atados a la clave del pedido.</p>
+
+	</main>
+</div>
+
+<footer class="colophon">Imagina Woo Quotes · Manual actualizado para la versión 1.11.0.</footer>
