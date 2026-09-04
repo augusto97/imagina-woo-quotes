@@ -574,7 +574,9 @@
 	padding: 10px 0;
 }
 
-.iwq-drawer--compact .iwq-mini-item__product {
+/* El flex va en un bloque interno: si fuera la propia celda dejaría de
+   ser celda de tabla y cada columna cerraría a su altura. */
+.iwq-drawer--compact .iwq-mini-item__wrap {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;

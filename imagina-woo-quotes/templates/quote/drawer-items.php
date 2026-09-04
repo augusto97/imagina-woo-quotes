@@ -38,6 +38,7 @@ if ( empty( $items ) ) {
 				</td>
 
 				<td class="iwq-mini-item__product">
+					<div class="iwq-mini-item__wrap">
 					<a class="iwq-mini-item__name" href="<?php echo esc_url( $iwq_product->get_permalink() ); ?>"><?php echo esc_html( $iwq_name ); ?></a>
 
 					<?php if ( $iwq_show_price ) : ?>
@@ -72,6 +73,7 @@ if ( empty( $items ) ) {
 								<path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>
 							</svg>
 						</button>
+					</div>
 					</div>
 				</td>
 

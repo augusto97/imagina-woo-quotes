@@ -5,6 +5,14 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.9.2] - 2026-09-03
+
+### Corregido
+- En la densidad compacta del panel lateral, la celda del producto dejaba
+  de ser celda de tabla y cada columna cerraba a su propia altura, con el
+  separador partido en tres trozos. La disposición compacta va ahora en un
+  bloque interno y las tres celdas comparten la altura de la fila
+
 ## [1.9.1] - 2026-09-03
 
 ### Corregido
@@ -251,6 +259,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.2
 [1.9.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.1
 [1.9.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.0
 [1.8.0]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.8.0
