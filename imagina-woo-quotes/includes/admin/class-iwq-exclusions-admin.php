@@ -24,6 +24,20 @@ class IWQ_Exclusions_Admin {
 	}
 
 	/**
+	 * Opciones del selector de modo.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function get_mode_options() {
+		return array(
+			'inherit'  => __( 'Según los ajustes generales', 'imagina-woo-quotes' ),
+			'enabled'  => __( 'Permitir presupuesto', 'imagina-woo-quotes' ),
+			'only'     => __( 'Solo presupuesto', 'imagina-woo-quotes' ),
+			'disabled' => __( 'Nunca presupuestar', 'imagina-woo-quotes' ),
+		);
+	}
+
+	/**
 	 * Pinta el selector de modo.
 	 *
 	 * @return void
@@ -37,12 +51,7 @@ class IWQ_Exclusions_Admin {
 				'label'       => __( 'Presupuestos', 'imagina-woo-quotes' ),
 				'description' => __( '«Solo presupuesto» oculta el precio y el botón de compra de este producto.', 'imagina-woo-quotes' ),
 				'desc_tip'    => true,
-				'options'     => array(
-					'inherit'  => __( 'Según los ajustes generales', 'imagina-woo-quotes' ),
-					'enabled'  => __( 'Permitir presupuesto', 'imagina-woo-quotes' ),
-					'only'     => __( 'Solo presupuesto', 'imagina-woo-quotes' ),
-					'disabled' => __( 'Nunca presupuestar', 'imagina-woo-quotes' ),
-				),
+				'options'     => self::get_mode_options(),
 			)
 		);
 

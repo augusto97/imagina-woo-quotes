@@ -3,7 +3,7 @@
  * Plugin Name: Imagina Woo Quotes
  * Plugin URI:  https://github.com/augusto97/imagina-woo-quotes
  * Description: Permite a los clientes armar una lista de productos y solicitar un presupuesto. El presupuesto se gestiona como un pedido de WooCommerce, con PDF, emails y formulario configurable.
- * Version:     1.9.4
+ * Version:     1.9.5
  * Author:      Imagina
  * Text Domain: imagina-woo-quotes
  * Domain Path: /languages
@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'IWQ_VERSION', '1.9.4' );
+define( 'IWQ_VERSION', '1.9.5' );
 define( 'IWQ_FILE', __FILE__ );
 define( 'IWQ_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IWQ_URL', plugin_dir_url( __FILE__ ) );
@@ -34,8 +34,11 @@ require_once IWQ_DIR . 'includes/iwq-form-functions.php';
 require_once IWQ_DIR . 'includes/iwq-template-functions.php';
 
 /**
- * Declara compatibilidad con HPOS (almacenamiento de pedidos en tablas propias)
- * y con los bloques de carrito/checkout.
+ * Declara compatibilidad con las características de WooCommerce que tratan a
+ * los plugins sin declaración como incompatibles: HPOS (pedidos en tablas
+ * propias), bloques de carrito y finalizar compra, y el editor de productos
+ * nuevo (experimental, retirado en WooCommerce 11): el plugin funciona con él;
+ * el ajuste por producto vive en el editor clásico.
  */
 add_action(
 	'before_woocommerce_init',
@@ -43,8 +46,10 @@ add_action(
 		if ( ! class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			return;
 		}
-		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', IWQ_FILE, true );
-		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', IWQ_FILE, true );
+
+		foreach ( array( 'custom_order_tables', 'cart_checkout_blocks', 'product_block_editor' ) as $iwq_feature ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( $iwq_feature, IWQ_FILE, true );
+		}
 	}
 );
 

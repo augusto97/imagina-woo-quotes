@@ -6,6 +6,15 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.9.5] - 2026-09-04
+
+### Corregido
+- WooCommerce marcaba el plugin como incompatible con sus características
+  activas en las tiendas con el editor de productos nuevo (experimental,
+  retirado en WooCommerce 11), porque no declaraba compatibilidad con él.
+  Ya la declara, junto a HPOS y los bloques de carrito y finalizar compra.
+  El ajuste «Presupuestos» de cada producto sigue en el editor clásico
+
 ## [1.9.4] - 2026-09-03
 
 ### Añadido
@@ -275,6 +284,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.5
 [1.9.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.4
 [1.9.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.3
 [1.9.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.2
