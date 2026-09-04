@@ -453,7 +453,10 @@ class IWQ_Quote {
 	 * Guarda los precios de catálogo del momento de la solicitud.
 	 *
 	 * Sirven para mostrar el precio original tachado cuando el presupuesto
-	 * ofrece un descuento.
+	 * ofrece un descuento. Se guardan con y sin impuestos para compararlos
+	 * siempre en la misma base que el precio presupuestado: si no, en una
+	 * tienda con precios con IVA incluido el precio neto de la línea parecía
+	 * una rebaja del precio de catálogo.
 	 *
 	 * @return void
 	 */
@@ -464,11 +467,47 @@ class IWQ_Quote {
 			$product = $item->get_product();
 
 			if ( $product ) {
-				$prices[ $item_id ] = (float) wc_get_price_to_display( $product );
+				$prices[ $item_id ] = array(
+					'excl' => (float) wc_get_price_excluding_tax( $product ),
+					'incl' => (float) wc_get_price_including_tax( $product ),
+				);
 			}
 		}
 
 		$this->order->update_meta_data( self::META_LIST_PRICES, $prices );
+	}
+
+	/**
+	 * Indica si los importes por línea se muestran con impuestos incluidos.
+	 *
+	 * Sigue el ajuste de WooCommerce «Mostrar precios en el carrito y en el
+	 * pago», el mismo que usan los emails de pedido; los totales del pedido
+	 * desglosan el impuesto en cualquiera de los dos casos.
+	 *
+	 * @return bool
+	 */
+	public static function display_includes_tax() {
+		return wc_tax_enabled() && 'incl' === get_option( 'woocommerce_tax_display_cart' );
+	}
+
+	/**
+	 * Precio unitario presupuestado de una línea, en la base de visualización.
+	 *
+	 * @param WC_Order_Item_Product $item Línea del pedido.
+	 * @return float
+	 */
+	public function get_item_unit_price( $item ) {
+		return (float) $this->order->get_item_total( $item, self::display_includes_tax(), true );
+	}
+
+	/**
+	 * Total presupuestado de una línea, en la base de visualización.
+	 *
+	 * @param WC_Order_Item_Product $item Línea del pedido.
+	 * @return float
+	 */
+	public function get_item_line_total( $item ) {
+		return (float) $this->order->get_line_total( $item, self::display_includes_tax(), true );
 	}
 
 	/**
@@ -501,7 +540,48 @@ class IWQ_Quote {
 	public function get_list_price( $item_id ) {
 		$prices = $this->order->get_meta( self::META_LIST_PRICES );
 
-		return isset( $prices[ $item_id ] ) ? (float) $prices[ $item_id ] : null;
+		if ( ! isset( $prices[ $item_id ] ) ) {
+			return null;
+		}
+
+		if ( is_array( $prices[ $item_id ] ) ) {
+			$basis = self::display_includes_tax() ? 'incl' : 'excl';
+
+			return isset( $prices[ $item_id ][ $basis ] ) ? (float) $prices[ $item_id ][ $basis ] : null;
+		}
+
+		// Solicitudes anteriores a 1.11.5: un solo valor, en la base con la
+		// que la tienda mostraba los precios del catálogo.
+		return (float) $prices[ $item_id ];
+	}
+
+	/**
+	 * Precio de catálogo de una línea solo si el presupuesto lo mejora.
+	 *
+	 * Es el que se muestra tachado junto al precio presupuestado. Compara en
+	 * la misma base (con o sin impuestos) y con un margen de redondeo, para
+	 * que un céntimo de diferencia no aparezca como descuento.
+	 *
+	 * @param int                   $item_id ID de la línea.
+	 * @param WC_Order_Item_Product $item    Línea del pedido.
+	 * @return float|null
+	 */
+	public function get_list_price_if_better( $item_id, $item ) {
+		$list = $this->get_list_price( $item_id );
+
+		if ( ! $list ) {
+			return null;
+		}
+
+		$prices = $this->order->get_meta( self::META_LIST_PRICES );
+		$unit   = $this->get_item_unit_price( $item );
+
+		if ( ! is_array( $prices[ $item_id ] ) ) {
+			// Valor antiguo: se compara en la base del catálogo de entonces.
+			$unit = (float) $this->order->get_item_total( $item, 'incl' === get_option( 'woocommerce_tax_display_shop' ), true );
+		}
+
+		return $list > $unit + 0.005 ? $list : null;
 	}
 
 	/* ---------------------------------------------------------------------

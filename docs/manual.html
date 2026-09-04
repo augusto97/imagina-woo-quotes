@@ -439,7 +439,7 @@
 			<p class="lead">Solicitud de presupuestos para WooCommerce. Esta guía explica cómo funciona de principio a fin, qué ve el cliente y qué hace cada ajuste.</p>
 		</div>
 		<div class="masthead__meta">
-			<div>Versión del manual <b>1.11.4</b></div>
+			<div>Versión del manual <b>1.11.5</b></div>
 			<div>Requiere <b>WordPress 6.4</b> · <b>WooCommerce 8.0</b> · <b>PHP 8.1</b></div>
 			<div class="theme-switch" role="group" aria-label="Tema de la página">
 				<button type="button" data-mode="light" aria-pressed="false">Claro</button>
@@ -558,7 +558,7 @@
 		<div class="note note--warn">
 			<p><strong>Cambiar el estado a mano no envía el correo.</strong> Si eliges «Presupuesto enviado» en el desplegable de estado, el pedido cambia pero el cliente no recibe nada. El envío siempre va por la acción «Enviar el presupuesto al cliente». Así un cambio de estado accidental nunca dispara un email.</p>
 		</div>
-		<p>Si el presupuesto mejora el precio de catálogo, el email y el PDF muestran el precio original tachado. Puedes regenerar el PDF en cualquier momento con la acción «Regenerar el PDF».</p>
+		<p>Si el presupuesto mejora el precio de catálogo, el email y el PDF muestran el precio original tachado. Los precios por línea siguen el ajuste de WooCommerce «Mostrar precios en el carrito y en el pago» (con o sin impuestos), igual que los emails de pedido, y los totales desglosan el impuesto; el precio de catálogo se compara en la misma base, así que en una tienda con precios con IVA incluido no aparece tachado sin motivo. Puedes regenerar el PDF en cualquier momento con la acción «Regenerar el PDF».</p>
 
 		<h3 id="negociar">Contraofertas y vencimiento</h3>
 		<p>Con las contraofertas activadas, el cliente puede proponer otro importe desde Mi cuenta o desde el enlace del email, con un comentario. Recibes el email «Contraoferta del cliente» y en la caja «Presupuesto» aparece la propuesta con la conversación completa. Puedes responder con un mensaje, ajustar las líneas y reenviar el presupuesto, o aceptar en nombre del cliente.</p>
@@ -826,7 +826,7 @@ add_filter( 'iwq_design_css', fn( $css ) => $css . '.iwq-add-button{letter-spaci
 	</main>
 </div>
 
-<footer class="colophon">Imagina Woo Quotes · Manual actualizado para la versión 1.11.4. Las capturas proceden de una tienda de pruebas con WordPress en inglés; el plugin se muestra en español.</footer>
+<footer class="colophon">Imagina Woo Quotes · Manual actualizado para la versión 1.11.5. Las capturas proceden de una tienda de pruebas con WordPress en inglés; el plugin se muestra en español.</footer>
 
 <script>
 (function () {

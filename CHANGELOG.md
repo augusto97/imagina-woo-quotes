@@ -6,6 +6,18 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.5] - 2026-09-04
+
+### Corregido
+- En tiendas con impuestos activos y precios introducidos con IVA incluido,
+  el email y el PDF mostraban el precio de catálogo (con IVA) tachado y al
+  lado el precio de la línea (sin IVA), como si hubiera una rebaja que no
+  existía. Los precios por línea siguen ahora el ajuste de WooCommerce
+  «Mostrar precios en el carrito y en el pago», igual que los emails de
+  pedido, los totales desglosan el impuesto y el precio de catálogo se
+  guarda con y sin impuestos para compararlo siempre en la misma base. El
+  tachado solo aparece cuando el presupuesto mejora de verdad el precio
+
 ## [1.11.4] - 2026-09-04
 
 ### Añadido
@@ -374,6 +386,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.5
 [1.11.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.4
 [1.11.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.3
 [1.11.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.2

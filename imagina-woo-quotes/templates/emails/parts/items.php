@@ -31,8 +31,8 @@ $iwq_args   = array( 'currency' => $order->get_currency() );
 		foreach ( $order->get_items() as $iwq_item_id => $iwq_item ) :
 			$iwq_product = $iwq_item->get_product();
 			$iwq_qty     = $iwq_item->get_quantity();
-			$iwq_unit    = $iwq_qty ? (float) $iwq_item->get_total() / $iwq_qty : 0;
-			$iwq_list    = $quote->get_list_price( $iwq_item_id );
+			$iwq_unit    = $quote->get_item_unit_price( $iwq_item );
+			$iwq_list    = $quote->get_list_price_if_better( $iwq_item_id, $iwq_item );
 			$iwq_thumb   = $iwq_product ? wp_get_attachment_image_url( $iwq_product->get_image_id(), 'thumbnail' ) : '';
 			?>
 			<tr>
@@ -51,12 +51,12 @@ $iwq_args   = array( 'currency' => $order->get_currency() );
 				<td class="iwq-num"><?php echo esc_html( $iwq_qty ); ?></td>
 				<?php if ( $iwq_priced ) : ?>
 					<td class="iwq-num">
-						<?php if ( $iwq_list && $iwq_list > $iwq_unit ) : ?>
+						<?php if ( $iwq_list ) : ?>
 							<del><?php echo wp_kses_post( wc_price( $iwq_list, $iwq_args ) ); ?></del><br>
 						<?php endif; ?>
 						<?php echo wp_kses_post( wc_price( $iwq_unit, $iwq_args ) ); ?>
 					</td>
-					<td class="iwq-num"><?php echo wp_kses_post( wc_price( $iwq_item->get_total(), $iwq_args ) ); ?></td>
+					<td class="iwq-num"><?php echo wp_kses_post( wc_price( $quote->get_item_line_total( $iwq_item ), $iwq_args ) ); ?></td>
 				<?php endif; ?>
 			</tr>
 		<?php endforeach; ?>

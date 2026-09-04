@@ -214,8 +214,7 @@ class IWQ_PDF_Blocks {
 		foreach ( $order->get_items() as $item_id => $item ) {
 			$product    = $item->get_product();
 			$quantity   = $item->get_quantity();
-			$line_total = (float) $item->get_total();
-			$unit       = $quantity ? $line_total / $quantity : 0;
+			$line_total = $quote->get_item_line_total( $item );
 
 			$html .= '<tr><td class="iwq-pdf-table__product">';
 
@@ -239,7 +238,7 @@ class IWQ_PDF_Blocks {
 			$html .= '<td class="iwq-pdf-table__qty">' . esc_html( $quantity ) . '</td>';
 
 			if ( $priced ) {
-				$html .= '<td class="iwq-pdf-table__price">' . self::price( $unit, $order, $quote, $item_id ) . '</td>';
+				$html .= '<td class="iwq-pdf-table__price">' . self::price( $item_id, $item, $order, $quote ) . '</td>';
 				$html .= '<td class="iwq-pdf-table__total">' . wp_kses_post( wc_price( $line_total, array( 'currency' => $order->get_currency() ) ) ) . '</td>';
 			}
 
@@ -250,27 +249,26 @@ class IWQ_PDF_Blocks {
 	}
 
 	/**
-	 * Pinta un precio, tachando el de catálogo si el presupuesto mejora.
+	 * Pinta el precio unitario, tachando el de catálogo si el presupuesto
+	 * mejora. Ambos en la misma base de impuestos.
 	 *
-	 * @param float     $unit    Precio unitario presupuestado.
-	 * @param WC_Order  $order   Pedido.
-	 * @param IWQ_Quote $quote   Presupuesto.
-	 * @param int       $item_id ID de la línea.
+	 * @param int                   $item_id ID de la línea.
+	 * @param WC_Order_Item_Product $item    Línea del pedido.
+	 * @param WC_Order              $order   Pedido.
+	 * @param IWQ_Quote             $quote   Presupuesto.
 	 * @return string
 	 */
-	private static function price( $unit, $order, $quote, $item_id ) {
+	private static function price( $item_id, $item, $order, $quote ) {
 		$args   = array( 'currency' => $order->get_currency() );
-		$actual = wc_price( $unit, $args );
+		$actual = wc_price( $quote->get_item_unit_price( $item ), $args );
 
 		if ( ! iwq_option_enabled( 'pdf_show_strikethrough', true ) ) {
 			return wp_kses_post( $actual );
 		}
 
-		$list = $quote->get_list_price( $item_id );
+		$list = $quote->get_list_price_if_better( $item_id, $item );
 
-		// Solo tiene sentido tachar si el presupuesto realmente mejora el
-		// precio de catálogo.
-		if ( ! $list || $list <= $unit ) {
+		if ( ! $list ) {
 			return wp_kses_post( $actual );
 		}
 
