@@ -794,6 +794,8 @@
 		<dl class="faq">
 			<dt>El botón no aparece en un producto</dt>
 			<dd>Revisa, por este orden: que el sistema está activo en General, que el producto no está excluido en Reglas ni marcado como «Nunca presupuestar» en su ficha, la condición de stock, y si el visitante tiene un rol permitido. Los productos externos y agrupados requieren su interruptor en Reglas.</dd>
+			<dt>El botón aparece en la portada o en un carrusel, pero al pulsarlo no pasa nada</dt>
+			<dd>Desde la versión 1.11.6 el plugin carga su script y sus estilos allí donde se pinta el botón, aunque la página no sea de la tienda: carruseles de otros plugins o del tema, widgets y bloques Colección de productos. Si en una página muy personalizada siguiera sin cargarse, un desarrollador puede forzarlo con el filtro <code>iwq_enqueue_assets</code>.</dd>
 			<dt>El cliente no recibe el email del presupuesto</dt>
 			<dd>Comprueba que usaste la acción «Enviar el presupuesto al cliente» y no solo el cambio de estado, que el email «Presupuesto enviado» está activo en <span class="path">WooCommerce<span>›</span>Ajustes<span>›</span>Emails</span>, y que la tienda envía correo (un plugin SMTP ayuda). En <span class="path">Vista previa</span> puedes mandarte una prueba.</dd>
 			<dt>El PDF sale vacío o no se genera</dt>

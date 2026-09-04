@@ -29,7 +29,7 @@ class IWQ_Assets {
 	 * @return void
 	 */
 	public function enqueue() {
-		if ( ! $this->page_needs_assets() ) {
+		if ( wp_script_is( 'iwq-frontend', 'enqueued' ) || ! $this->page_needs_assets() ) {
 			return;
 		}
 
@@ -103,6 +103,55 @@ class IWQ_Assets {
 	}
 
 	/**
+	 * Encola los assets fuera de wp_enqueue_scripts, cuando la página resulta
+	 * necesitarlos al renderizar. Es seguro llamarla varias veces.
+	 *
+	 * @return void
+	 */
+	public static function ensure() {
+		$assets = IWQ::instance()->get( 'assets' );
+
+		if ( $assets instanceof self ) {
+			$assets->enqueue();
+		}
+	}
+
+	/**
+	 * Indica si el contenido de la página trae productos de WooCommerce:
+	 * bloques de la tienda o sus shortcodes. Sirve para cargar los assets en
+	 * la cabecera, sin parpadeo, en portadas y páginas que no son de tienda.
+	 *
+	 * @return bool
+	 */
+	private function content_has_products() {
+		if ( ! is_singular() ) {
+			return false;
+		}
+
+		$post = get_post();
+
+		if ( ! $post || '' === $post->post_content ) {
+			return false;
+		}
+
+		$content = $post->post_content;
+
+		if ( false !== strpos( $content, '<!-- wp:woocommerce/' ) ) {
+			return true;
+		}
+
+		$shortcodes = array( 'products', 'product', 'product_page', 'product_category', 'product_categories', 'recent_products', 'featured_products', 'sale_products', 'best_selling_products', 'top_rated_products', 'iwq_button', 'iwq_quote_list' );
+
+		foreach ( $shortcodes as $shortcode ) {
+			if ( has_shortcode( $content, $shortcode ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Decide si la página actual puede necesitar los assets.
 	 *
 	 * Se resuelve antes de renderizar, así que es una predicción: preferimos
@@ -120,7 +169,7 @@ class IWQ_Assets {
 			return true;
 		}
 
-		$is_woo_page = is_woocommerce() || is_cart() || is_checkout() || is_account_page();
+		$is_woo_page = is_woocommerce() || is_cart() || is_checkout() || is_account_page() || $this->content_has_products();
 
 		/**
 		 * Filtra si la página actual carga los assets del plugin.

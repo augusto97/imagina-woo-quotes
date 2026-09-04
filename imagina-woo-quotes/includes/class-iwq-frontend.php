@@ -32,6 +32,16 @@ class IWQ_Frontend {
 	private static $rendered_single = array();
 
 	/**
+	 * Producto cuyo botón acaba de salir por el bloque de compra del loop.
+	 *
+	 * En la tienda el bloque y el hook clásico se ejecutan seguidos para el
+	 * mismo producto; con esto el hook no repite el botón.
+	 *
+	 * @var int
+	 */
+	private static $block_rendered_loop = 0;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -52,6 +62,12 @@ class IWQ_Frontend {
 
 		// Catálogo.
 		add_action( 'woocommerce_after_shop_loop_item', array( $this, 'render_loop_button' ), 20 );
+
+		// Bloques Colección de productos y Productos fuera de la tienda (una
+		// portada, una página de destino): WooCommerce solo dispara los hooks
+		// clásicos del loop en las plantillas de archivo, así que el botón se
+		// añade a la salida del bloque de compra de cada producto.
+		add_filter( 'render_block_woocommerce/product-button', array( $this, 'append_to_product_button_block' ), 10, 2 );
 
 		// Ocultación de precio y botón de compra.
 		add_filter( 'woocommerce_get_price_html', array( $this, 'filter_price_html' ), 100, 2 );
@@ -237,7 +253,43 @@ class IWQ_Frontend {
 			return;
 		}
 
+		if ( $product instanceof WC_Product && self::$block_rendered_loop === $product->get_id() ) {
+			self::$block_rendered_loop = 0;
+			return;
+		}
+
 		$this->output_button( $product, 'loop' );
+	}
+
+	/**
+	 * Añade el botón de presupuesto tras el bloque de compra de un producto
+	 * dentro de un loop de bloques (Colección de productos, Productos).
+	 *
+	 * @param string $content Salida del bloque.
+	 * @param array  $block   Bloque analizado.
+	 * @return string
+	 */
+	public function append_to_product_button_block( $content, $block ) {
+		if ( ! iwq_option_enabled( 'show_on_shop', true ) ) {
+			return $content;
+		}
+
+		$post_id = isset( $block['context']['postId'] ) ? (int) $block['context']['postId'] : 0;
+		$product = $post_id ? wc_get_product( $post_id ) : $GLOBALS['product'] ?? null;
+
+		if ( ! $product instanceof WC_Product ) {
+			return $content;
+		}
+
+		$button = $this->get_button_html( $product, 'loop' );
+
+		if ( ! $button ) {
+			return $content;
+		}
+
+		self::$block_rendered_loop = $product->get_id();
+
+		return $content . $button;
 	}
 
 	/**
@@ -250,7 +302,7 @@ class IWQ_Frontend {
 			return;
 		}
 
-		self::$needs_assets = true;
+		self::require_assets();
 
 		iwq_get_template( 'quote/cart-button.php' );
 	}
@@ -270,7 +322,7 @@ class IWQ_Frontend {
 			return $content;
 		}
 
-		self::$needs_assets = true;
+		self::require_assets();
 
 		return $content . '<div class="iwq iwq-cart-actions">' . iwq_get_template( 'quote/cart-button.php', array(), true ) . '</div>';
 	}
@@ -308,7 +360,7 @@ class IWQ_Frontend {
 			self::$rendered_single[ $product->get_id() ] = true;
 		}
 
-		self::$needs_assets = true;
+		self::require_assets();
 
 		// En un producto variable, la variación concreta la elige el usuario:
 		// el front la lee del formulario al pulsar el botón.
@@ -407,6 +459,14 @@ class IWQ_Frontend {
 	 */
 	public static function require_assets() {
 		self::$needs_assets = true;
+
+		// Si el botón aparece donde no se preveía (un carrusel de productos
+		// en la portada, un bloque o widget de otro plugin), la decisión de
+		// wp_enqueue_scripts ya pasó: se encolan ahora y WordPress los
+		// imprime en el pie.
+		if ( did_action( 'wp_enqueue_scripts' ) && ! wp_doing_ajax() ) {
+			IWQ_Assets::ensure();
+		}
 	}
 
 	/**

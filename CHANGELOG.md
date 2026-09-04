@@ -6,6 +6,23 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.6] - 2026-09-04
+
+### Añadido
+- El botón «Solicitar presupuesto» aparece también en los bloques Colección
+  de productos y Productos colocados fuera de la tienda (una portada, una
+  página de destino), donde WooCommerce no dispara los hooks clásicos del
+  catálogo
+
+### Corregido
+- En páginas que no son de tienda (la portada con un carrusel de productos
+  de otro plugin o del tema, un widget en el pie), el botón se pintaba pero
+  al pulsarlo no hacía nada ni se abría el panel: el script y los estilos
+  solo se cargaban en las páginas de WooCommerce. Ahora, si el botón aparece
+  donde no estaba previsto, los assets se cargan en ese momento; y en las
+  páginas cuyo contenido trae bloques o shortcodes de productos se cargan
+  desde la cabecera
+
 ## [1.11.5] - 2026-09-04
 
 ### Corregido
@@ -386,6 +403,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.6
 [1.11.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.5
 [1.11.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.4
 [1.11.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.3
