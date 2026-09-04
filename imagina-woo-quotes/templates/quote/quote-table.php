@@ -34,6 +34,7 @@ foreach ( $items as $iwq_key => $iwq_item ) {
 $iwq_any_price = (bool) array_filter( array_column( $iwq_rows, 'show_price' ) );
 $iwq_columns   = $iwq_any_price ? 6 : 4;
 $iwq_button    = IWQ_Design::get_theme_button_class();
+$iwq_total     = IWQ_Session::get_total_html();
 ?>
 <div class="iwq-cart">
 	<table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents iwq-cart-table" cellspacing="0">
@@ -112,6 +113,13 @@ $iwq_button    = IWQ_Design::get_theme_button_class();
 					<?php endif; ?>
 				</tr>
 			<?php endforeach; ?>
+
+			<?php if ( $iwq_any_price ) : ?>
+				<tr class="iwq-cart-total"<?php echo '' === $iwq_total ? ' hidden' : ''; ?>>
+					<td colspan="<?php echo esc_attr( $iwq_columns - 1 ); ?>" class="product-name iwq-cart-total__label"><?php esc_html_e( 'Total', 'woocommerce' ); ?></td>
+					<td class="product-subtotal iwq-cart-total__value" data-title="<?php esc_attr_e( 'Total', 'woocommerce' ); ?>"><?php echo wp_kses_post( $iwq_total ); ?></td>
+				</tr>
+			<?php endif; ?>
 
 			<tr>
 				<td colspan="<?php echo esc_attr( $iwq_columns ); ?>" class="actions">

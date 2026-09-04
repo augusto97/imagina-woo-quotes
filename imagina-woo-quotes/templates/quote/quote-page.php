@@ -55,6 +55,12 @@ $iwq_button_class = $iwq_woo_style ? IWQ_Design::get_theme_button_class() : 'iwq
 
 				<?php iwq_get_template( 'quote/drawer-content.php', array( 'items' => $items ) ); ?>
 
+				<?php $iwq_total = IWQ_Session::get_total_html(); ?>
+				<p class="iwq-list__total iwq-cart-total"<?php echo '' === $iwq_total ? ' hidden' : ''; ?>>
+					<span><?php esc_html_e( 'Total', 'imagina-woo-quotes' ); ?></span>
+					<strong class="iwq-cart-total__value"><?php echo wp_kses_post( $iwq_total ); ?></strong>
+				</p>
+
 				<p class="iwq-quote-page__tools">
 					<button type="button" class="iwq-clear-list iwq-link-button">
 						<?php esc_html_e( 'Vaciar la lista', 'imagina-woo-quotes' ); ?>

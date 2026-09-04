@@ -173,6 +173,15 @@
 				node.hidden = state.total === '';
 				node.querySelector( '.iwq-drawer__subtotal-value' ).innerHTML = state.total;
 			} );
+
+			// Fila de total de la página de solicitud.
+			document.querySelectorAll( '.iwq-cart-total' ).forEach( function ( node ) {
+				node.hidden = state.total === '';
+			} );
+
+			document.querySelectorAll( '.iwq-cart-total__value' ).forEach( function ( node ) {
+				node.innerHTML = state.total;
+			} );
 		}
 
 		refreshEmptyState( state.count );

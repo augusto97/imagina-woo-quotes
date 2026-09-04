@@ -5,6 +5,13 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
 Los zips instalables de cada versión están en la rama `release`.
 
+## [1.9.4] - 2026-09-03
+
+### Añadido
+- Fila de total al final de la lista de la página de solicitud, en la tabla
+  tipo carrito y en la lista compacta. Se recalcula al cambiar cantidades o
+  quitar productos y desaparece si ningún producto muestra precio
+
 ## [1.9.3] - 2026-09-03
 
 ### Corregido
@@ -267,6 +274,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.4
 [1.9.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.3
 [1.9.2]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.2
 [1.9.1]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.1
