@@ -126,6 +126,24 @@ Para generar un zip instalable:
 ./build.sh
 ```
 
+Si no quieres compilar nada, la rama `release` contiene siempre un único
+`imagina-woo-quotes.zip` con la última versión publicada, listo para subir
+desde **Plugins → Añadir nuevo → Subir plugin**.
+
+### Publicar una versión
+
+```bash
+./bump-version.sh 1.9.5      # cabecera, IWQ_VERSION y sección del CHANGELOG
+git commit -am "Versión 1.9.5" && git tag -a v1.9.5 -m "v1.9.5"
+./build.sh                   # comprueba coherencia y genera zip + SHA-256
+./publish-release.sh         # reemplaza el zip de la rama release
+git push origin <rama> release v1.9.5
+```
+
+La rama `release` guarda solo tres archivos: el zip con nombre fijo, su
+SHA-256 y un README con la versión actual. El historial de cambios vive en
+`CHANGELOG.md` de esta rama.
+
 ## Personalización
 
 **Plantillas.** Cópialas a tu tema bajo `imagina-woo-quotes/`, respetando la

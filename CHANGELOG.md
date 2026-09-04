@@ -3,7 +3,8 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 
-Los zips instalables de cada versión están en la rama `release`.
+El zip instalable de la última versión está en la rama `release`, siempre
+con el nombre `imagina-woo-quotes.zip`.
 
 ## [1.9.4] - 2026-09-03
 
