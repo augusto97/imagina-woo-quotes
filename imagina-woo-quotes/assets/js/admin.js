@@ -137,6 +137,37 @@
 		var $frame = $( '#iwq-preview-iframe' );
 		var $meta = $( '#iwq-preview-meta' );
 		var $result = $( '#iwq-preview-result' );
+		var $previewStatus = $( '#iwq-preview-status' );
+
+		/**
+		 * Mensaje de error legible a partir de una respuesta AJAX fallida.
+		 *
+		 * @param {Object} xhr Respuesta de jQuery.
+		 * @return {string}
+		 */
+		function failureMessage( xhr ) {
+			if ( xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message ) {
+				return xhr.responseJSON.data.message;
+			}
+
+			var code = xhr && xhr.status ? ' (HTTP ' + xhr.status + ')' : '';
+
+			return ( i18n.requestFailed || 'La petición ha fallado' ) + code;
+		}
+
+		/**
+		 * Muestra un aviso junto al botón de ejemplo y como aviso flotante.
+		 *
+		 * @param {string}  message Texto.
+		 * @param {boolean} isError Si es un error.
+		 */
+		function previewNotice( message, isError ) {
+			$previewStatus.text( message ).toggleClass( 'is-error', !! isError );
+
+			if ( typeof toast === 'function' ) {
+				toast( message, isError ? 'error' : 'success' );
+			}
+		}
 
 		function params( extra ) {
 			return $.extend( {
@@ -155,9 +186,17 @@
 
 			$frame.removeAttr( 'srcdoc' );
 
+			// Chrome no muestra PDF dentro de un iframe con sandbox; el HTML
+			// del email sí va aislado.
+			if ( view === 'pdf' ) {
+				$frame.removeAttr( 'sandbox' );
+			} else {
+				$frame.attr( 'sandbox', 'allow-same-origin' );
+			}
+
 			$.getJSON( ajax, params( { action: 'iwq_preview_meta' } ), function ( response ) {
 				if ( ! response.success ) {
-					$result.text( response.data.message );
+					previewNotice( response.data && response.data.message ? response.data.message : failureMessage(), true );
 					return;
 				}
 
@@ -175,10 +214,16 @@
 				$preview.data( 'pdfUrl', d.pdf_url );
 
 				if ( view === 'pdf' ) {
-					$frame.attr( 'src', d.pdf_url || 'about:blank' );
+					if ( d.pdf_url ) {
+						$frame.attr( 'src', d.pdf_url );
+					} else {
+						$frame.attr( 'srcdoc', '<p style="font-family:sans-serif;color:#666;padding:24px">' + ( i18n.noPdf || '' ) + '</p>' );
+					}
 				} else {
 					$frame.attr( 'src', ajax + '?' + $.param( params( { action: 'iwq_preview_email', format: view } ) ) );
 				}
+			} ).fail( function ( xhr ) {
+				previewNotice( failureMessage( xhr ), true );
 			} );
 		}
 
@@ -194,21 +239,29 @@
 		$preview.on( 'click', '#iwq-preview-sample', function () {
 			var $button = $( this ).prop( 'disabled', true );
 
-			$.post( ajax, { action: 'iwq_create_sample', nonce: nonce }, function ( response ) {
-				$button.prop( 'disabled', false );
+			$previewStatus.removeClass( 'is-error' ).text( i18n.creating || '…' );
 
-				if ( ! response.success ) {
-					$result.text( response.data.message );
-					return;
-				}
+			$.post( ajax, { action: 'iwq_create_sample', nonce: nonce } )
+				.done( function ( response ) {
+					if ( ! response.success ) {
+						previewNotice( response.data && response.data.message ? response.data.message : failureMessage(), true );
+						return;
+					}
 
-				$( '#iwq-preview-order' )
-					.find( 'option[value=""]' ).remove().end()
-					.prepend( $( '<option>', { value: response.data.id, text: response.data.label } ) )
-					.val( response.data.id );
+					$( '#iwq-preview-order' )
+						.find( 'option[value=""]' ).remove().end()
+						.prepend( $( '<option>', { value: response.data.id, text: response.data.label } ) )
+						.val( response.data.id );
 
-				refresh();
-			} );
+					previewNotice( i18n.sampleCreated || response.data.label, false );
+					refresh();
+				} )
+				.fail( function ( xhr ) {
+					previewNotice( failureMessage( xhr ), true );
+				} )
+				.always( function () {
+					$button.prop( 'disabled', false );
+				} );
 		} );
 
 		$preview.on( 'click', '#iwq-preview-send', function () {
@@ -216,10 +269,16 @@
 
 			$result.text( i18n.sending );
 
-			$.post( ajax, params( { action: 'iwq_send_test_email', to: $( '#iwq-preview-to' ).val() } ), function ( response ) {
-				$button.prop( 'disabled', false );
-				$result.text( response.data.message );
-			} );
+			$.post( ajax, params( { action: 'iwq_send_test_email', to: $( '#iwq-preview-to' ).val() } ) )
+				.done( function ( response ) {
+					$result.text( response.data && response.data.message ? response.data.message : '' );
+				} )
+				.fail( function ( xhr ) {
+					$result.text( failureMessage( xhr ) );
+				} )
+				.always( function () {
+					$button.prop( 'disabled', false );
+				} );
 		} );
 
 		refresh();

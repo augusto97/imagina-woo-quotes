@@ -6,6 +6,20 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.9.6] - 2026-09-04
+
+### Corregido
+- Vista previa: la pestaña «PDF adjunto» salía en blanco en Chrome con el
+  aviso «Chrome bloqueó esta página», porque el visor de PDF no funciona
+  dentro de un iframe con sandbox. El aislamiento se aplica solo a las
+  vistas de email
+- Vista previa: «Crear presupuesto de ejemplo» parecía no hacer nada cuando
+  la petición fallaba, porque el error solo se escribía en la tarjeta de
+  envío de prueba y una respuesta de servidor con error no se mostraba.
+  Ahora el resultado, bueno o malo, aparece junto al botón y como aviso
+  flotante, y los errores del servidor al crear el ejemplo se devuelven con
+  su mensaje
+
 ## [1.9.5] - 2026-09-04
 
 ### Corregido
@@ -284,6 +298,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.9.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.6
 [1.9.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.5
 [1.9.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.4
 [1.9.3]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.9.3

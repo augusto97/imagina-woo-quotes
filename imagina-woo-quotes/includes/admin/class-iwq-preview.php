@@ -263,6 +263,24 @@ class IWQ_Preview {
 	public function ajax_create_sample() {
 		$this->authorize();
 
+		try {
+			$this->create_sample();
+		} catch ( \Throwable $e ) {
+			wp_send_json_error(
+				array(
+					/* translators: %s: mensaje de error. */
+					'message' => sprintf( __( 'No se pudo crear el ejemplo: %s', 'imagina-woo-quotes' ), $e->getMessage() ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Crea el presupuesto de ejemplo y responde con su ID y etiqueta.
+	 *
+	 * @return void
+	 */
+	private function create_sample() {
 		$candidates = wc_get_products(
 			array(
 				'status'       => 'publish',

@@ -59,6 +59,7 @@ defined( 'ABSPATH' ) || exit;
 					<?php echo IWQ_Admin::icon( 'plus' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<?php esc_html_e( 'Crear presupuesto de ejemplo', 'imagina-woo-quotes' ); ?>
 				</button>
+				<span class="iwq-preview__status" id="iwq-preview-status" role="status" aria-live="polite"></span>
 
 				<span class="iwq-preview__view" role="group" aria-label="<?php esc_attr_e( 'Qué ver', 'imagina-woo-quotes' ); ?>">
 					<button type="button" class="button is-active" data-view="html" aria-pressed="true"><?php esc_html_e( 'Email', 'imagina-woo-quotes' ); ?></button>

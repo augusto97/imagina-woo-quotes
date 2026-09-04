@@ -55,6 +55,17 @@ mkdir -p "$OUT/$SLUG"
 	--exclude='composer.lock' \
 	"$SLUG" ) | ( cd "$OUT" && tar -xf - )
 
+# Ningún archivo PHP del paquete puede tener errores de sintaxis: un zip
+# roto tumba el admin de quien lo instale.
+LINT_ERRORS=0
+while IFS= read -r -d '' PHP_FILE; do
+	if ! php -l "$PHP_FILE" >/dev/null 2>&1; then
+		echo "Error de sintaxis en $PHP_FILE" >&2
+		LINT_ERRORS=$(( LINT_ERRORS + 1 ))
+	fi
+done < <( find "$OUT/$SLUG" -name "*.php" -not -path "*/vendor/*" -print0 )
+[[ "$LINT_ERRORS" -eq 0 ]] || { echo "Abortado: $LINT_ERRORS archivo(s) con errores de sintaxis." >&2; exit 1; }
+
 ( cd "$OUT" && zip -qr "../$SLUG-$VERSION.zip" "$SLUG" -x "*.DS_Store" )
 
 ( cd "$ROOT" && sha256sum "$SLUG-$VERSION.zip" > "$SLUG-$VERSION.zip.sha256" )

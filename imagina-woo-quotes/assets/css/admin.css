@@ -500,6 +500,8 @@ a.iwq-kpi:hover { transform: translateY( -2px ); box-shadow: var( --iwq-shadow-l
 .iwq-preview__test label { font-weight: 600; font-size: 13px; }
 .iwq-preview__test input { max-width: 300px; }
 .iwq-preview__result { color: var( --iwq-text-2 ); font-size: 13px; }
+.iwq-preview__status { align-self: center; color: var( --iwq-text-2 ); font-size: 13px; }
+.iwq-preview__status.is-error { color: var( --iwq-danger ); font-weight: 600; }
 
 /* ---------------------------------------------------------------------
  * Piezas sueltas: avisos, etiquetas, tablas, vacíos
