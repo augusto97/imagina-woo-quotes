@@ -1,12 +1,12 @@
 # Imagina Woo Quotes
 
-**Versión actual: 1.11.5** · 2026-09-04 · 4.7M
+**Versión actual: 1.11.6** · 2026-09-04 · 4.7M
 
 Esta rama contiene únicamente el zip instalable de la última versión, con
 nombre fijo, para que siempre sepas cuál descargar:
 
 - [`imagina-woo-quotes.zip`](imagina-woo-quotes.zip)
-- SHA-256: `b85618111ed4d39551ed2f413acaf0196033f35eb1eeae8f3253b1d64c14f4e8`
+- SHA-256: `be48eeeea06c87a99ed0d5c75f470c0c246f2063a5f7b82ed0b2a75e8474ba74`
 
 ## Instalación
 
