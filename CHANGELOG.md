@@ -6,6 +6,18 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.9] - 2026-09-08
+
+### Corregido
+- El aviso rojo «Connection lost. Saving has been disabled until you are
+  reconnected» seguía apareciendo como aviso flotante en las pestañas del
+  plugin en sitios donde otro plugin (un gestor de avisos, otra versión de
+  WooCommerce) imprime ese aviso oculto en todas las pantallas: la pantalla
+  del plugin convertía en aviso flotante cualquier aviso de error de
+  WordPress, también los ocultos. Ahora solo convierte los avisos de sus
+  propios ajustes (guardado y errores de validación), elimina el del latido
+  y deja los de otros plugins tal como están
+
 ## [1.11.8] - 2026-09-08
 
 ### Cambiado
@@ -425,6 +437,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.9]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.9
 [1.11.8]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.8
 [1.11.7]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.7
 [1.11.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.6

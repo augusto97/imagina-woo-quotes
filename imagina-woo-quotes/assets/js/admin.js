@@ -495,7 +495,23 @@
 	 * aviso flotante; los errores de saneado se quedan visibles en la página.
 	 */
 	function absorbNotices() {
-		var $notices = $app.children( '.notice, .updated' );
+		// El aviso oculto «Connection lost» del latido lo imprimen WooCommerce
+		// y algunos gestores de avisos en cualquier pantalla; aquí no pinta
+		// nada (los ajustes se guardan con un envío normal) y convertido en
+		// aviso flotante parecía un error real.
+		$( '#lost-connection-notice' ).remove();
+
+		var $notices = $app.children( '.notice, .updated' ).filter( function () {
+			var $notice = $( this );
+
+			// Solo los avisos que WordPress imprime por nuestros ajustes; los
+			// ocultos y los de otros plugins se quedan como están.
+			if ( $notice.hasClass( 'hidden' ) || ! $notice.is( ':visible' ) ) {
+				return false;
+			}
+
+			return $notice.hasClass( 'settings-error' ) || $notice.hasClass( 'updated' ) || $notice.attr( 'id' ) === 'setting-error-settings_updated';
+		} );
 
 		$notices.each( function () {
 			var $notice = $( this );
