@@ -6,7 +6,7 @@ Esta rama contiene únicamente el zip instalable de la última versión, con
 nombre fijo, para que siempre sepas cuál descargar:
 
 - [`imagina-woo-quotes.zip`](imagina-woo-quotes.zip)
-- SHA-256: `4638882487676e61db6ae9293691d23b6d769cacf132fcbf0481961835bef8e1`
+- SHA-256: `f12e436c51fb5fb114782f008fa375aaa1e34025388e4bd2cfaa25580578d6a2`
 
 ## Instalación
 
