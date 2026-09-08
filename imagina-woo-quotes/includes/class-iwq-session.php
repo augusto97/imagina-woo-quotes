@@ -44,6 +44,11 @@ class IWQ_Session {
 		add_action( 'wc_ajax_iwq_get_list', array( $this, 'ajax_get_list' ) );
 		add_action( 'wc_ajax_iwq_clear_list', array( $this, 'ajax_clear_list' ) );
 
+		// Con caché de página el HTML puede llevar un nonce ya caducado: el
+		// front pide uno nuevo por aquí (petición que nunca se cachea) y
+		// repite la acción, en vez de decirle al cliente que recargue.
+		add_action( 'wc_ajax_iwq_nonce', array( $this, 'ajax_nonce' ) );
+
 		// Al iniciar sesión, fusionamos la lista de invitado con la guardada.
 		add_action( 'wp_login', array( $this, 'merge_on_login' ), 10, 2 );
 	}
@@ -395,14 +400,44 @@ class IWQ_Session {
 	 * @return void
 	 */
 	private function check_nonce() {
+		self::verify_nonce_or_die();
+	}
+
+	/**
+	 * Rechaza la petición si el nonce no es válido.
+	 *
+	 * El código `nonce` de la respuesta permite al front distinguir un nonce
+	 * caducado (típico de una página servida desde caché) de otros errores,
+	 * renovarlo y reintentar sin molestar al cliente.
+	 *
+	 * @return void
+	 */
+	public static function verify_nonce_or_die() {
 		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'iwq_frontend' ) ) {
+			nocache_headers();
 			wp_send_json_error(
-				array( 'message' => __( 'La sesión caducó. Recarga la página e inténtalo de nuevo.', 'imagina-woo-quotes' ) ),
+				array(
+					'message' => __( 'La sesión caducó. Recarga la página e inténtalo de nuevo.', 'imagina-woo-quotes' ),
+					'code'    => 'nonce',
+				),
 				403
 			);
 		}
+	}
+
+	/**
+	 * AJAX: devuelve un nonce nuevo.
+	 *
+	 * No toca la lista ni requiere nonce previo: solo sirve para que una
+	 * página cacheada pueda seguir funcionando.
+	 *
+	 * @return void
+	 */
+	public function ajax_nonce() {
+		nocache_headers();
+		wp_send_json_success( array( 'nonce' => wp_create_nonce( 'iwq_frontend' ) ) );
 	}
 
 	/**

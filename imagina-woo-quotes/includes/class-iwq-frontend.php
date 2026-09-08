@@ -85,6 +85,33 @@ class IWQ_Frontend {
 
 		// Paso del carrito completo a la lista de presupuesto.
 		add_action( 'template_redirect', array( $this, 'handle_cart_to_quote' ) );
+
+		// La página de solicitud pinta la lista de cada visitante y el
+		// formulario: nunca debe servirse desde caché, como el carrito.
+		add_filter( 'wp_headers', array( $this, 'prevent_caching' ) );
+	}
+
+	/**
+	 * Marca la página de solicitud como no cacheable.
+	 *
+	 * Las constantes las respetan los plugins de caché (WP Rocket, LiteSpeed,
+	 * W3 Total Cache, WP Super Cache…) y las cabeceras, los CDN.
+	 *
+	 * @param array $headers Cabeceras de la respuesta.
+	 * @return array
+	 */
+	public function prevent_caching( $headers ) {
+		if ( ! self::is_quote_page() ) {
+			return $headers;
+		}
+
+		foreach ( array( 'DONOTCACHEPAGE', 'DONOTCACHEOBJECT', 'DONOTCACHEDB' ) as $constant ) {
+			if ( ! defined( $constant ) ) {
+				define( $constant, true );
+			}
+		}
+
+		return array_merge( (array) $headers, wp_get_nocache_headers() );
 	}
 
 	/**

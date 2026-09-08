@@ -39,10 +39,91 @@
 	 * @param {Object} data   Pares clave/valor a enviar.
 	 * @return {Promise<Object>} Cuerpo `data` de la respuesta.
 	 */
+	/**
+	 * Indica si la respuesta es un rechazo por nonce caducado.
+	 *
+	 * @param {Object} json Respuesta del servidor.
+	 * @return {boolean}
+	 */
+	function isStaleNonce( json ) {
+		return !! ( json && ! json.success && json.data && json.data.code === 'nonce' );
+	}
+
+	/**
+	 * Pide un nonce nuevo al servidor.
+	 *
+	 * Una página servida desde caché puede llevar un nonce de hace horas o
+	 * días; en vez de pedir al cliente que recargue, se renueva y se repite
+	 * la acción.
+	 *
+	 * @return {Promise<string>} Nonce nuevo.
+	 */
+	function refreshNonce() {
+		return fetch( endpoint( 'iwq_nonce' ), {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: { 'X-Requested-With': 'XMLHttpRequest' }
+		} )
+			.then( function ( response ) {
+				return response.json();
+			} )
+			.then( function ( json ) {
+				if ( ! json.success || ! json.data || ! json.data.nonce ) {
+					throw new Error( i18n.error );
+				}
+
+				settings.nonce = json.data.nonce;
+
+				return settings.nonce;
+			} );
+	}
+
+	/**
+	 * Envía un FormData al servidor y, si el nonce caducó, lo renueva y
+	 * repite el envío una vez.
+	 *
+	 * @param {string}   action Acción de WooCommerce.
+	 * @param {FormData} body   Cuerpo de la petición.
+	 * @return {Promise<{response: Response, json: Object}>}
+	 */
+	function send( action, body ) {
+		body.set( 'nonce', settings.nonce );
+
+		return fetch( endpoint( action ), {
+			method: 'POST',
+			body: body,
+			credentials: 'same-origin',
+			headers: { 'X-Requested-With': 'XMLHttpRequest' }
+		} )
+			.then( function ( response ) {
+				return response.json().then( function ( json ) {
+					return { response: response, json: json };
+				} );
+			} )
+			.then( function ( result ) {
+				if ( ! isStaleNonce( result.json ) ) {
+					return result;
+				}
+
+				return refreshNonce().then( function () {
+					body.set( 'nonce', settings.nonce );
+
+					return fetch( endpoint( action ), {
+						method: 'POST',
+						body: body,
+						credentials: 'same-origin',
+						headers: { 'X-Requested-With': 'XMLHttpRequest' }
+					} ).then( function ( response ) {
+						return response.json().then( function ( json ) {
+							return { response: response, json: json };
+						} );
+					} );
+				} );
+			} );
+	}
+
 	function post( action, data ) {
 		var body = new FormData();
-
-		body.append( 'nonce', settings.nonce );
 
 		Object.keys( data || {} ).forEach( function ( key ) {
 			var value = data[ key ];
@@ -61,23 +142,17 @@
 			body.append( key, value );
 		} );
 
-		return fetch( endpoint( action ), {
-			method: 'POST',
-			body: body,
-			credentials: 'same-origin',
-			headers: { 'X-Requested-With': 'XMLHttpRequest' }
-		} )
-			.then( function ( response ) {
-				return response.json().then( function ( json ) {
-					if ( ! response.ok || ! json.success ) {
-						var error = new Error( ( json.data && json.data.message ) || i18n.error );
-						error.data = json.data || {};
-						throw error;
-					}
+		return send( action, body ).then( function ( result ) {
+			var json = result.json;
 
-					return json.data;
-				} );
-			} );
+			if ( ! result.response.ok || ! json.success ) {
+				var error = new Error( ( json.data && json.data.message ) || i18n.error );
+				error.data = json.data || {};
+				throw error;
+			}
+
+			return json.data;
+		} );
 	}
 
 	/**
@@ -554,8 +629,6 @@
 		var button = form.querySelector( '[type="submit"]' );
 		var body = new FormData( form );
 
-		body.append( 'nonce', settings.nonce );
-
 		clearFormErrors( form );
 
 		if ( button ) {
@@ -569,17 +642,11 @@
 					body.set( 'iwq_recaptcha_token', token );
 				}
 
-				return fetch( endpoint( 'iwq_submit_request' ), {
-					method: 'POST',
-					body: body,
-					credentials: 'same-origin',
-					headers: { 'X-Requested-With': 'XMLHttpRequest' }
-				} );
+				return send( 'iwq_submit_request', body );
 			} )
-			.then( function ( response ) {
-				return response.json();
-			} )
-			.then( function ( json ) {
+			.then( function ( result ) {
+				var json = result.json;
+
 				if ( ! json.success ) {
 					showFormErrors( form, json.data || {} );
 					return;

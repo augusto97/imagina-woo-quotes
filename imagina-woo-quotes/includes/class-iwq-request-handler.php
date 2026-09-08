@@ -34,11 +34,7 @@ class IWQ_Request_Handler {
 	 * @return void
 	 */
 	public function ajax_submit() {
-		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-
-		if ( ! wp_verify_nonce( $nonce, 'iwq_frontend' ) ) {
-			wp_send_json_error( array( 'message' => __( 'La sesión caducó. Recarga la página e inténtalo de nuevo.', 'imagina-woo-quotes' ) ), 403 );
-		}
+		IWQ_Session::verify_nonce_or_die();
 
 		if ( IWQ_Session::is_empty() ) {
 			wp_send_json_error( array( 'message' => __( 'Tu lista de presupuesto está vacía.', 'imagina-woo-quotes' ) ), 400 );
@@ -402,11 +398,7 @@ class IWQ_Request_Handler {
 	 * @return void
 	 */
 	public function ajax_counter_offer() {
-		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
-
-		if ( ! wp_verify_nonce( $nonce, 'iwq_frontend' ) ) {
-			wp_send_json_error( array( 'message' => __( 'La sesión caducó. Recarga la página.', 'imagina-woo-quotes' ) ), 403 );
-		}
+		IWQ_Session::verify_nonce_or_die();
 
 		if ( ! iwq_option_enabled( 'allow_counter_offers', true ) ) {
 			wp_send_json_error( array( 'message' => __( 'Las contraofertas no están habilitadas.', 'imagina-woo-quotes' ) ), 400 );

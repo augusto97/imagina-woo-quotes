@@ -6,6 +6,19 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.7] - 2026-09-08
+
+### Corregido
+- En sitios con caché de página (WP Rocket, LiteSpeed, Cloudflare…), al
+  pulsar «Solicitar presupuesto» salía «La sesión caducó. Recarga la página»
+  y no se añadía nada: el HTML cacheado llevaba un nonce de hace horas o
+  días. Ahora, si el nonce caducó, el front pide uno nuevo (petición que
+  nunca se cachea) y repite la acción sin molestar al cliente; vale para
+  añadir, quitar, cambiar cantidades, enviar la solicitud y contraofertar
+- La página de solicitud queda marcada como no cacheable (constantes
+  DONOTCACHEPAGE y cabeceras no-cache, como el carrito de WooCommerce): pinta
+  la lista de cada visitante y no debe servirse desde caché
+
 ## [1.11.6] - 2026-09-04
 
 ### Añadido
@@ -403,6 +416,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.7]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.7
 [1.11.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.6
 [1.11.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.5
 [1.11.4]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.4
