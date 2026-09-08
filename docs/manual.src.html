@@ -762,7 +762,7 @@
 				<tr><td>Logotipo</td><td>Vacío, se usa el logo del tema.</td></tr>
 				<tr><td>Nombre del archivo</td><td>Admite <code>{order_number}</code>, <code>{order_id}</code>, <code>{date}</code> y <code>{site_title}</code>.</td></tr>
 				<tr><td>Tamaño / Orientación</td><td>A4, Carta u Oficio; vertical u horizontal.</td></tr>
-				<tr><td>Incluir los enlaces de aceptar y rechazar</td><td>Botones dentro del PDF mientras admite respuesta.</td></tr>
+				<tr><td>Botones de aceptar y rechazar en el PDF</td><td>Activado por defecto. Solo salen en presupuestos enviados y vigentes: el PDF de la solicitud inicial no tiene precio que aceptar, y al aceptarse, rechazarse o vencer desaparecen al regenerarlo. La plantilla debe llevar el bloque «Botones de respuesta».</td></tr>
 				<tr><td>Tachar el precio de catálogo si el presupuesto mejora</td><td>Muestra el precio original tachado junto al presupuestado.</td></tr>
 				<tr><td>Pie de página / Texto del pie / CSS adicional</td><td>Pie del documento y estilos extra (CSS 2.1).</td></tr>
 			</tbody>
@@ -800,6 +800,8 @@
 			<dd>Ocurre en sitios con caché de página: el HTML guardado lleva una clave de seguridad de hace horas. Desde la versión 1.11.7 el plugin renueva esa clave solo y repite la acción, así que el aviso ya no aparece. La página de solicitud queda excluida de la caché automáticamente; si tu CDN cachea todo el HTML por su cuenta (una regla «cache everything» de Cloudflare, por ejemplo), excluye también esa página en el CDN.</dd>
 			<dt>El cliente no recibe el email del presupuesto</dt>
 			<dd>Comprueba que usaste la acción «Enviar el presupuesto al cliente» y no solo el cambio de estado, que el email «Presupuesto enviado» está activo en <span class="path">WooCommerce<span>›</span>Ajustes<span>›</span>Emails</span>, y que la tienda envía correo (un plugin SMTP ayuda). En <span class="path">Vista previa</span> puedes mandarte una prueba.</dd>
+			<dt>El PDF no lleva los botones de aceptar y rechazar</dt>
+			<dd>Aparecen solo cuando el presupuesto está en «Presupuesto enviado» y no ha vencido; el PDF que se adjunta a la confirmación de la solicitud es un resguardo sin precio que aceptar. Comprueba que el ajuste «Botones de aceptar y rechazar en el PDF» está activo en la pestaña PDF y que la plantilla incluye el bloque «Botones de respuesta». Si descargaste el PDF antes de enviar el presupuesto, vuelve a descargarlo: se regenera con los botones.</dd>
 			<dt>El PDF sale vacío o no se genera</dt>
 			<dd>La pestaña Inicio indica si el generador está disponible. Si instalaste el plugin desde el zip publicado, la librería ya viene incluida. Si el pedido no tiene líneas con precio, la tabla queda vacía; regenera el PDF desde «Acciones del pedido» tras editar.</dd>
 			<dt>Los presupuestos salen en Analytics como ventas</dt>

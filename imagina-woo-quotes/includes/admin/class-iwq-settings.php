@@ -847,8 +847,9 @@ class IWQ_Settings {
 							),
 						),
 						'pdf_show_actions'     => array(
-							'label' => __( 'Incluir los enlaces de aceptar y rechazar', 'imagina-woo-quotes' ),
+							'label' => __( 'Botones de aceptar y rechazar en el PDF', 'imagina-woo-quotes' ),
 							'type'  => 'checkbox',
+							'desc'  => __( 'Solo aparecen en presupuestos enviados y vigentes: el PDF de la solicitud inicial aún no tiene precio que aceptar, y al aceptarse, rechazarse o vencer desaparecen al regenerarlo. La plantilla debe llevar el bloque «Botones de respuesta»; las que crea el plugin ya lo incluyen.', 'imagina-woo-quotes' ),
 						),
 						'pdf_show_strikethrough' => array(
 							'label' => __( 'Tachar el precio de catálogo si el presupuesto mejora', 'imagina-woo-quotes' ),

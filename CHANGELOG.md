@@ -6,6 +6,15 @@ Versionado [semántico](https://semver.org/lang/es/): MAYOR.MENOR.PARCHE.
 El zip instalable de la última versión está en la rama `release`, siempre
 con el nombre `imagina-woo-quotes.zip`.
 
+## [1.11.8] - 2026-09-08
+
+### Cambiado
+- El ajuste de los botones de aceptar y rechazar del PDF (pestaña PDF) se
+  llama ahora «Botones de aceptar y rechazar en el PDF» y explica cuándo
+  aparecen: solo en presupuestos enviados y vigentes, y si la plantilla
+  lleva el bloque «Botones de respuesta». El PDF de la solicitud inicial no
+  los incluye porque aún no hay precio que aceptar
+
 ## [1.11.7] - 2026-09-08
 
 ### Corregido
@@ -416,6 +425,7 @@ Primera versión.
 - WordPress 6.9.7, WooCommerce 10.9.0, PHP 8.4, tema Twenty Twenty-Five
 - 27 comprobaciones de navegador con Playwright sobre Chromium
 
+[1.11.8]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.8
 [1.11.7]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.7
 [1.11.6]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.6
 [1.11.5]: https://github.com/augusto97/imagina-woo-quotes/releases/tag/v1.11.5
