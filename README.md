@@ -1,6 +1,6 @@
 # Manual de uso de Imagina Woo Quotes
 
-**Corresponde a la versión 1.11.6 del plugin** · 2026-09-04
+**Corresponde a la versión 1.11.7 del plugin** · 2026-09-08
 
 Esta rama contiene únicamente el manual de uso, siempre en su última versión:
 
