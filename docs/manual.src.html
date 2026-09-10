@@ -303,6 +303,10 @@
 	td code { white-space: nowrap; }
 
 	.steps { counter-reset: step; list-style: none; padding: 0; margin: 0 0 1.4rem; }
+	.steps[start="2"] { counter-reset: step 1; }
+	.steps[start="3"] { counter-reset: step 2; }
+	.steps[start="4"] { counter-reset: step 3; }
+	.steps[start="5"] { counter-reset: step 4; }
 	.steps > li {
 		counter-increment: step;
 		position: relative;
@@ -416,7 +420,8 @@
 	figure.shot { margin: 1.2rem 0 1.8rem; }
 	figure.shot img {
 		display: block;
-		width: 100%;
+		width: auto;
+		max-width: 100%;
 		height: auto;
 		border: 1px solid var(--line);
 		border-radius: 10px;
@@ -461,7 +466,11 @@
 		<ol id="toc-list">
 			<li><a href="#que-es">Qué es y cómo funciona</a></li>
 			<li><a href="#instalacion">Instalación y puesta en marcha</a></li>
-			<li><a href="#cliente">Lo que ve el cliente</a></li>
+			<li><a href="#cliente">Lo que ve el cliente</a>
+				<ol>
+					<li><a href="#aprobacion">Aprobación, pago y contraoferta</a></li>
+				</ol>
+			</li>
 			<li><a href="#gestion">Gestionar un presupuesto</a>
 				<ol>
 					<li><a href="#estados">Estados</a></li>
@@ -524,8 +533,35 @@
 <figure class="shot"><img src="{{img:account-quote-detail}}" alt="Detalle de un presupuesto. Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda." loading="lazy"><figcaption><b>Detalle de un presupuesto.</b> Descarga del PDF, botones de aceptar y rechazar, contraoferta y conversación con la tienda.</figcaption></figure>
 		</div>
 		<p>Los clientes registrados tienen una sección <strong>«Presupuestos»</strong> en Mi cuenta con todos los suyos: número, fecha, estado y total. Dentro de cada uno pueden descargar el PDF, aceptar, rechazar o proponer otro precio, y ver la conversación con la tienda. Los visitantes sin cuenta gestionan todo desde los enlaces del email.</p>
-		<h3>Aceptar y pagar</h3>
-		<p>El email «Presupuesto enviado» y el PDF llevan enlaces firmados de aceptar y rechazar, válidos solo para ese presupuesto. Al aceptar, el cliente va a la página de pago de WooCommerce con los métodos de pago de tu tienda. Puedes desactivar la redirección al pago si prefieres cobrar de otra forma.</p>
+		<h3 id="aprobacion">El flujo de aprobación, paso a paso</h3>
+		<p>Así responde el cliente a un presupuesto y así lo ve la tienda en cada paso. Los enlaces de aceptar y rechazar van firmados: solo sirven para ese presupuesto y esa acción, y dejan de funcionar cuando el presupuesto ya no admite respuesta.</p>
+		<ol class="steps">
+			<li><strong>La tienda envía el presupuesto</strong> Con las líneas ya valoradas, en <span class="path">Acciones del pedido</span> elige «Enviar el presupuesto al cliente» y pulsa el botón de aplicar. El pedido pasa a «Presupuesto enviado», se fija la validez, se genera el PDF definitivo y sale el email.</li>
+		</ol>
+<figure class="shot"><img src="{{img:admin-order-actions}}" alt="Caja Acciones del pedido con la acción Enviar el presupuesto al cliente seleccionada." loading="lazy"><figcaption><b>Acciones del pedido.</b> «Enviar el presupuesto al cliente» es lo único que manda el email; cambiar el estado a mano no lo envía.</figcaption></figure>
+		<ol class="steps" start="2">
+			<li><strong>El cliente recibe el email con el PDF</strong> El email «Presupuesto enviado» resume el presupuesto, tacha el precio de catálogo si lo has mejorado y lleva los botones de aceptar y rechazar. El PDF adjunto repite el detalle y los mismos botones, así puede responder desde el correo o desde el documento.</li>
+		</ol>
+		<div class="shots-2">
+<figure class="shot"><img src="{{img:email-quote-sent}}" alt="Email Presupuesto enviado con el resumen, los productos con el precio de catálogo tachado y los botones Aceptar el presupuesto y Rechazarlo." loading="lazy"><figcaption><b>Email «Presupuesto enviado».</b> Resumen, productos con el precio de catálogo tachado y los dos botones. Con las contraofertas activas, un enlace a Mi cuenta para proponer otro precio.</figcaption></figure>
+<figure class="shot"><img src="{{img:pdf-quote-sent}}" alt="PDF del presupuesto con número, validez, cliente, productos, totales, mensaje del cliente y los botones Aceptar el presupuesto y Rechazarlo." loading="lazy"><figcaption><b>PDF adjunto.</b> Mismos datos y mismos botones, mientras el presupuesto esté enviado y vigente. Se activan o quitan en <span class="path">Presupuestos<span>›</span>PDF</span>.</figcaption></figure>
+		</div>
+		<ol class="steps" start="3">
+			<li><strong>Acepta y paga</strong> Al pulsar «Aceptar el presupuesto», el pedido pasa a «Presupuesto aceptado», la tienda recibe el email «Presupuesto aceptado» y el cliente va directo a la página de pago de WooCommerce con los métodos de pago de tu tienda. Al pagar, el pedido pasa a «Procesando» y ya cuenta como venta. Si prefieres cobrar de otra forma, desactiva «Llevar al pago tras aceptar» en <span class="path">Presupuestos<span>›</span>Presupuestos</span>.</li>
+		</ol>
+<figure class="shot"><img src="{{img:front-accept-pay}}" alt="Página de pago de WooCommerce con el aviso Has aceptado el presupuesto, el resumen del pedido con el descuento y el método de pago." loading="lazy"><figcaption><b>Tras aceptar.</b> El aviso de confirmación y la página de pago de WooCommerce con el importe del presupuesto.</figcaption></figure>
+		<ol class="steps" start="4">
+			<li><strong>O lo rechaza</strong> «Rechazarlo» pasa el pedido a «Presupuesto rechazado» y muestra una confirmación en la página de solicitud. La tienda recibe el email «Presupuesto rechazado» y puede editar las líneas y volver a enviarlo con otra propuesta.</li>
+		</ol>
+<figure class="shot"><img src="{{img:front-reject}}" alt="Página de solicitud con el aviso Hemos registrado tu respuesta. Gracias por avisarnos." loading="lazy"><figcaption><b>Tras rechazar.</b> Confirmación en la página de solicitud; el enlace queda inutilizado.</figcaption></figure>
+		<ol class="steps" start="5">
+			<li><strong>O propone otro precio</strong> Con las contraofertas activadas, en Mi cuenta el cliente tiene los mismos botones, la conversación con la tienda y un formulario para proponer un importe con un comentario. La tienda recibe el email «Contraoferta del cliente», ve la propuesta en la caja «Presupuesto» del pedido y responde con un mensaje, ajusta las líneas y reenvía, o acepta en su nombre.</li>
+		</ol>
+		<div class="shots-2">
+<figure class="shot"><img src="{{img:account-quote-actions}}" alt="Mi cuenta: botones Aceptar el presupuesto y Rechazarlo, la conversación con la propuesta del cliente y el formulario de contraoferta." loading="lazy"><figcaption><b>Mi cuenta › detalle del presupuesto.</b> Botones de respuesta, conversación y formulario de contraoferta.</figcaption></figure>
+<figure class="shot"><img src="{{img:admin-order-conversation}}" alt="Caja Presupuesto del pedido con el aviso Contraoferta pendiente, el importe propuesto frente al del presupuesto, el vencimiento, la plantilla de PDF, el botón Ver el PDF y la conversación con un campo para responder." loading="lazy"><figcaption><b>Caja «Presupuesto» en el pedido.</b> La contraoferta pendiente con el importe propuesto, la conversación completa y el campo para responder al cliente.</figcaption></figure>
+		</div>
+		<p>Los visitantes sin cuenta hacen todo esto desde los enlaces del email y del PDF; para contraofertar necesitan una cuenta. Los emails que recibe la tienda en cada paso se activan y personalizan en <span class="path">WooCommerce<span>›</span>Ajustes<span>›</span>Emails</span>.</p>
 
 		<h2 id="gestion">Gestionar un presupuesto</h2>
 		<p>Cada presupuesto es un pedido en <span class="path">WooCommerce<span>›</span>Pedidos</span>. Ahí tienes las líneas, el cliente, las notas y el historial, más dos cajas del plugin: <strong>Presupuesto</strong> (vencimiento, plantilla de PDF, botón «Ver el PDF» y la conversación con el cliente) y <strong>Datos de la solicitud</strong> (las respuestas del formulario y los archivos adjuntos).</p>
