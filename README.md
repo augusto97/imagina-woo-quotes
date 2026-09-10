@@ -1,13 +1,13 @@
 # Manual de uso de Imagina Woo Quotes
 
-**Corresponde a la versión 1.11.9 del plugin** · 2026-09-08
+**Corresponde a la versión 1.11.9 del plugin** · 2026-09-10
 
 Esta rama contiene únicamente el manual de uso, siempre en su última versión:
 
-- [`imagina-woo-quotes-manual.html`](imagina-woo-quotes-manual.html) (3.4M):
+- [`imagina-woo-quotes-manual.html`](imagina-woo-quotes-manual.html) (3.8M):
   el manual completo en un solo archivo, con las capturas incrustadas. Es el
   que conviene descargar o enviar a un cliente: se abre en cualquier navegador.
-- [`imagina-woo-quotes-manual.zip`](imagina-woo-quotes-manual.zip) (2.9M):
+- [`imagina-woo-quotes-manual.zip`](imagina-woo-quotes-manual.zip) (3.3M):
   `index.html` más la carpeta `images/`, para subirlo a un servidor web.
 - [`index.html`](index.html) e [`images/`](images/): el mismo contenido sin
   comprimir. Con GitHub Pages apuntando a esta rama, el manual queda publicado
